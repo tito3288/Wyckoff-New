@@ -1,0 +1,455 @@
+---
+interface Recommendation {
+  sourceEntry: number;
+  name: string;
+  role: string;
+  quote: string[];
+}
+
+const recommendations: Recommendation[] = [
+  {
+    sourceEntry: 1,
+    name: "Sarah Rosenberger",
+    role: "Digital Transformer @Elanco, Team Unifier & Growth Marketing 🦄 Systems Thinker Bringing Pattern Recognition Across Industries to Scale What Works Faster (People>Outcomes) #Tech #Healthcare #Startups #eComm",
+    quote: [
+      "Luke is one of a kind. To say that he’s a game changer would be an understatement. It only took minutes into our first call to discuss how his company could support my team to feel the inspiration and creativity pouring out of him. I say this with a smile still, because he’s the type of entrepreneur and executive you remember regardless of how much you’ve interacted with him. His strategy and humility while working with us has drastically changed our social media performance and I look to more of the same in the coming year. Here’s to you, Luke!",
+    ],
+  },
+  {
+    sourceEntry: 2,
+    name: "Linda Thomas",
+    role: "Strategic Advisor | Senior Level Business Development Leader | Enabling individuals and organizations to grow and perform better.",
+    quote: [
+      "Luke is the crème de la crème of creativity, an ultimate “connector”, inspirational leader and partner. Everything he does is focused on helping individuals and organizations be their best. And he gets it done! Combine that with a strong code of ethics and a desire for everyone to succeed, you have a consummate professional who inspires and advances the cause. Goodness to the core, it’s an honor and privilege to know and work alongside Luke! Anyone who has the benefit to work with Luke will be forever enriched.",
+    ],
+  },
+  {
+    sourceEntry: 3,
+    name: "Diane Burgess Faber",
+    role: "Solving business challenges through dynamic learning experiences using the best of technology, design and science",
+    quote: [
+      "Luke has an uncanny ability to focus a person/team on their true goal and then help them reverse engineer everything that needs to happen to achieve that goal. He is smart, clever, fun, energetic, knows absolutely everyone, and is a marketing and business wiz! Such a pleasure...",
+    ],
+  },
+  {
+    sourceEntry: 11,
+    name: "Dave Patrick",
+    role: "Fractional CRO - Chief Commercial Officer | AI-Era Revenue Growth & Workforce Transformation | Co-founder, SightGlass AI Readiness | $130M P&L.",
+    quote: [
+      "I have had the pleasure of knowing Luke for more than 10 years in various roles. He is the consummate professional. Luke demonstrates tremendous enthusiasm and passion for all that he does. He blends business acumen and interpersonal skills into a wicked and energetic blend that fosters creativity and attracts people to him, his business and those that engage with him.",
+    ],
+  },
+  {
+    sourceEntry: 12,
+    name: "Eric Weeks",
+    role: "HR Executive and Business Leader at Delta Dental Insurance Company",
+    quote: [
+      "Luke is a highly strategic and effective visionary who will transform business. I've had the privilege of working with Luke and his team, I consider them to be subject matter experts who understand how to deliver value to you and your customers.",
+    ],
+  },
+  {
+    sourceEntry: 9,
+    name: "Marty Vondrell",
+    role: "Certified EOS Implementer, Author, Speaker",
+    quote: [
+      "Luke is one of the most energetic upbeat people I know. He always has a positive slant to things. This make it a joy to work with him. He is also a very creative person that will come up with the ideas that make a difference. I highly recommend Luke and what he can do for anybody.",
+    ],
+  },
+  {
+    sourceEntry: 20,
+    name: "John O’Loughlin",
+    role: "EVP, McAleer Gray, LLC / Founder & CEO HR Capital Partners, LLC / President, BOJUMJOL, LTD./bojumjol.com C-Suite and Board Practice and Advisor/Interim CHRO",
+    quote: [
+      "Luke is the ultimate value-add consultant and consummate business partner delivering services/solutions that exceed expectations/requirements. I strongly endorse him and his services.",
+    ],
+  },
+  {
+    sourceEntry: 26,
+    name: "Dan Smith",
+    role: "Director, Spectrum Health Office of Commercial Innovation",
+    quote: [
+      "Luke and his firm have been strategic partners to ThinkWise. Luke is a trusted partner who has the rare ability to engage clients in both strategic discussions/direction as well as deliver meaningful solutions that provide great value -- he talks big picture and gets it done.",
+      "His background in talent management and organizational development shows up in how he motivates and interacts with his partners, his employees and our shared-clients.",
+      "I recommend Luke and his firm without reservation.",
+    ],
+  },
+  {
+    sourceEntry: 40,
+    name: "Norm Devine",
+    role: "Sales and Marketing Leader",
+    quote: [
+      "Luke's positive energy and client-outcome focus permeate everything he does. He's a problem solver with great strategic vision, and he truly values the relationships he establishes with his clients and partners.",
+    ],
+  },
+  {
+    sourceEntry: 46,
+    name: "Keith Akins",
+    role: "When did titles ever really matter? at To Be Determined",
+    quote: [
+      "Luke's business acumen gives him uncommon ability to distill the key issues at play in his clients' organizations and to recommend strategies that pay off. That talent is combined with a heart as big as the Montana sky.",
+    ],
+  },
+];
+
+const carouselId = "wyckoff-recommendations";
+const trackId = `${carouselId}-track`;
+const headingId = `${carouselId}-heading`;
+---
+
+<section class="wrap band rv testimonials" aria-labelledby={headingId}>
+  <div
+    class="testimonial-carousel"
+    id={carouselId}
+    data-testimonial-carousel
+    role="region"
+    aria-roledescription="carousel"
+    aria-labelledby={headingId}
+  >
+    <div class="testimonial-carousel__heading">
+      <p class="label">From the people who've worked with him</p>
+      <h2 class="display display--sm" id={headingId}>What clients and colleagues say.</h2>
+    </div>
+
+    <div class="testimonial-carousel__viewport" data-carousel-viewport>
+      <div class="testimonial-carousel__track" id={trackId} data-carousel-track>
+        {recommendations.map((recommendation, index) => (
+          <article
+            class="testimonial-carousel__card"
+            data-carousel-slide
+            data-source-entry={recommendation.sourceEntry}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${index + 1} of ${recommendations.length}`}
+          >
+            <blockquote class="testimonial-carousel__quote">
+              {recommendation.quote.map((paragraph) => <p>{paragraph}</p>)}
+            </blockquote>
+            <footer class="testimonial-carousel__attribution">
+              <p class="testimonial-carousel__name">{recommendation.name}</p>
+              <p class="testimonial-carousel__role">{recommendation.role}</p>
+            </footer>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="testimonial-carousel__controls" role="group" aria-label="Recommendation carousel controls">
+      <button
+        class="testimonial-carousel__button testimonial-carousel__button--previous"
+        type="button"
+        data-carousel-previous
+        aria-controls={trackId}
+        aria-label="Show previous recommendations"
+      >
+        <span aria-hidden="true">&larr;</span>
+      </button>
+
+      <div
+        class="testimonial-carousel__dots"
+        data-carousel-dots
+        role="group"
+        aria-label="Choose a recommendation page"
+      >
+        {recommendations.map((_, index) => (
+          <button
+            class="testimonial-carousel__dot"
+            type="button"
+            data-carousel-dot={index}
+            aria-controls={trackId}
+            aria-label={`Show recommendation ${index + 1}`}
+            aria-current={index === 0 ? "true" : undefined}
+          >
+            <span aria-hidden="true"></span>
+          </button>
+        ))}
+      </div>
+
+      <button
+        class="testimonial-carousel__button testimonial-carousel__button--toggle"
+        type="button"
+        data-carousel-toggle
+        aria-controls={trackId}
+        aria-label="Pause automatic rotation"
+        aria-pressed="true"
+      >
+        <span data-carousel-toggle-label>Pause autoplay</span>
+      </button>
+
+      <button
+        class="testimonial-carousel__button testimonial-carousel__button--next"
+        type="button"
+        data-carousel-next
+        aria-controls={trackId}
+        aria-label="Show next recommendations"
+      >
+        <span aria-hidden="true">&rarr;</span>
+      </button>
+    </div>
+
+    <p
+      class="testimonial-carousel__status"
+      data-carousel-status
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      Showing recommendations 1–2 of {recommendations.length}
+    </p>
+  </div>
+</section>
+
+<script>
+  const AUTOPLAY_DELAY = 8000;
+  const DESKTOP_QUERY = "(min-width: 48rem)";
+  const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+  const SWIPE_THRESHOLD = 50;
+
+  function initializeTestimonialCarousels() {
+    document.querySelectorAll<HTMLElement>("[data-testimonial-carousel]").forEach((carousel) => {
+      if (carousel.dataset.carouselReady === "true") return;
+
+      const slides = Array.from(carousel.querySelectorAll<HTMLElement>("[data-carousel-slide]"));
+      const dots = Array.from(carousel.querySelectorAll<HTMLButtonElement>("[data-carousel-dot]"));
+      const viewport = carousel.querySelector<HTMLElement>("[data-carousel-viewport]");
+      const previousButton = carousel.querySelector<HTMLButtonElement>("[data-carousel-previous]");
+      const nextButton = carousel.querySelector<HTMLButtonElement>("[data-carousel-next]");
+      const toggleButton = carousel.querySelector<HTMLButtonElement>("[data-carousel-toggle]");
+      const toggleLabel = carousel.querySelector<HTMLElement>("[data-carousel-toggle-label]");
+      const status = carousel.querySelector<HTMLElement>("[data-carousel-status]");
+
+      if (
+        slides.length === 0 ||
+        !viewport ||
+        !previousButton ||
+        !nextButton ||
+        !toggleButton ||
+        !toggleLabel ||
+        !status
+      ) return;
+
+      carousel.dataset.carouselReady = "true";
+
+      const desktopMedia = window.matchMedia(DESKTOP_QUERY);
+      const reducedMotionMedia = window.matchMedia(REDUCED_MOTION_QUERY);
+
+      let itemsPerPage = desktopMedia.matches ? 2 : 1;
+      let currentPage = 0;
+      let autoplayPaused = reducedMotionMedia.matches;
+      let pointerIsOver = false;
+      let focusIsWithin = false;
+      let documentIsHidden = document.hidden;
+      let autoplayTimer: number | undefined;
+      let swipePointerId: number | undefined;
+      let swipeStartX = 0;
+      let swipeStartY = 0;
+
+      const getPageCount = () => Math.ceil(slides.length / itemsPerPage);
+
+      const stopAutoplayTimer = () => {
+        if (autoplayTimer === undefined) return;
+        window.clearTimeout(autoplayTimer);
+        autoplayTimer = undefined;
+      };
+
+      const canAutoplay = () =>
+        !autoplayPaused &&
+        !reducedMotionMedia.matches &&
+        !pointerIsOver &&
+        !focusIsWithin &&
+        !documentIsHidden &&
+        getPageCount() > 1;
+
+      const updateAutoplayControl = () => {
+        const reducedMotion = reducedMotionMedia.matches;
+        const autoplayEnabled = !autoplayPaused && !reducedMotion;
+
+        toggleButton.disabled = reducedMotion;
+        toggleButton.setAttribute("aria-pressed", String(autoplayEnabled));
+
+        if (reducedMotion) {
+          toggleLabel.textContent = "Autoplay off";
+          toggleButton.setAttribute(
+            "aria-label",
+            "Automatic rotation disabled by your reduced-motion preference",
+          );
+          toggleButton.title = "Automatic rotation is disabled while reduced motion is preferred.";
+          return;
+        }
+
+        toggleButton.removeAttribute("title");
+        toggleLabel.textContent = autoplayEnabled ? "Pause autoplay" : "Play autoplay";
+        toggleButton.setAttribute(
+          "aria-label",
+          autoplayEnabled ? "Pause automatic rotation" : "Start automatic rotation",
+        );
+      };
+
+      const render = () => {
+        const pageCount = getPageCount();
+        currentPage = ((currentPage % pageCount) + pageCount) % pageCount;
+        status.setAttribute("aria-live", canAutoplay() ? "off" : "polite");
+
+        const firstVisibleIndex = currentPage * itemsPerPage;
+        const lastVisibleIndex = Math.min(firstVisibleIndex + itemsPerPage, slides.length);
+
+        slides.forEach((slide, index) => {
+          const isVisible = index >= firstVisibleIndex && index < lastVisibleIndex;
+          slide.hidden = !isVisible;
+          if (isVisible) slide.removeAttribute("inert");
+          else slide.setAttribute("inert", "");
+        });
+
+        dots.forEach((dot, index) => {
+          const isAvailable = index < pageCount;
+          const isCurrent = isAvailable && index === currentPage;
+          const firstItem = index * itemsPerPage + 1;
+          const lastItem = Math.min(firstItem + itemsPerPage - 1, slides.length);
+
+          dot.hidden = !isAvailable;
+          dot.disabled = !isAvailable;
+          dot.tabIndex = isAvailable ? 0 : -1;
+          if (isCurrent) dot.setAttribute("aria-current", "true");
+          else dot.removeAttribute("aria-current");
+
+          if (isAvailable) {
+            dot.setAttribute(
+              "aria-label",
+              firstItem === lastItem
+                ? `Show recommendation ${firstItem}`
+                : `Show recommendations ${firstItem} through ${lastItem}`,
+            );
+          }
+        });
+
+        status.textContent =
+          firstVisibleIndex + 1 === lastVisibleIndex
+            ? `Showing recommendation ${firstVisibleIndex + 1} of ${slides.length}`
+            : `Showing recommendations ${firstVisibleIndex + 1}–${lastVisibleIndex} of ${slides.length}`;
+
+        updateAutoplayControl();
+      };
+
+      const syncAutoplay = () => {
+        stopAutoplayTimer();
+        status.setAttribute("aria-live", canAutoplay() ? "off" : "polite");
+        if (!canAutoplay()) return;
+
+        autoplayTimer = window.setTimeout(() => {
+          autoplayTimer = undefined;
+          currentPage = (currentPage + 1) % getPageCount();
+          render();
+          syncAutoplay();
+        }, AUTOPLAY_DELAY);
+      };
+
+      const goToPage = (page: number, manualNavigation = true) => {
+        if (manualNavigation) autoplayPaused = true;
+        currentPage = page;
+        render();
+        syncAutoplay();
+      };
+
+      previousButton.addEventListener("click", () => goToPage(currentPage - 1));
+      nextButton.addEventListener("click", () => goToPage(currentPage + 1));
+
+      dots.forEach((dot) => {
+        dot.addEventListener("click", () => {
+          const page = Number(dot.dataset.carouselDot);
+          if (Number.isInteger(page)) goToPage(page);
+        });
+      });
+
+      toggleButton.addEventListener("click", () => {
+        if (reducedMotionMedia.matches) return;
+        autoplayPaused = !autoplayPaused;
+        updateAutoplayControl();
+        syncAutoplay();
+      });
+
+      carousel.addEventListener("mouseenter", () => {
+        pointerIsOver = true;
+        syncAutoplay();
+      });
+
+      carousel.addEventListener("mouseleave", () => {
+        pointerIsOver = false;
+        syncAutoplay();
+      });
+
+      carousel.addEventListener("focusin", () => {
+        focusIsWithin = true;
+        syncAutoplay();
+      });
+
+      carousel.addEventListener("focusout", (event) => {
+        const nextFocusedElement = event.relatedTarget;
+        if (nextFocusedElement instanceof Node && carousel.contains(nextFocusedElement)) return;
+        focusIsWithin = false;
+        syncAutoplay();
+      });
+
+      carousel.addEventListener("keydown", (event) => {
+        if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          goToPage(currentPage - 1);
+        } else if (event.key === "ArrowRight") {
+          event.preventDefault();
+          goToPage(currentPage + 1);
+        } else if (event.key === "Home") {
+          event.preventDefault();
+          goToPage(0);
+        } else if (event.key === "End") {
+          event.preventDefault();
+          goToPage(getPageCount() - 1);
+        }
+      });
+
+      viewport.addEventListener("pointerdown", (event) => {
+        if (!event.isPrimary || event.pointerType === "mouse") return;
+        swipePointerId = event.pointerId;
+        swipeStartX = event.clientX;
+        swipeStartY = event.clientY;
+      });
+
+      viewport.addEventListener("pointerup", (event) => {
+        if (event.pointerId !== swipePointerId) return;
+
+        const distanceX = event.clientX - swipeStartX;
+        const distanceY = event.clientY - swipeStartY;
+        swipePointerId = undefined;
+
+        if (Math.abs(distanceX) < SWIPE_THRESHOLD || Math.abs(distanceX) <= Math.abs(distanceY)) return;
+        goToPage(currentPage + (distanceX < 0 ? 1 : -1));
+      });
+
+      viewport.addEventListener("pointercancel", () => {
+        swipePointerId = undefined;
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        documentIsHidden = document.hidden;
+        syncAutoplay();
+      });
+
+      desktopMedia.addEventListener("change", () => {
+        const firstVisibleIndex = currentPage * itemsPerPage;
+        itemsPerPage = desktopMedia.matches ? 2 : 1;
+        currentPage = Math.floor(firstVisibleIndex / itemsPerPage);
+        render();
+        syncAutoplay();
+      });
+
+      reducedMotionMedia.addEventListener("change", () => {
+        if (reducedMotionMedia.matches) autoplayPaused = true;
+        render();
+        syncAutoplay();
+      });
+
+      render();
+      syncAutoplay();
+    });
+  }
+
+  initializeTestimonialCarousels();
+</script>

@@ -1,0 +1,70 @@
+---
+const revenueOptions = ["Under $3M", "$3M – $10M", "$10M – $25M", "$25M – $50M", "$50M+"];
+---
+<section class="band band--ink" id="contact">
+  <div class="wrap contact__grid">
+    <div class="rv">
+      <p class="label">The next step</p>
+      <h2 class="display" style="max-width:11ch">Let's discuss profitable growth.</h2>
+      <p class="lede" style="margin-top:2rem">Tell us what's shifted in the business. If there's a fit, you'll hear back directly from Luke.</p>
+    </div>
+    <form class="rv" id="contactForm" method="post" action="/api/contact" novalidate>
+      <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required /></div>
+      <div class="field"><label for="f-co">Company</label><input id="f-co" name="company" type="text" autocomplete="organization" /></div>
+      <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required /></div>
+      <div class="field"><label for="f-rev">Annual revenue</label>
+        <select id="f-rev" name="revenue">{revenueOptions.map((opt) => <option>{opt}</option>)}</select>
+      </div>
+      <div class="field"><label for="f-what">What's changed?</label><textarea id="f-what" name="message" rows="3" required></textarea></div>
+      <div class="hp-field" aria-hidden="true">
+        <label for="f-website" tabindex="-1">Leave this field empty</label>
+        <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+      <button class="submit" type="submit"><span>Send it to Luke</span></button>
+      <p class="formstatus" id="formStatus" role="status" aria-live="polite"></p>
+      <p class="formnote">Every inquiry is read personally. Nothing is shared, sold, or added to a list.</p>
+    </form>
+  </div>
+</section>
+
+<script is:inline>
+(function(){
+  var form=document.getElementById('contactForm');
+  if(!form) return;
+  var status=document.getElementById('formStatus');
+  var btn=form.querySelector('.submit');
+  var btnText=btn.querySelector('span');
+  form.addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var data={};
+    new FormData(form).forEach(function(v,k){ data[k]=v; });
+    if(!data.name || !data.email || !data.message){
+      status.classList.add('err');
+      status.textContent='Please fill in your name, email, and what’s changed.';
+      return;
+    }
+    btn.disabled=true; btnText.textContent='Sending…';
+    status.classList.remove('err'); status.textContent='';
+    fetch('/api/contact',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data)
+    }).then(function(res){
+      return res.json().catch(function(){return {};}).then(function(out){
+        if(res.ok){
+          form.reset();
+          status.textContent='Thank you — your note is on its way to Luke.';
+        }else{
+          status.classList.add('err');
+          status.textContent=out.error||'Something went wrong. Please try again in a moment.';
+        }
+      });
+    }).catch(function(){
+      status.classList.add('err');
+      status.textContent='Network error — please try again.';
+    }).finally(function(){
+      btn.disabled=false; btnText.textContent='Send it to Luke';
+    });
+  });
+})();
+</script>

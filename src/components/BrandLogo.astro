@@ -1,0 +1,61 @@
+---
+type Variant = "lockup" | "mark";
+
+interface Props {
+  variant?: Variant;
+  class?: string;
+  /** Supplying a label makes the otherwise decorative logo accessible. */
+  label?: string;
+}
+
+const {
+  variant = "lockup",
+  class: className,
+  label,
+} = Astro.props;
+---
+
+<span
+  class:list={["brand-logo", `brand-logo--${variant}`, className]}
+  role={label ? "img" : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : "true"}
+></span>
+
+<style>
+  .brand-logo {
+    display: inline-block;
+    position: relative;
+    flex: none;
+    color: inherit;
+    vertical-align: middle;
+    aspect-ratio: var(--brand-logo-aspect);
+  }
+
+  .brand-logo::before {
+    content: "";
+    position: absolute;
+    inset: var(--brand-logo-clearspace);
+    background-color: currentColor;
+    -webkit-mask-image: var(--brand-logo-mask);
+    mask-image: var(--brand-logo-mask);
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+
+  .brand-logo--lockup {
+    --brand-logo-aspect: 4339 / 2622;
+    --brand-logo-mask: url("/images/brand/wyckoff-lockup-mask.png");
+    --brand-logo-clearspace: 7%;
+  }
+
+  .brand-logo--mark {
+    --brand-logo-aspect: 1739 / 1219;
+    --brand-logo-mask: url("/images/brand/wyckoff-mark-mask.png");
+    --brand-logo-clearspace: 9%;
+  }
+</style>

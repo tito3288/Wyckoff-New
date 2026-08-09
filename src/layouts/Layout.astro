@@ -1,0 +1,202 @@
+---
+import "../styles/global.css";
+import BrandLogo from "../components/BrandLogo.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Wyckoff Consulting — Executive Marketing Leadership",
+  description = "Executive marketing leadership for $3M–$50M companies, at the moments that decide their next decade. Fractional CMO services since 1993.",
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" type="image/png" href="/images/brand/wyckoff-favicon.png" />
+  <meta name="theme-color" content="#1F2D27" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL("/images/hero-fallback.jpg", canonical)} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="generator" content={Astro.generator} />
+</head>
+<body class="loading">
+
+  <div id="loader">
+    <BrandLogo variant="lockup" class="lmark" />
+    <div class="lbar"><i id="lbarFill"></i></div>
+    <div class="lnum" id="lnum">00</div>
+  </div>
+
+  <div id="prog"></div>
+
+  <Nav />
+
+  <slot />
+
+  <Footer />
+
+  <script is:inline>
+  (function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- LOADER ---------- */
+  var loader=document.getElementById('loader'), lfill=document.getElementById('lbarFill'), lnum=document.getElementById('lnum');
+  function finish(){
+    document.body.classList.remove('loading');
+    document.body.classList.add('ready');
+    if(loader) loader.classList.add('done');
+  }
+  if(reduce){ finish(); }
+  else{
+    var pct=0;
+    var tick=setInterval(function(){
+      pct += Math.random()*14 + 6;
+      if(pct>=100){ pct=100; clearInterval(tick); setTimeout(finish,340); }
+      lfill.style.right=(100-pct)+'%';
+      lnum.textContent=(pct<10?'0':'')+Math.floor(pct);
+    },110);
+  }
+
+  /* ---------- HERO VIDEO ---------- */
+  var hv=document.getElementById('heroVideo');
+  if(hv){
+    if(reduce){ hv.remove(); }
+    else{
+      var arm=function(){ hv.classList.add('live'); };
+      hv.addEventListener('playing', arm, {once:true});
+      hv.addEventListener('error', function(){ hv.remove(); });
+      var p=hv.play && hv.play();
+      if(p && p.catch){ p.catch(function(){ /* stays on fallback image */ }); }
+    }
+  }
+
+  /* ---------- NAV + PROGRESS + HERO PARALLAX + PLX BANDS ---------- */
+  var nav=document.getElementById('nav'), prog=document.getElementById('prog');
+  var plxEls=Array.prototype.slice.call(document.querySelectorAll('[data-plx]'));
+  function onScroll(){
+    var y=window.scrollY;
+    if(y > window.innerHeight*0.8) nav.classList.add('stuck'); else nav.classList.remove('stuck');
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    prog.style.width=(h>0 ? (y/h)*100 : 0)+'%';
+    if(!reduce && y < window.innerHeight){
+      var hi=document.getElementById('heroInner');
+      if(hi){ hi.style.transform='translate3d(0,'+(y*0.24)+'px,0)'; hi.style.opacity=String(Math.max(0,1-y/(window.innerHeight*0.85))); }
+    }
+    if(!reduce){
+      plxEls.forEach(function(el){
+        var r=el.getBoundingClientRect();
+        if(r.bottom<0 || r.top>window.innerHeight) return;
+        var speed=parseFloat(el.getAttribute('data-plx'))||0.12;
+        var center=r.top + r.height/2 - window.innerHeight/2;
+        el.style.transform='translate3d(0,'+(center*-speed)+'px,0)';
+      });
+    }
+  }
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+  /* ---------- WORD SPLIT ---------- */
+  document.querySelectorAll('.wordrise').forEach(function(el){
+    var walk=function(node){
+      Array.prototype.slice.call(node.childNodes).forEach(function(n){
+        if(n.nodeType===3){
+          var frag=document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(function(w){
+            if(!w.trim()){ frag.appendChild(document.createTextNode(w)); return; }
+            var s=document.createElement('span'); s.textContent=w; frag.appendChild(s);
+          });
+          n.parentNode.replaceChild(frag,n);
+        } else if(n.nodeType===1){ walk(n); }
+      });
+    };
+    walk(el);
+    el.querySelectorAll('span').forEach(function(s,i){ s.style.transitionDelay=(i*0.045)+'s'; });
+  });
+
+  /* ---------- REVEALS ---------- */
+  var revs=document.querySelectorAll('.rv,.wordrise,#aboutMedia');
+  if(reduce || !('IntersectionObserver' in window)){
+    revs.forEach(function(el){el.classList.add('in')});
+  } else {
+    var io=new IntersectionObserver(function(en){
+      en.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    },{threshold:0.15,rootMargin:'0px 0px -6% 0px'});
+    revs.forEach(function(el){io.observe(el)});
+  }
+
+  /* ---------- COUNTERS ---------- */
+  function run(el){
+    var t=parseInt(el.getAttribute('data-count'),10), sfx=el.getAttribute('data-suffix')||'';
+    if(reduce){ el.textContent=t+sfx; return; }
+    var s=null,d=1700;
+    function step(ts){
+      if(!s)s=ts;
+      var p=Math.min((ts-s)/d,1), e=1-Math.pow(1-p,4);
+      el.textContent=Math.round(t*e)+(p===1?sfx:'');
+      if(p<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var nums=document.querySelectorAll('[data-count]');
+  if('IntersectionObserver' in window){
+    var io2=new IntersectionObserver(function(en){
+      en.forEach(function(e){ if(e.isIntersecting){ run(e.target); io2.unobserve(e.target); } });
+    },{threshold:0.5});
+    nums.forEach(function(el){io2.observe(el)});
+  } else { nums.forEach(run); }
+
+  /* ---------- PINNED POINTS ---------- */
+  var items=document.querySelectorAll('#pinRight .pin__item');
+  var pnums=document.querySelectorAll('#numWrap .pin__num');
+  var ptits=document.querySelectorAll('#titWrap .pin__tit');
+  var rail=document.querySelectorAll('#rail i');
+  var active=0;
+  function setActive(i){
+    if(i===active) return;
+    pnums[active].classList.remove('on'); pnums[active].classList.add('out');
+    ptits[active].classList.remove('on');
+    rail[active].classList.remove('on');
+    active=i;
+    pnums[active].classList.remove('out'); pnums[active].classList.add('on');
+    ptits[active].classList.add('on');
+    rail[active].classList.add('on');
+  }
+  if('IntersectionObserver' in window && window.innerWidth>960){
+    var io3=new IntersectionObserver(function(){
+      var center=window.innerHeight/2, closest=active, distance=Infinity;
+      items.forEach(function(item,index){
+        var rect=item.getBoundingClientRect();
+        var nextDistance=Math.abs(rect.top+rect.height/2-center);
+        if(nextDistance<distance){ distance=nextDistance; closest=index; }
+      });
+      setActive(closest);
+    },{threshold:0.01,rootMargin:'-45% 0px -45% 0px'});
+    items.forEach(function(el){io3.observe(el)});
+  }
+
+  /* ---------- ANCHORS ---------- */
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click',function(ev){
+      var id=a.getAttribute('href'); if(id.length<2)return;
+      var t=document.querySelector(id); if(!t)return;
+      ev.preventDefault();
+      t.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+    });
+  });
+  })();
+  </script>
+</body>
+</html>

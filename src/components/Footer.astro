@@ -1,0 +1,24 @@
+---
+import BrandLogo from "./BrandLogo.astro";
+
+const links = [
+  { href: "#points", label: "Inflection Points" },
+  { href: "#about", label: "About" },
+  { href: "#insights", label: "Insights" },
+  { href: "#contact", label: "Contact" },
+];
+const year = new Date().getFullYear();
+---
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__top">
+      <a class="foot__brand" href="#top" aria-label="Wyckoff Consulting, back to top">
+        <BrandLogo variant="lockup" class="foot__logo" />
+      </a>
+      <nav class="foot__nav" aria-label="Footer">
+        {links.map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+    </div>
+    <div class="foot__bar"><span>Strategy. Growth. Enterprise Value.</span><span>&copy; {year} Wyckoff Consulting</span></div>
+  </div>
+</footer>

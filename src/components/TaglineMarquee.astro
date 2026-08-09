@@ -1,0 +1,10 @@
+---
+const words = ["Strategy", "Growth", "Enterprise Value", "A Stronger Business", "A Stronger Future"];
+// The design doubles the word list inside each track, and doubles the track,
+// so the CSS translateX(-100%) loop never shows a gap.
+const track = [...words, ...words];
+---
+<div class="mq" aria-hidden="true">
+  <div class="mq__track">{track.map((w) => <span>{w}</span>)}</div>
+  <div class="mq__track">{track.map((w) => <span>{w}</span>)}</div>
+</div>

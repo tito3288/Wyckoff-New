@@ -1,0 +1,29 @@
+---
+// Hero video stays remote (large asset); the fallback image is served locally.
+const heroVideo = "https://videos.pexels.com/video-files/7552419/7552419-hd_1920_1080_25fps.mp4";
+---
+<header class="hero" id="top">
+  <div class="hero__media" aria-hidden="true">
+    <img class="hero__fallback" src="/images/hero-fallback.jpg" alt="" width="1800" height="1200" fetchpriority="high" />
+    <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="metadata"
+      poster="/images/hero-poster.jpg">
+      <source src={heroVideo} type="video/mp4" />
+    </video>
+  </div>
+  <div class="hero__wash" aria-hidden="true"></div>
+  <div class="hero__grain" aria-hidden="true"></div>
+
+  <div class="hero__inner wrap" id="heroInner">
+    <p class="hero__kicker">Fractional Chief Marketing Officer</p>
+    <h1 class="display display--xl">
+      <span class="ln"><span>Companies don't</span></span>
+      <span class="ln"><span>hire us because</span></span>
+      <span class="ln"><span>marketing is broken.</span></span>
+      <span class="ln"><span class="soft">Something bigger changed.</span></span>
+    </h1>
+    <div class="hero__foot">
+      <p class="hero__sub">Executive marketing leadership for $3M–$50M companies, at the moments that decide their next decade.</p>
+      <a class="textlink" href="#points">See the eight inflection points &rarr;</a>
+    </div>
+  </div>
+</header>

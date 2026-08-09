@@ -1,0 +1,45 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import TaglineMarquee from "../components/TaglineMarquee.astro";
+import Positioning from "../components/Positioning.astro";
+import ParallaxBand from "../components/ParallaxBand.astro";
+import LogoMarquee from "../components/LogoMarquee.astro";
+import InflectionPoints from "../components/InflectionPoints.astro";
+import Stats from "../components/Stats.astro";
+import About from "../components/About.astro";
+import Statement from "../components/Statement.astro";
+import Testimonials from "../components/Testimonials.astro";
+import Insights from "../components/Insights.astro";
+import Contact from "../components/Contact.astro";
+import { clientLogos, guestLectureLogos } from "../data/logos";
+---
+<Layout>
+  <Hero />
+  <TaglineMarquee />
+  <Positioning />
+  <ParallaxBand />
+  <LogoMarquee
+    id="past-clients"
+    visibleLabel="Selected past clients"
+    accessibleLabel="Past clients of Wyckoff Consulting"
+    logos={clientLogos}
+  />
+  <InflectionPoints />
+  <Stats />
+  <About />
+  <LogoMarquee
+    id="guest-lectures"
+    visibleLabel="Where Luke has guest lectured"
+    accessibleLabel="Colleges and universities where Luke Wyckoff has guest lectured"
+    logos={guestLectureLogos}
+    externalCta={{
+      label: "Explore Luke's keynote work",
+      href: "https://lukewyckoff.com/",
+    }}
+  />
+  <Statement />
+  <Testimonials />
+  <Insights />
+  <Contact />
+</Layout>

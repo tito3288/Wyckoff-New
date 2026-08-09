@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wyckoff Consulting — Executive Marketing Leadership</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,300..600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1F2D27;
+  --forest:#3B5249;
+  --sage:#5B7F71;
+  --sage-lt:#91B0A4;
+  --sage-pale:#BCD0C8;
+  --cream:#ECE6DE;
+  --tan:#E6D1BC;
+  --amber:#D08847;
+  --font:"Source Sans 3",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --gutter:clamp(1.25rem,5vw,6rem);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;background:var(--cream);color:var(--ink);font-family:var(--font);
+  font-weight:400;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body.loading{overflow:hidden;height:100vh}
+img,video{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:1560px;margin:0 auto;padding-inline:var(--gutter)}
+
+/* ============ TYPE ============ */
+.display{font-weight:600;font-size:clamp(2.6rem,7.4vw,8rem);line-height:.93;letter-spacing:-.045em;margin:0}
+.display--xl{font-size:clamp(3rem,9.6vw,12rem);line-height:.9;letter-spacing:-.055em}
+.display--sm{font-size:clamp(2rem,4.2vw,4.2rem);line-height:1;letter-spacing:-.035em}
+.label{
+  font-size:clamp(.6rem,.75vw,.7rem);font-weight:400;letter-spacing:.44em;
+  text-transform:uppercase;margin:0 0 2.4rem;color:var(--sage);
+}
+.lede{font-size:clamp(1.02rem,1.4vw,1.28rem);font-weight:300;line-height:1.6;max-width:44ch;
+  color:color-mix(in srgb,var(--ink) 76%,transparent)}
+.band{padding-block:clamp(5rem,14vh,12rem)}
+.band--ink{background:var(--ink);color:var(--cream)}
+.band--ink .label{color:var(--sage-lt)}
+.band--ink .lede{color:color-mix(in srgb,var(--cream) 70%,transparent)}
+.band--tan{background:var(--tan)}
+.mark path{fill:currentColor}
+
+/* ============ LOADER ============ */
+#loader{
+  position:fixed;inset:0;z-index:200;background:var(--ink);color:var(--cream);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2.2rem;
+  transition:transform 1.05s cubic-bezier(.76,0,.24,1);
+}
+#loader.done{transform:translateY(-101%)}
+#loader .lmark{width:74px;height:48px;color:var(--sage-lt)}
+#loader .lmark path{opacity:0;transform:translateY(14px);animation:lup .55s cubic-bezier(.2,.8,.3,1) forwards}
+#loader .lmark path:nth-child(1){animation-delay:.1s}
+#loader .lmark path:nth-child(2){animation-delay:.22s}
+#loader .lmark path:nth-child(3){animation-delay:.34s}
+@keyframes lup{to{opacity:1;transform:translateY(0)}}
+#loader .lbar{width:min(240px,42vw);height:1px;background:color-mix(in srgb,var(--cream) 22%,transparent);position:relative;overflow:hidden}
+#loader .lbar i{position:absolute;inset:0 100% 0 0;background:var(--amber);transition:right .2s linear}
+#loader .lnum{font-size:.68rem;letter-spacing:.36em;color:var(--sage-lt)}
+
+/* ============ CURSOR ============ */
+.cur,.curdot{position:fixed;top:0;left:0;z-index:190;pointer-events:none;border-radius:50%;mix-blend-mode:difference}
+.cur{width:38px;height:38px;border:1px solid rgba(236,230,222,.65);margin:-19px 0 0 -19px;
+  transition:width .32s cubic-bezier(.2,.8,.3,1),height .32s cubic-bezier(.2,.8,.3,1),margin .32s cubic-bezier(.2,.8,.3,1),opacity .3s}
+.curdot{width:5px;height:5px;background:#ECE6DE;margin:-2.5px 0 0 -2.5px}
+.cur.big{width:82px;height:82px;margin:-41px 0 0 -41px}
+body.no-cursor{cursor:none}
+@media(hover:none),(max-width:900px){.cur,.curdot{display:none}body.no-cursor{cursor:auto}}
+
+/* ============ PROGRESS ============ */
+#prog{position:fixed;top:0;left:0;height:2px;width:0;background:var(--amber);z-index:120;transition:width .1s linear}
+
+/* ============ NAV ============ */
+.nav{
+  position:fixed;inset:0 0 auto 0;z-index:100;display:flex;align-items:center;
+  justify-content:space-between;padding:1.4rem var(--gutter);color:var(--cream);
+  transition:background .5s cubic-bezier(.4,0,.2,1),color .5s,padding .5s,backdrop-filter .5s;
+}
+.nav.stuck{background:color-mix(in srgb,var(--cream) 92%,transparent);backdrop-filter:blur(14px);color:var(--ink);padding-block:.9rem}
+.nav__brand{display:flex;align-items:center;gap:.85rem;text-decoration:none}
+.nav__mark{width:30px;height:20px;flex:none}
+.nav__name{font-size:.74rem;letter-spacing:.36em;text-transform:uppercase;white-space:nowrap}
+.nav__links{display:flex;align-items:center;gap:2.6rem}
+.nav__links a{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;position:relative;padding-bottom:.25rem}
+.nav__links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:currentColor;transition:width .4s cubic-bezier(.4,0,.2,1)}
+.nav__links a:hover::after{width:100%}
+.nav__cta::after{width:100% !important}
+@media(max-width:900px){.nav__links a:not(.nav__cta){display:none}}
+
+/* ============ HERO ============ */
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;background:var(--ink);color:var(--cream);overflow:hidden}
+.hero__media{position:absolute;inset:0;transform:scale(1.1);opacity:0;animation:plateIn 1.7s .3s cubic-bezier(.16,.84,.44,1) forwards}
+@keyframes plateIn{to{transform:scale(1);opacity:1}}
+.hero__fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  animation:kenburns 26s ease-in-out infinite alternate}
+@keyframes kenburns{from{transform:scale(1) translate(0,0)}to{transform:scale(1.1) translate(-1.5%,1.5%)}}
+.hero__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease}
+.hero__video.live{opacity:1}
+.hero__wash{position:absolute;inset:0;background:
+  radial-gradient(125% 82% at 20% 6%,color-mix(in srgb,var(--sage) 22%,transparent) 0%,transparent 60%),
+  linear-gradient(180deg,color-mix(in srgb,var(--ink) 52%,transparent) 0%,color-mix(in srgb,var(--ink) 30%,transparent) 45%,var(--ink) 96%)}
+.hero__grain{position:absolute;inset:0;opacity:.15;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+.hero__inner{position:relative;z-index:3;width:100%;padding-bottom:clamp(3rem,8vh,6rem);padding-top:9rem}
+.hero__kicker{font-size:clamp(.58rem,.72vw,.68rem);letter-spacing:.44em;text-transform:uppercase;color:var(--sage-pale);margin:0 0 clamp(1.6rem,4vh,2.8rem)}
+.hero h1{max-width:16ch;text-shadow:0 2px 40px color-mix(in srgb,var(--ink) 55%,transparent)}
+.ln{display:block;overflow:hidden}
+.ln > span{display:block;transform:translateY(105%);transition:transform 1.15s cubic-bezier(.16,.84,.44,1)}
+.ready .ln > span{transform:translateY(0)}
+.ln:nth-child(1) > span{transition-delay:.10s}
+.ln:nth-child(2) > span{transition-delay:.20s}
+.ln:nth-child(3) > span{transition-delay:.30s}
+.ln:nth-child(4) > span{transition-delay:.40s}
+.soft{color:var(--sage-pale);font-weight:200}
+.hero__foot{margin-top:clamp(2.2rem,5.5vh,4rem);display:flex;flex-wrap:wrap;align-items:flex-end;
+  justify-content:space-between;gap:2.2rem;border-top:1px solid color-mix(in srgb,var(--cream) 22%,transparent);padding-top:1.9rem;
+  opacity:0;transform:translateY(24px);transition:opacity 1s .65s ease,transform 1s .65s cubic-bezier(.16,.84,.44,1)}
+.ready .hero__foot{opacity:1;transform:none}
+.hero__sub{max-width:36ch;font-size:clamp(.94rem,1.15vw,1.1rem);font-weight:300;line-height:1.6;
+  color:color-mix(in srgb,var(--cream) 80%,transparent);margin:0}
+.textlink{display:inline-flex;align-items:center;gap:.7rem;text-decoration:none;font-size:.72rem;
+  letter-spacing:.24em;text-transform:uppercase;white-space:nowrap;padding-bottom:.45rem;
+  border-bottom:1px solid currentColor;transition:gap .35s cubic-bezier(.4,0,.2,1),color .35s}
+.textlink:hover{gap:1.35rem;color:var(--amber)}
+
+/* ============ MARQUEE ============ */
+.mq{background:var(--ink);color:var(--cream);border-block:1px solid color-mix(in srgb,var(--cream) 14%,transparent);
+  overflow:hidden;padding-block:1.15rem;display:flex}
+.mq__track{display:flex;flex:none;gap:3.5rem;padding-right:3.5rem;animation:scrollx 34s linear infinite;white-space:nowrap}
+.mq span{font-size:clamp(.68rem,.85vw,.78rem);letter-spacing:.4em;text-transform:uppercase;color:var(--sage-lt);display:flex;align-items:center;gap:3.5rem}
+.mq span::after{content:"";width:5px;height:5px;background:var(--amber);border-radius:50%;display:inline-block}
+@keyframes scrollx{to{transform:translateX(-100%)}}
+.mq--logos{background:var(--cream);border-color:color-mix(in srgb,var(--ink) 12%,transparent);padding-block:clamp(2rem,4vh,3rem)}
+.mq--logos .mq__track{gap:clamp(3rem,6vw,6rem);padding-right:clamp(3rem,6vw,6rem);animation-duration:52s}
+.mq--logos img{height:clamp(38px,4.4vw,58px);width:auto;mix-blend-mode:multiply;filter:grayscale(1) contrast(.85);
+  opacity:.45;transition:opacity .4s,filter .4s}
+.mq--logos img:hover{opacity:1;filter:grayscale(0) contrast(1)}
+.mq:hover .mq__track{animation-play-state:paused}
+
+/* ============ REVEALS ============ */
+.rv{opacity:0;transform:translateY(34px);transition:opacity 1s cubic-bezier(.16,.84,.44,1),transform 1s cubic-bezier(.16,.84,.44,1)}
+.rv.in{opacity:1;transform:none}
+.wordrise span{display:inline-block;opacity:0;transform:translateY(.5em) rotate(2deg);
+  transition:opacity .7s cubic-bezier(.16,.84,.44,1),transform .7s cubic-bezier(.16,.84,.44,1)}
+.wordrise.in span{opacity:1;transform:none}
+
+/* ============ SPLIT ============ */
+.split{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(2.5rem,7vw,7rem);align-items:start}
+@media(max-width:960px){.split{grid-template-columns:1fr;gap:2.5rem}}
+
+/* ============ PARALLAX IMAGE BAND ============ */
+.plxband{position:relative;height:clamp(340px,64vh,640px);overflow:hidden;background:var(--ink)}
+.plxband img{position:absolute;left:0;top:-12%;width:100%;height:124%;object-fit:cover;will-change:transform;
+  filter:grayscale(.25) contrast(1.02)}
+.plxband::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,color-mix(in srgb,var(--ink) 34%,transparent),transparent 40%,color-mix(in srgb,var(--ink) 46%,transparent))}
+.plxband__cap{position:absolute;left:var(--gutter);bottom:1.6rem;z-index:2;color:var(--cream);
+  font-size:.64rem;letter-spacing:.36em;text-transform:uppercase;opacity:.85}
+
+/* ============ PINNED INFLECTION POINTS ============ */
+.pin{position:relative;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(2rem,6vw,6rem)}
+.pin__left{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;justify-content:center}
+.pin__meta{font-size:.62rem;letter-spacing:.36em;text-transform:uppercase;color:var(--sage-lt);margin-bottom:1.6rem}
+.pin__numwrap{position:relative;height:clamp(6rem,15vw,15rem);margin-bottom:.5rem}
+.pin__num{position:absolute;inset:0;font-size:clamp(6rem,15vw,15rem);font-weight:600;letter-spacing:-.06em;
+  line-height:.85;color:var(--cream);opacity:0;transform:translateY(38%);
+  transition:opacity .55s cubic-bezier(.16,.84,.44,1),transform .55s cubic-bezier(.16,.84,.44,1)}
+.pin__num.on{opacity:1;transform:none}
+.pin__num.out{opacity:0;transform:translateY(-38%)}
+.pin__titwrap{position:relative;height:clamp(5rem,9vw,9.5rem)}
+.pin__tit{position:absolute;inset:0;font-size:clamp(1.5rem,3.1vw,3.1rem);font-weight:600;letter-spacing:-.03em;
+  line-height:1.02;color:var(--sage-lt);opacity:0;transform:translateY(24px);
+  transition:opacity .55s .07s cubic-bezier(.16,.84,.44,1),transform .55s .07s cubic-bezier(.16,.84,.44,1);max-width:14ch}
+.pin__tit.on{opacity:1;transform:none}
+.pin__rail{margin-top:2.4rem;display:flex;gap:6px}
+.pin__rail i{flex:1;height:2px;background:color-mix(in srgb,var(--cream) 18%,transparent);transition:background .45s}
+.pin__rail i.on{background:var(--amber)}
+.pin__right{padding-block:36vh}
+.pin__item{min-height:56vh;display:flex;flex-direction:column;justify-content:center;
+  padding-block:clamp(2rem,5vh,4rem);border-bottom:1px solid color-mix(in srgb,var(--cream) 13%,transparent)}
+.pin__item:last-child{border-bottom:0}
+.pin__mobtit{display:none}
+.pin__seg{margin-bottom:2rem}
+.pin__seg:last-child{margin-bottom:0}
+.pin__seg h4{margin:0 0 .7rem;font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;font-weight:400;color:var(--amber)}
+.pin__seg p{margin:0;font-size:clamp(1.05rem,1.55vw,1.5rem);font-weight:300;line-height:1.45;letter-spacing:-.015em;
+  color:color-mix(in srgb,var(--cream) 88%,transparent);max-width:34ch}
+@media(max-width:960px){
+  .pin{grid-template-columns:1fr;gap:0}
+  .pin__left{display:none}
+  .pin__right{padding-block:0}
+  .pin__item{min-height:0;padding-block:2.6rem}
+  .pin__mobtit{display:block;margin:0 0 1.6rem;font-size:1.6rem;font-weight:600;letter-spacing:-.03em;line-height:1.05}
+  .pin__mobtit em{display:block;font-style:normal;font-size:.62rem;letter-spacing:.32em;color:var(--sage-lt);margin-bottom:.7rem;font-weight:400}
+}
+
+/* ============ STATS ============ */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(1.5rem,4vw,3.5rem);margin-top:3.5rem}
+.stat{border-top:1px solid color-mix(in srgb,var(--ink) 24%,transparent);padding-top:1.6rem;overflow:hidden}
+.stat__n{font-size:clamp(3.2rem,9vw,9rem);font-weight:600;letter-spacing:-.06em;line-height:.85;display:block;font-variant-numeric:tabular-nums}
+.stat__l{display:block;margin-top:1.1rem;font-size:.64rem;letter-spacing:.3em;text-transform:uppercase;color:color-mix(in srgb,var(--ink) 60%,transparent)}
+@media(max-width:860px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* ============ ABOUT ============ */
+.about2__name{
+  font-size:clamp(3.4rem,11vw,11.5rem);font-weight:600;letter-spacing:-.05em;line-height:.86;
+  margin:0 0 clamp(2rem,4.5vh,3.5rem);position:relative;z-index:1;pointer-events:none;
+}
+.about2__name .outline{color:transparent;-webkit-text-stroke:1.5px var(--ink);text-stroke:1.5px var(--ink)}
+.about2__grid{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:clamp(2.5rem,6vw,6rem);align-items:start}
+@media(max-width:960px){.about2__grid{grid-template-columns:1fr}}
+.about2__figure{position:relative;margin:0;z-index:2}
+.about2__media{position:relative;overflow:hidden;aspect-ratio:3/4;max-height:680px}
+.about2__media img{width:100%;height:100%;object-fit:cover;object-position:center 28%;
+  filter:grayscale(1) contrast(1.05);transform:scale(1.14);
+  transition:filter .8s ease,transform 1.4s cubic-bezier(.16,.84,.44,1)}
+.about2__media.in img{transform:scale(1)}
+.about2__media:hover img{filter:grayscale(0) contrast(1)}
+.about2__media::after{content:"";position:absolute;inset:0;background:var(--ink);transform-origin:top;
+  transform:scaleY(1);transition:transform 1.25s cubic-bezier(.76,0,.24,1)}
+.about2__media.in::after{transform:scaleY(0)}
+.about2__tint{position:absolute;inset:0;background:var(--sage);mix-blend-mode:color;opacity:.4;pointer-events:none;transition:opacity .7s;z-index:2}
+.about2__media:hover .about2__tint{opacity:0}
+.about2__quote{
+  position:absolute;left:clamp(1rem,3vw,2.2rem);bottom:clamp(1rem,3vw,2.2rem);z-index:3;
+  max-width:min(26ch,78%);
+  background:color-mix(in srgb,var(--ink) 94%,transparent);color:var(--cream);
+  border-left:2px solid var(--amber);
+  padding:clamp(1.1rem,2vw,1.7rem) clamp(1.2rem,2.2vw,1.9rem);
+  font-size:clamp(1.05rem,1.6vw,1.45rem);font-weight:200;font-style:italic;
+  line-height:1.32;letter-spacing:-.02em;
+}
+.about2__side{
+  position:absolute;bottom:0;right:-2.4rem;z-index:2;
+  writing-mode:vertical-rl;
+  font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;color:var(--sage);
+  white-space:nowrap;
+}
+@media(max-width:960px){.about2__side{display:none}}
+.about2__body{padding-top:clamp(.5rem,2vw,2rem)}
+.about2__body p{font-size:clamp(1rem,1.25vw,1.16rem);font-weight:300;line-height:1.68;max-width:50ch;
+  color:color-mix(in srgb,var(--ink) 78%,transparent);margin:0 0 1.4rem}
+.about2__facts{
+  margin-top:2.6rem;padding-top:1.8rem;border-top:1px solid color-mix(in srgb,var(--ink) 22%,transparent);
+  display:flex;flex-wrap:wrap;gap:2.5rem 3.5rem;
+}
+.about2__fact b{display:block;font-size:clamp(1.5rem,2.4vw,2.2rem);font-weight:600;letter-spacing:-.03em;line-height:1}
+.about2__fact span{display:block;margin-top:.5rem;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--sage);font-weight:400}
+@media(max-width:960px){
+  .about2__body{padding-top:1rem}
+}
+
+/* ============ STATEMENT (full-bleed image) ============ */
+.statement{position:relative;overflow:hidden;background:var(--ink);color:var(--cream);
+  min-height:clamp(420px,78vh,760px);display:flex;align-items:center}
+.statement__bg{position:absolute;left:0;top:-12%;width:100%;height:124%;object-fit:cover;will-change:transform;
+  filter:grayscale(.35) contrast(1.02);opacity:.5}
+.statement::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(180deg,var(--ink) 0%,color-mix(in srgb,var(--ink) 42%,transparent) 45%,var(--ink) 100%)}
+.statement .wrap{position:relative;z-index:2}
+.statement p{margin:0;max-width:22ch;font-size:clamp(2.4rem,7vw,7rem);font-weight:200;line-height:1;letter-spacing:-.05em}
+.statement strong{font-weight:600;color:var(--sage-pale)}
+
+/* ============ QUOTES ============ */
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(2rem,4vw,4rem);margin-top:3.5rem}
+.quote{border-top:1px solid color-mix(in srgb,var(--ink) 24%,transparent);padding-top:1.9rem;transition:border-color .45s}
+.quote:hover{border-color:var(--amber)}
+.quote p{margin:0 0 1.9rem;font-size:clamp(1rem,1.28vw,1.16rem);font-weight:300;line-height:1.58;letter-spacing:-.012em;
+  color:color-mix(in srgb,var(--ink) 86%,transparent)}
+.quote__who{font-size:.8rem;letter-spacing:.04em;font-weight:600}
+.quote__role{display:block;margin-top:.4rem;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);font-weight:400}
+@media(max-width:960px){.quotes{grid-template-columns:1fr;gap:2.5rem}}
+
+/* ============ POSTS ============ */
+.posts{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(2rem,4vw,4rem);margin-top:3.5rem}
+.post{text-decoration:none;display:block;position:relative}
+.post__img{overflow:hidden;aspect-ratio:16/10;margin-bottom:1.4rem;background:var(--tan)}
+.post__img img{width:100%;height:100%;object-fit:cover;filter:grayscale(.6) contrast(1.02);
+  transition:filter .6s ease,transform 1s cubic-bezier(.16,.84,.44,1)}
+.post:hover .post__img img{filter:grayscale(0);transform:scale(1.05)}
+.post__date{font-size:.64rem;letter-spacing:.28em;text-transform:uppercase;color:var(--sage)}
+.post h3{margin:1rem 0 0;font-size:clamp(1.18rem,1.7vw,1.55rem);font-weight:600;line-height:1.16;letter-spacing:-.025em;max-width:21ch}
+.post h3 span{background-image:linear-gradient(var(--amber),var(--amber));background-size:0% 1px;background-repeat:no-repeat;
+  background-position:0 100%;transition:background-size .5s cubic-bezier(.4,0,.2,1)}
+.post:hover h3 span{background-size:100% 1px}
+@media(max-width:960px){.posts{grid-template-columns:1fr}}
+
+/* ============ CONTACT ============ */
+.contact__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(2.5rem,6vw,6rem);align-items:start}
+@media(max-width:960px){.contact__grid{grid-template-columns:1fr}}
+.field{margin-bottom:2rem;position:relative}
+.field label{display:block;margin-bottom:.7rem;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--sage-lt)}
+.field input,.field select,.field textarea{
+  width:100%;background:transparent;border:0;border-bottom:1px solid color-mix(in srgb,var(--cream) 24%,transparent);
+  color:var(--cream);font-family:var(--font);font-size:1.05rem;font-weight:300;padding:.6rem 0;border-radius:0;transition:border-color .4s}
+.field textarea{resize:vertical;min-height:5.5rem;line-height:1.6}
+.field select{appearance:none;cursor:pointer}
+.field select option{background:var(--ink);color:var(--cream)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-bottom-color:var(--amber)}
+.submit{margin-top:.6rem;position:relative;overflow:hidden;background:transparent;
+  border:1px solid color-mix(in srgb,var(--cream) 38%,transparent);color:var(--cream);font-family:var(--font);
+  font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;padding:1.15rem 2.6rem;cursor:pointer;border-radius:0;isolation:isolate}
+.submit span{position:relative;z-index:2;transition:color .45s}
+.submit::before{content:"";position:absolute;inset:0;background:var(--amber);transform:translateY(101%);
+  transition:transform .55s cubic-bezier(.76,0,.24,1);z-index:1}
+.submit:hover::before{transform:translateY(0)}
+.submit:hover span{color:var(--ink)}
+.formnote{margin-top:1.5rem;font-size:.78rem;font-weight:300;color:color-mix(in srgb,var(--cream) 52%,transparent)}
+
+/* ============ FOOTER ============ */
+.foot{background:var(--ink);color:var(--cream);padding-block:clamp(3rem,7vh,5rem);border-top:1px solid color-mix(in srgb,var(--cream) 13%,transparent)}
+.foot__top{display:flex;flex-wrap:wrap;gap:2.5rem;justify-content:space-between;align-items:flex-start}
+.foot__mark{width:52px;height:34px;color:var(--sage-lt)}
+.foot__nav{display:flex;flex-wrap:wrap;gap:2rem}
+.foot__nav a{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;opacity:.62;transition:opacity .35s}
+.foot__nav a:hover{opacity:1}
+.foot__bar{margin-top:3.5rem;padding-top:1.5rem;border-top:1px solid color-mix(in srgb,var(--cream) 13%,transparent);
+  display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;font-size:.68rem;letter-spacing:.16em;
+  text-transform:uppercase;color:color-mix(in srgb,var(--cream) 42%,transparent)}
+
+:focus-visible{outline:2px solid var(--amber);outline-offset:4px}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation:none !important;transition-duration:.01ms !important}
+  .rv,.wordrise span{opacity:1;transform:none}
+  .ln > span{transform:none}
+  .hero__foot{opacity:1;transform:none}
+  .about2__media::after{transform:scaleY(0)}
+  .about2__media img{transform:none}
+  .hero__media{opacity:1;transform:none}
+  #loader{display:none}
+}
+</style>
+</head>
+<body class="loading no-cursor">
+
+<div id="loader">
+  <svg class="lmark" viewBox="0 0 170 110" aria-hidden="true">
+    <path fill="currentColor" d="M0 0h62L31 98z"/><path fill="currentColor" d="M108 0h62l-31 98z"/><path fill="currentColor" d="M85 18l37 92H48z"/>
+  </svg>
+  <div class="lbar"><i id="lbarFill"></i></div>
+  <div class="lnum" id="lnum">00</div>
+</div>
+
+<div class="cur" id="cur" aria-hidden="true"></div>
+<div class="curdot" id="curdot" aria-hidden="true"></div>
+<div id="prog"></div>
+
+<nav class="nav" id="nav">
+  <a class="nav__brand" href="#top" data-cur>
+    <span class="nav__mark"><svg class="mark" viewBox="0 0 170 110" aria-hidden="true"><path d="M0 0h62L31 98zM108 0h62l-31 98zM85 18l37 92H48z"/></svg></span>
+    <span class="nav__name">Wyckoff</span>
+  </a>
+  <div class="nav__links">
+    <a href="#points" data-cur>Inflection Points</a>
+    <a href="#about" data-cur>About</a>
+    <a href="#insights" data-cur>Insights</a>
+    <a class="nav__cta" href="#contact" data-cur>Start a conversation</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="hero__media" aria-hidden="true">
+    <img class="hero__fallback" src="https://images.unsplash.com/photo-1431540015161-0bf868a2d407?q=60&w=1800&auto=format&fit=crop" alt="">
+    <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="metadata"
+      poster="https://images.pexels.com/videos/7552419/pexels-photo-7552419.jpeg?auto=compress&cs=tinysrgb&w=1600">
+      <source src="https://videos.pexels.com/video-files/7552419/7552419-hd_1920_1080_25fps.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero__wash" aria-hidden="true"></div>
+  <div class="hero__grain" aria-hidden="true"></div>
+
+  <div class="hero__inner wrap" id="heroInner">
+    <p class="hero__kicker">Fractional Chief Marketing Officer</p>
+    <h1 class="display display--xl">
+      <span class="ln"><span>Companies don't</span></span>
+      <span class="ln"><span>hire us because</span></span>
+      <span class="ln"><span>marketing is broken.</span></span>
+      <span class="ln"><span class="soft">Something bigger changed.</span></span>
+    </h1>
+    <div class="hero__foot">
+      <p class="hero__sub">Executive marketing leadership for $3M–$50M companies, at the moments that decide their next decade.</p>
+      <a class="textlink" href="#points" data-cur>See the eight inflection points &rarr;</a>
+    </div>
+  </div>
+</header>
+
+<!-- TAGLINE MARQUEE -->
+<div class="mq" aria-hidden="true">
+  <div class="mq__track"><span>Strategy</span><span>Growth</span><span>Enterprise Value</span><span>A Stronger Business</span><span>A Stronger Future</span><span>Strategy</span><span>Growth</span><span>Enterprise Value</span><span>A Stronger Business</span><span>A Stronger Future</span></div>
+  <div class="mq__track"><span>Strategy</span><span>Growth</span><span>Enterprise Value</span><span>A Stronger Business</span><span>A Stronger Future</span><span>Strategy</span><span>Growth</span><span>Enterprise Value</span><span>A Stronger Business</span><span>A Stronger Future</span></div>
+</div>
+
+<!-- POSITIONING -->
+<section class="wrap band rv">
+  <div class="split">
+    <div>
+      <p class="label">The premise</p>
+      <h2 class="display wordrise">Every business has a few moments that set the ceiling.</h2>
+    </div>
+    <div style="padding-top:.6rem">
+      <p class="lede">Growth stalls. A leader walks out. A buyer comes to the table. In those moments a company doesn't need more marketing activity — it needs someone who has sat in the chair before and knows which decisions compound.</p>
+      <p class="lede" style="margin-top:1.6rem">Wyckoff steps in as executive marketing leadership, at the capacity the business actually needs, for exactly as long as it needs it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PARALLAX FIELD BAND -->
+<div class="plxband" aria-hidden="true">
+  <img data-plx="0.16" src="https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?q=60&w=2000&auto=format&fit=crop" alt="" loading="lazy">
+  <div class="plxband__cap">Manufacturing &middot; Healthcare &middot; Industrial B2B &middot; 20+ verticals</div>
+</div>
+
+<!-- LOGO MARQUEE -->
+<div class="mq mq--logos" aria-label="Selected clients">
+  <div class="mq__track">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/gates-logo_square.png" alt="Gates" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/avaya-logo_square.png" alt="Avaya" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/uchealth-logo_square.png" alt="UCHealth" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/history-logo_square.png" alt="History" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/sme-logo_square.png" alt="SME" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/peerless-machinery-logo_square.png" alt="Peerless Machinery" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/millenium-machinery-logo_square.png" alt="Millennium Machinery" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/bradley-company-logo_square.png" alt="Bradley Company" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/adam-logo_square.png" alt="ADAM" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2024/06/cavallo-logo.png" alt="Cavallo" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2024/06/nu-ice-logo.png" alt="Nu-Ice" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/telecom-logo_square.png" alt="Telecom" loading="lazy">
+  </div>
+  <div class="mq__track" aria-hidden="true">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/gates-logo_square.png" alt="" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/avaya-logo_square.png" alt="" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/uchealth-logo_square.png" alt="" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/history-logo_square.png" alt="" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/sme-logo_square.png" alt="" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/peerless-machinery-logo_square.png" alt="" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/millenium-machinery-logo_square.png" alt="" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/bradley-company-logo_square.png" alt="" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/adam-logo_square.png" alt="" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2024/06/cavallo-logo.png" alt="" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2024/06/nu-ice-logo.png" alt="" loading="lazy">
+    <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/telecom-logo_square.png" alt="" loading="lazy">
+  </div>
+</div>
+
+<!-- INFLECTION POINTS — PINNED -->
+<section class="band band--ink" id="points" style="padding-bottom:0">
+  <div class="wrap">
+    <div class="rv" style="margin-bottom:clamp(2rem,6vh,4rem)">
+      <p class="label">Eight critical business inflection points</p>
+      <h2 class="display" style="max-width:13ch">This is where we get the call.</h2>
+    </div>
+
+    <div class="pin" id="pin">
+      <div class="pin__left">
+        <div class="pin__meta">The turn</div>
+        <div class="pin__numwrap" id="numWrap">
+          <div class="pin__num on">01</div><div class="pin__num">02</div><div class="pin__num">03</div><div class="pin__num">04</div>
+          <div class="pin__num">05</div><div class="pin__num">06</div><div class="pin__num">07</div><div class="pin__num">08</div>
+        </div>
+        <div class="pin__titwrap" id="titWrap">
+          <div class="pin__tit on">Growth Has Stalled</div>
+          <div class="pin__tit">Marketing Leadership Gap</div>
+          <div class="pin__tit">Entering a New Market</div>
+          <div class="pin__tit">No Marketing Function</div>
+          <div class="pin__tit">Rebranding or Repositioning</div>
+          <div class="pin__tit">Preparing for Sale</div>
+          <div class="pin__tit">Merger or Acquisition</div>
+          <div class="pin__tit">Private Equity &amp; Venture-Backed</div>
+        </div>
+        <div class="pin__rail" id="rail">
+          <i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+
+      <div class="pin__right" id="pinRight">
+        <article class="pin__item">
+          <h3 class="pin__mobtit"><em>01</em>Growth Has Stalled</h3>
+          <div class="pin__seg"><h4>The challenge</h4><p>Revenue has plateaued. The pipeline is inconsistent. Growth has lost momentum.</p></div>
+          <div class="pin__seg"><h4>What's needed</h4><p>A strategic reset, measurable KPIs, and a revenue-focused growth plan.</p></div>
+        </article>
+        <article class="pin__item">
+          <h3 class="pin__mobtit"><em>02</em>Marketing Leadership Gap</h3>
+          <div class="pin__seg"><h4>The challenge</h4><p>Your marketing leader is gone, and the team lacks senior direction.</p></div>
+          <div class="pin__seg"><h4>What's needed</h4><p>Immediate fractional CMO leadership, stability, and a clear path forward.</p></div>
+        </article>
+        <article class="pin__item">
+          <h3 class="pin__mobtit"><em>03</em>Entering a New Market</h3>
+          <div class="pin__seg"><h4>The challenge</h4><p>You're expanding into a new industry, geography, service, or customer segment.</p></div>
+          <div class="pin__seg"><h4>What's needed</h4><p>Sharp positioning, the right message, and a proven go-to-market strategy.</p></div>
+        </article>
+        <article class="pin__item">
+          <h3 class="pin__mobtit"><em>04</em>No Marketing Function</h3>
+          <div class="pin__seg"><h4>The challenge</h4><p>Growth has been driven by sales, relationships, and the founder — not a marketing system.</p></div>
+          <div class="pin__seg"><h4>What's needed</h4><p>A scalable marketing foundation aligned with sales and revenue.</p></div>
+        </article>
+        <article class="pin__item">
+          <h3 class="pin__mobtit"><em>05</em>Rebranding or Repositioning</h3>
+          <div class="pin__seg"><h4>The challenge</h4><p>Your company has evolved, but your brand has not.</p></div>
+          <div class="pin__seg"><h4>What's needed</h4><p>Stronger positioning, clearer messaging, and meaningful differentiation.</p></div>
+        </article>
+        <article class="pin__item">
+          <h3 class="pin__mobtit"><em>06</em>Preparing for Sale</h3>
+          <div class="pin__seg"><h4>The challenge</h4><p>You want to maximize valuation and reduce dependence on the owner.</p></div>
+          <div class="pin__seg"><h4>What's needed</h4><p>Predictable revenue, a compelling growth story, and stronger enterprise value.</p></div>
+        </article>
+        <article class="pin__item">
+          <h3 class="pin__mobtit"><em>07</em>Merger or Acquisition</h3>
+          <div class="pin__seg"><h4>The challenge</h4><p>Brands, teams, customers, and strategies must come together quickly.</p></div>
+          <div class="pin__seg"><h4>What's needed</h4><p>Unified messaging, aligned go-to-market strategy, and confident communication.</p></div>
+        </article>
+        <article class="pin__item">
+          <h3 class="pin__mobtit"><em>08</em>Private Equity &amp; Venture-Backed</h3>
+          <div class="pin__seg"><h4>The challenge</h4><p>Your portfolio company needs experienced leadership to accelerate growth and increase enterprise value.</p></div>
+          <div class="pin__seg"><h4>What's needed</h4><p>Executive fractional CMO leadership, strategic alignment, and a proven value creation plan.</p></div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="wrap band band--tan rv">
+  <p class="label">Since 1993</p>
+  <h2 class="display display--sm" style="max-width:17ch">Three decades of decisions, in rooms like yours.</h2>
+  <div class="stats">
+    <div class="stat"><span class="stat__n" data-count="33">0</span><span class="stat__l">Years in practice</span></div>
+    <div class="stat"><span class="stat__n" data-count="20" data-suffix="+">0</span><span class="stat__l">Vertical markets</span></div>
+    <div class="stat"><span class="stat__n" data-count="12">0</span><span class="stat__l">Countries</span></div>
+    <div class="stat"><span class="stat__n" data-count="100" data-suffix="s">0</span><span class="stat__l">Growth initiatives led</span></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="wrap band" id="about">
+  <p class="label rv">Who steps in</p>
+  <h2 class="about2__name rv" aria-label="Luke Wyckoff">Luke <span class="outline">Wyckoff</span></h2>
+  <div class="about2__grid">
+    <figure class="about2__figure">
+      <div class="about2__media" id="aboutMedia">
+        <img src="https://wyckoffconsulting.com/wp-content/uploads/2023/03/luke.jpg" alt="Luke Wyckoff, Fractional Chief Marketing Officer" loading="lazy">
+        <span class="about2__tint" aria-hidden="true"></span>
+        <figcaption class="about2__quote">&ldquo;Without margin, there is no mission.&rdquo;</figcaption>
+      </div>
+      <span class="about2__side" aria-hidden="true">Fractional CMO &mdash; Est. 1993</span>
+    </figure>
+    <div class="about2__body rv">
+      <p>A creative operator with a finance background, placed on your executive team in a part-time capacity. What you get is an unbiased expert whose only focus is growth and profitability.</p>
+      <p>Since 1993, Wyckoff has worked across more than 20 vertical markets in 12 countries, executing marketing strategies that drive owners' equity and shareholder value. The catch: you can't hire him as a W2.</p>
+      <div class="about2__facts">
+        <div class="about2__fact"><b>1993</b><span>In practice since</span></div>
+        <div class="about2__fact"><b>20+</b><span>Vertical markets</span></div>
+        <div class="about2__fact"><b>12</b><span>Countries</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATEMENT — full-bleed image -->
+<section class="statement">
+  <img class="statement__bg" data-plx="0.12" src="https://images.unsplash.com/photo-1567789884554-0b844b597180?q=60&w=2000&auto=format&fit=crop" alt="" loading="lazy" aria-hidden="true">
+  <div class="wrap">
+    <p class="wordrise">Marketing exists for one reason. <strong>To create profitable growth.</strong></p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="wrap band rv">
+  <p class="label">From the people who've worked with him</p>
+  <div class="quotes">
+    <blockquote class="quote">
+      <p>Everything he does is focused on helping individuals and organizations be their best. And he gets it done. Combine that with a strong code of ethics and a desire for everyone to succeed, and you have a consummate professional who advances the cause.</p>
+      <div class="quote__who">Linda Thomas<span class="quote__role">VP, Global Accounts — Mandel Communications</span></div>
+    </blockquote>
+    <blockquote class="quote">
+      <p>One of the best business partners I have worked with. His drive, energy and customer service are inspiring. Great skills in problem solving, tireless, and very intuitive.</p>
+      <div class="quote__who">Patricia Lawrence<span class="quote__role">Senior VP, Human Resources — Re/Max</span></div>
+    </blockquote>
+    <blockquote class="quote">
+      <p>The ultimate value-add consultant and consummate business partner, delivering solutions that exceed requirements. I strongly endorse him and his services.</p>
+      <div class="quote__who">John O'Loughlin<span class="quote__role">McAleer Gray LLC</span></div>
+    </blockquote>
+  </div>
+</section>
+
+<!-- INSIGHTS -->
+<section class="wrap band rv" id="insights" style="padding-top:0">
+  <p class="label">Insights</p>
+  <h2 class="display display--sm" style="max-width:15ch">Thinking from the chair.</h2>
+  <div class="posts">
+    <a class="post" href="#" data-cur>
+      <div class="post__img"><img src="https://images.unsplash.com/photo-1573164574572-cb89e39749b4?q=60&w=1100&auto=format&fit=crop" alt="" loading="lazy"></div>
+      <span class="post__date">June 2024</span>
+      <h3><span>Digital Strategies for EOS-Driven Companies</span></h3>
+    </a>
+    <a class="post" href="#" data-cur>
+      <div class="post__img"><img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=60&w=1100&auto=format&fit=crop" alt="" loading="lazy"></div>
+      <span class="post__date">October 2022</span>
+      <h3><span>Three Things to Do Before Google Multisearch Arrives</span></h3>
+    </a>
+    <a class="post" href="#" data-cur>
+      <div class="post__img"><img src="https://images.unsplash.com/photo-1581091212991-8891c7d4bd9b?q=60&w=1100&auto=format&fit=crop" alt="" loading="lazy"></div>
+      <span class="post__date">August 2022</span>
+      <h3><span>Recessionary Times Are Redirecting the Great Resignation</span></h3>
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="band band--ink" id="contact">
+  <div class="wrap contact__grid">
+    <div class="rv">
+      <p class="label">The next step</p>
+      <h2 class="display" style="max-width:11ch">Let's talk about what's changed.</h2>
+      <p class="lede" style="margin-top:2rem">Tell us what's shifted in the business. If there's a fit, you'll hear back directly from Luke.</p>
+    </div>
+    <div class="rv">
+      <div class="field"><label for="f-name">Name</label><input id="f-name" type="text" autocomplete="name"></div>
+      <div class="field"><label for="f-co">Company</label><input id="f-co" type="text" autocomplete="organization"></div>
+      <div class="field"><label for="f-email">Email</label><input id="f-email" type="email" autocomplete="email"></div>
+      <div class="field"><label for="f-rev">Annual revenue</label>
+        <select id="f-rev"><option>Under $3M</option><option>$3M – $10M</option><option>$10M – $25M</option><option>$25M – $50M</option><option>$50M+</option></select>
+      </div>
+      <div class="field"><label for="f-what">What's changed?</label><textarea id="f-what" rows="3"></textarea></div>
+      <button class="submit" type="button" data-cur><span>Send it to Luke</span></button>
+      <p class="formnote">Every inquiry is read personally. Nothing is shared, sold, or added to a list.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__top">
+      <div style="display:flex;align-items:center;gap:1.1rem">
+        <span class="foot__mark"><svg class="mark" viewBox="0 0 170 110" aria-hidden="true"><path d="M0 0h62L31 98zM108 0h62l-31 98zM85 18l37 92H48z"/></svg></span>
+        <span style="font-size:.7rem;letter-spacing:.36em;text-transform:uppercase">Wyckoff Consulting</span>
+      </div>
+      <nav class="foot__nav">
+        <a href="#points" data-cur>Inflection Points</a><a href="#about" data-cur>About</a>
+        <a href="#insights" data-cur>Insights</a><a href="#contact" data-cur>Contact</a>
+      </nav>
+    </div>
+    <div class="foot__bar"><span>Strategy. Growth. Enterprise Value.</span><span>&copy; 2026 Wyckoff Consulting</span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- LOADER ---------- */
+var loader=document.getElementById('loader'), lfill=document.getElementById('lbarFill'), lnum=document.getElementById('lnum');
+function finish(){
+  document.body.classList.remove('loading');
+  document.body.classList.add('ready');
+  if(loader) loader.classList.add('done');
+}
+if(reduce){ finish(); }
+else{
+  var pct=0;
+  var tick=setInterval(function(){
+    pct += Math.random()*14 + 6;
+    if(pct>=100){ pct=100; clearInterval(tick); setTimeout(finish,340); }
+    lfill.style.right=(100-pct)+'%';
+    lnum.textContent=(pct<10?'0':'')+Math.floor(pct);
+  },110);
+}
+
+/* ---------- HERO VIDEO ---------- */
+var hv=document.getElementById('heroVideo');
+if(hv){
+  if(reduce){ hv.remove(); }
+  else{
+    var arm=function(){ hv.classList.add('live'); };
+    hv.addEventListener('playing', arm, {once:true});
+    hv.addEventListener('error', function(){ hv.remove(); });
+    var p=hv.play && hv.play();
+    if(p && p.catch){ p.catch(function(){ /* stays on fallback image */ }); }
+  }
+}
+
+/* ---------- CURSOR ---------- */
+var cur=document.getElementById('cur'), dot=document.getElementById('curdot');
+if(window.matchMedia('(hover:hover)').matches && window.innerWidth>900 && !reduce){
+  var tx=window.innerWidth/2, ty=window.innerHeight/2, cx=tx, cy=ty;
+  document.addEventListener('mousemove',function(e){
+    tx=e.clientX; ty=e.clientY;
+    dot.style.transform='translate3d('+tx+'px,'+ty+'px,0)';
+  });
+  (function loop(){
+    cx += (tx-cx)*0.16; cy += (ty-cy)*0.16;
+    cur.style.transform='translate3d('+cx+'px,'+cy+'px,0)';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('[data-cur],input,select,textarea').forEach(function(el){
+    el.addEventListener('mouseenter',function(){cur.classList.add('big')});
+    el.addEventListener('mouseleave',function(){cur.classList.remove('big')});
+  });
+} else { document.body.classList.remove('no-cursor'); }
+
+/* ---------- NAV + PROGRESS + HERO PARALLAX + PLX BANDS ---------- */
+var nav=document.getElementById('nav'), prog=document.getElementById('prog');
+var plxEls=Array.prototype.slice.call(document.querySelectorAll('[data-plx]'));
+function onScroll(){
+  var y=window.scrollY;
+  if(y > window.innerHeight*0.8) nav.classList.add('stuck'); else nav.classList.remove('stuck');
+  var h=document.documentElement.scrollHeight-window.innerHeight;
+  prog.style.width=(h>0 ? (y/h)*100 : 0)+'%';
+  if(!reduce && y < window.innerHeight){
+    var hi=document.getElementById('heroInner');
+    if(hi){ hi.style.transform='translate3d(0,'+(y*0.24)+'px,0)'; hi.style.opacity=String(Math.max(0,1-y/(window.innerHeight*0.85))); }
+  }
+  if(!reduce){
+    plxEls.forEach(function(el){
+      var r=el.getBoundingClientRect();
+      if(r.bottom<0 || r.top>window.innerHeight) return;
+      var speed=parseFloat(el.getAttribute('data-plx'))||0.12;
+      var center=r.top + r.height/2 - window.innerHeight/2;
+      el.style.transform='translate3d(0,'+(center*-speed)+'px,0)';
+    });
+  }
+}
+window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+/* ---------- WORD SPLIT ---------- */
+document.querySelectorAll('.wordrise').forEach(function(el){
+  var walk=function(node){
+    Array.prototype.slice.call(node.childNodes).forEach(function(n){
+      if(n.nodeType===3){
+        var frag=document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(function(w){
+          if(!w.trim()){ frag.appendChild(document.createTextNode(w)); return; }
+          var s=document.createElement('span'); s.textContent=w; frag.appendChild(s);
+        });
+        n.parentNode.replaceChild(frag,n);
+      } else if(n.nodeType===1){ walk(n); }
+    });
+  };
+  walk(el);
+  el.querySelectorAll('span').forEach(function(s,i){ s.style.transitionDelay=(i*0.045)+'s'; });
+});
+
+/* ---------- REVEALS ---------- */
+var revs=document.querySelectorAll('.rv,.wordrise,#aboutMedia');
+if(reduce || !('IntersectionObserver' in window)){
+  revs.forEach(function(el){el.classList.add('in')});
+} else {
+  var io=new IntersectionObserver(function(en){
+    en.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:0.15,rootMargin:'0px 0px -6% 0px'});
+  revs.forEach(function(el){io.observe(el)});
+}
+
+/* ---------- COUNTERS ---------- */
+function run(el){
+  var t=parseInt(el.getAttribute('data-count'),10), sfx=el.getAttribute('data-suffix')||'';
+  if(reduce){ el.textContent=t+sfx; return; }
+  var s=null,d=1700;
+  function step(ts){
+    if(!s)s=ts;
+    var p=Math.min((ts-s)/d,1), e=1-Math.pow(1-p,4);
+    el.textContent=Math.round(t*e)+(p===1?sfx:'');
+    if(p<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+var nums=document.querySelectorAll('[data-count]');
+if('IntersectionObserver' in window){
+  var io2=new IntersectionObserver(function(en){
+    en.forEach(function(e){ if(e.isIntersecting){ run(e.target); io2.unobserve(e.target); } });
+  },{threshold:0.5});
+  nums.forEach(function(el){io2.observe(el)});
+} else { nums.forEach(run); }
+
+/* ---------- PINNED POINTS ---------- */
+var items=document.querySelectorAll('#pinRight .pin__item');
+var pnums=document.querySelectorAll('#numWrap .pin__num');
+var ptits=document.querySelectorAll('#titWrap .pin__tit');
+var rail=document.querySelectorAll('#rail i');
+var active=0;
+function setActive(i){
+  if(i===active) return;
+  pnums[active].classList.remove('on'); pnums[active].classList.add('out');
+  ptits[active].classList.remove('on');
+  rail[active].classList.remove('on');
+  active=i;
+  pnums[active].classList.remove('out'); pnums[active].classList.add('on');
+  ptits[active].classList.add('on');
+  rail[active].classList.add('on');
+}
+if('IntersectionObserver' in window && window.innerWidth>960){
+  var io3=new IntersectionObserver(function(en){
+    en.forEach(function(e){
+      if(e.isIntersecting){
+        var idx=Array.prototype.indexOf.call(items,e.target);
+        if(idx>-1) setActive(idx);
+      }
+    });
+  },{threshold:0.01,rootMargin:'-45% 0px -45% 0px'});
+  items.forEach(function(el){io3.observe(el)});
+}
+
+/* ---------- ANCHORS ---------- */
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(ev){
+    var id=a.getAttribute('href'); if(id.length<2)return;
+    var t=document.querySelector(id); if(!t)return;
+    ev.preventDefault();
+    t.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+  });
+});
+})();
+</script>
+</body>
+</html>

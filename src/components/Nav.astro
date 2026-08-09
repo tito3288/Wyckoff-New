@@ -1,0 +1,121 @@
+---
+import BrandLogo from "./BrandLogo.astro";
+
+const links = [
+  { href: "#points", label: "Inflection Points", cta: false },
+  { href: "#about", label: "About", cta: false },
+  { href: "#insights", label: "Insights", cta: false },
+  { href: "#contact", label: "Start a Conversation", cta: true },
+];
+---
+<nav class="nav" id="nav" aria-label="Main navigation">
+  <a class="nav__brand" href="#top" aria-label="Wyckoff Consulting, home">
+    <BrandLogo variant="lockup" class="nav__logo" />
+  </a>
+
+  <div class="nav__links">
+    {links.map((link) => (
+      <a class:list={[link.cta && "nav__cta"]} href={link.href}>{link.label}</a>
+    ))}
+  </div>
+
+  <button
+    class="nav__toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="mobile-menu"
+    aria-label="Open navigation menu"
+  >
+    <span class="nav__toggle-box" aria-hidden="true">
+      <span></span>
+      <span></span>
+    </span>
+  </button>
+
+  <div class="nav__overlay" id="mobile-menu" aria-hidden="true" inert>
+    <div class="nav__overlay-inner">
+      <p class="nav__overlay-label">Navigate</p>
+      <div class="nav__overlay-links">
+        {links.map((link, index) => (
+          <a
+            class:list={["nav__overlay-link", link.cta && "nav__overlay-cta"]}
+            href={link.href}
+            style={`--menu-index:${index}`}
+          >
+            <span>{link.label}</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        ))}
+      </div>
+      <p class="nav__overlay-note">Executive marketing leadership since 1993.</p>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const nav = document.querySelector<HTMLElement>("#nav");
+  const toggle = nav?.querySelector<HTMLButtonElement>(".nav__toggle");
+  const menu = nav?.querySelector<HTMLElement>("#mobile-menu");
+  const menuLinks = menu
+    ? Array.from(menu.querySelectorAll<HTMLAnchorElement>("a[href]"))
+    : [];
+
+  if (nav && toggle && menu) {
+    let isOpen = false;
+
+    const setOpen = (nextOpen: boolean, restoreFocus = true) => {
+      isOpen = nextOpen;
+      toggle.setAttribute("aria-expanded", String(nextOpen));
+      toggle.setAttribute("aria-label", nextOpen ? "Close navigation menu" : "Open navigation menu");
+      menu.setAttribute("aria-hidden", String(!nextOpen));
+      menu.toggleAttribute("inert", !nextOpen);
+      nav.classList.toggle("menu-open", nextOpen);
+      document.body.classList.toggle("menu-open", nextOpen);
+
+      if (nextOpen) {
+        requestAnimationFrame(() => menuLinks[0]?.focus());
+      } else if (restoreFocus) {
+        toggle.focus();
+      }
+    };
+
+    toggle.addEventListener("click", () => setOpen(!isOpen));
+    menuLinks.forEach((link) => link.addEventListener("click", () => setOpen(false)));
+
+    document.addEventListener("keydown", (event) => {
+      if (!isOpen) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      const focusableLinks = menuLinks.filter(
+        (element) => !element.hasAttribute("disabled") && element.getClientRects().length > 0,
+      );
+      if (!focusableLinks.length) return;
+      const first = focusableLinks[0];
+      const last = focusableLinks[focusableLinks.length - 1];
+
+      if (event.shiftKey && document.activeElement === toggle) {
+        event.preventDefault();
+        last.focus();
+      } else if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        toggle.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        toggle.focus();
+      } else if (!event.shiftKey && document.activeElement === toggle) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    const desktopQuery = window.matchMedia("(min-width: 901px)");
+    desktopQuery.addEventListener("change", (event) => {
+      if (event.matches && isOpen) setOpen(false, false);
+    });
+  }
+</script>
