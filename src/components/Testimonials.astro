@@ -165,17 +165,6 @@ const headingId = `${carouselId}-heading`;
       </div>
 
       <button
-        class="testimonial-carousel__button testimonial-carousel__button--toggle"
-        type="button"
-        data-carousel-toggle
-        aria-controls={trackId}
-        aria-label="Pause automatic rotation"
-        aria-pressed="true"
-      >
-        <span data-carousel-toggle-label>Pause autoplay</span>
-      </button>
-
-      <button
         class="testimonial-carousel__button testimonial-carousel__button--next"
         type="button"
         data-carousel-next
@@ -212,8 +201,6 @@ const headingId = `${carouselId}-heading`;
       const viewport = carousel.querySelector<HTMLElement>("[data-carousel-viewport]");
       const previousButton = carousel.querySelector<HTMLButtonElement>("[data-carousel-previous]");
       const nextButton = carousel.querySelector<HTMLButtonElement>("[data-carousel-next]");
-      const toggleButton = carousel.querySelector<HTMLButtonElement>("[data-carousel-toggle]");
-      const toggleLabel = carousel.querySelector<HTMLElement>("[data-carousel-toggle-label]");
       const status = carousel.querySelector<HTMLElement>("[data-carousel-status]");
 
       if (
@@ -221,8 +208,6 @@ const headingId = `${carouselId}-heading`;
         !viewport ||
         !previousButton ||
         !nextButton ||
-        !toggleButton ||
-        !toggleLabel ||
         !status
       ) return;
 
@@ -233,7 +218,6 @@ const headingId = `${carouselId}-heading`;
 
       let itemsPerPage = desktopMedia.matches ? 2 : 1;
       let currentPage = 0;
-      let autoplayPaused = reducedMotionMedia.matches;
       let pointerIsOver = false;
       let focusIsWithin = false;
       let documentIsHidden = document.hidden;
@@ -251,37 +235,11 @@ const headingId = `${carouselId}-heading`;
       };
 
       const canAutoplay = () =>
-        !autoplayPaused &&
         !reducedMotionMedia.matches &&
         !pointerIsOver &&
         !focusIsWithin &&
         !documentIsHidden &&
         getPageCount() > 1;
-
-      const updateAutoplayControl = () => {
-        const reducedMotion = reducedMotionMedia.matches;
-        const autoplayEnabled = !autoplayPaused && !reducedMotion;
-
-        toggleButton.disabled = reducedMotion;
-        toggleButton.setAttribute("aria-pressed", String(autoplayEnabled));
-
-        if (reducedMotion) {
-          toggleLabel.textContent = "Autoplay off";
-          toggleButton.setAttribute(
-            "aria-label",
-            "Automatic rotation disabled by your reduced-motion preference",
-          );
-          toggleButton.title = "Automatic rotation is disabled while reduced motion is preferred.";
-          return;
-        }
-
-        toggleButton.removeAttribute("title");
-        toggleLabel.textContent = autoplayEnabled ? "Pause autoplay" : "Play autoplay";
-        toggleButton.setAttribute(
-          "aria-label",
-          autoplayEnabled ? "Pause automatic rotation" : "Start automatic rotation",
-        );
-      };
 
       const render = () => {
         const pageCount = getPageCount();
@@ -325,7 +283,6 @@ const headingId = `${carouselId}-heading`;
             ? `Showing recommendation ${firstVisibleIndex + 1} of ${slides.length}`
             : `Showing recommendations ${firstVisibleIndex + 1}–${lastVisibleIndex} of ${slides.length}`;
 
-        updateAutoplayControl();
       };
 
       const syncAutoplay = () => {
@@ -341,8 +298,7 @@ const headingId = `${carouselId}-heading`;
         }, AUTOPLAY_DELAY);
       };
 
-      const goToPage = (page: number, manualNavigation = true) => {
-        if (manualNavigation) autoplayPaused = true;
+      const goToPage = (page: number) => {
         currentPage = page;
         render();
         syncAutoplay();
@@ -356,13 +312,6 @@ const headingId = `${carouselId}-heading`;
           const page = Number(dot.dataset.carouselDot);
           if (Number.isInteger(page)) goToPage(page);
         });
-      });
-
-      toggleButton.addEventListener("click", () => {
-        if (reducedMotionMedia.matches) return;
-        autoplayPaused = !autoplayPaused;
-        updateAutoplayControl();
-        syncAutoplay();
       });
 
       carousel.addEventListener("mouseenter", () => {
@@ -441,7 +390,6 @@ const headingId = `${carouselId}-heading`;
       });
 
       reducedMotionMedia.addEventListener("change", () => {
-        if (reducedMotionMedia.matches) autoplayPaused = true;
         render();
         syncAutoplay();
       });
