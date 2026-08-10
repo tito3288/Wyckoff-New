@@ -1,5 +1,6 @@
 ---
 import ExternalArrow from "./ExternalArrow.astro";
+import LinkedInIcon from "./LinkedInIcon.astro";
 
 const facts = [
   { value: "1993", label: "In practice since" },
@@ -9,11 +10,18 @@ const facts = [
 ---
 <section class="wrap band" id="about">
   <p class="label rv">Who Is Wyckoff</p>
-  <h2 class="about2__name rv" aria-label="Luke Wyckoff">Luke <span class="outline">Wyckoff</span></h2>
+  <h2 class="about2__name rv">Luke <span class="surname">Wyckoff</span></h2>
   <div class="about2__grid">
     <figure class="about2__figure">
       <div class="about2__media" id="aboutMedia">
-        <img src="/images/luke.jpg" alt="Luke Wyckoff, Fractional Chief Marketing Officer" loading="lazy" />
+        <img
+          src="/images/wyckoff/luke-headshot.webp"
+          alt="Luke Wyckoff, Fractional Chief Marketing Officer"
+          width="958"
+          height="959"
+          loading="lazy"
+          decoding="async"
+        />
         <span class="about2__tint" aria-hidden="true"></span>
         <figcaption class="about2__quote">&ldquo;Without margin, there is no mission.&rdquo;</figcaption>
       </div>
@@ -29,7 +37,9 @@ const facts = [
       </div>
       <div class="about2__prompt">
         <a class="textlink" href="https://www.linkedin.com/in/lukewyckoff/" target="_blank" rel="noopener noreferrer">
-          Do you already know someone who knows Wyckoff?<ExternalArrow />
+          <LinkedInIcon />
+          <span>Do you already know someone who knows Wyckoff?</span>
+          <ExternalArrow />
         </a>
       </div>
     </div>
@@ -42,7 +52,14 @@ const facts = [
   }
 
   .about2__prompt .textlink {
+    align-items: flex-start;
     max-width: 100%;
+    line-height: 1.45;
     white-space: normal;
+  }
+
+  .about2__prompt .textlink > :global(svg) {
+    flex: none;
+    margin-top: 0.05em;
   }
 </style>

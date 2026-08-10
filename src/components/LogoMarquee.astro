@@ -7,20 +7,28 @@ export interface ExternalCta {
   href: string;
 }
 
+export interface FeatureImage {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
 interface Props {
   visibleLabel: string;
   accessibleLabel: string;
   logos: readonly LogoItem[];
   externalCta?: ExternalCta;
+  featureImage?: FeatureImage;
   id?: string;
 }
 
-const { visibleLabel, accessibleLabel, logos, externalCta, id } = Astro.props;
+const { visibleLabel, accessibleLabel, logos, externalCta, featureImage, id } = Astro.props;
 const sectionId = id ?? visibleLabel.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 const headingId = `${sectionId}-heading`;
 ---
 <section class="logo-marquee" id={sectionId} aria-labelledby={headingId}>
-  <div class="wrap logo-marquee__header">
+  <div class:list={["wrap", "logo-marquee__header", externalCta && "logo-marquee__header--with-cta"]}>
     <h2 class="label" id={headingId}>{visibleLabel}</h2>
     {externalCta && (
       <a class="textlink logo-marquee__cta" href={externalCta.href} target="_blank" rel="noopener noreferrer">
@@ -28,6 +36,18 @@ const headingId = `${sectionId}-heading`;
       </a>
     )}
   </div>
+  {featureImage && (
+    <div class="wrap logo-marquee__feature">
+      <img
+        src={featureImage.src}
+        alt={featureImage.alt}
+        width={featureImage.width}
+        height={featureImage.height}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  )}
   <div class="mq mq--logos" aria-label={accessibleLabel}>
     <div class="mq__track">
       {logos.map((logo) => (
@@ -58,11 +78,15 @@ const headingId = `${sectionId}-heading`;
 
 <style>
   .logo-marquee__header {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
     align-items: center;
-    justify-content: space-between;
     gap: 1.5rem;
     padding-block: clamp(2rem, 5vh, 3.5rem);
+  }
+
+  .logo-marquee__header--with-cta {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   }
 
   .logo-marquee__header .label {
@@ -86,13 +110,34 @@ const headingId = `${sectionId}-heading`;
   }
 
   .logo-marquee__cta {
-    flex: none;
+    grid-column: 2;
+    justify-self: center;
+    justify-content: center;
+    max-width: 100%;
+    text-align: center;
+    white-space: normal;
   }
 
-  @media (max-width: 680px) {
-    .logo-marquee__header {
-      align-items: flex-start;
-      flex-direction: column;
+  .logo-marquee__feature {
+    padding-bottom: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .logo-marquee__feature img {
+    width: min(100%, 58rem);
+    height: auto;
+    margin-inline: auto;
+    border-left: 3px solid var(--amber);
+  }
+
+  @media (max-width: 900px) {
+    .logo-marquee__header--with-cta {
+      grid-template-columns: 1fr;
+    }
+
+    .logo-marquee__cta {
+      grid-column: 1;
+      justify-self: center;
+      text-align: center;
     }
   }
 </style>
