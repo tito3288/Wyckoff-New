@@ -32,7 +32,7 @@ const facts = [
       <p>Since 1993, Wyckoff has worked across more than 20 vertical markets in 12 countries, executing marketing strategies that drive owners' equity and shareholder value. The catch: you can't hire him as a W2.</p>
       <div class="about2__facts">
         {facts.map((f) => (
-          <div class="about2__fact"><b>{f.value}</b><span>{f.label}</span></div>
+          <div class="about2__fact"><span class="about2__fact-value">{f.value}</span><span class="about2__fact-label">{f.label}</span></div>
         ))}
       </div>
       <div class="about2__prompt">
@@ -40,6 +40,7 @@ const facts = [
           <LinkedInIcon />
           <span>Do you already know someone who knows Wyckoff?</span>
           <ExternalArrow />
+          <span class="sr-only"> (opens in a new tab)</span>
         </a>
       </div>
     </div>

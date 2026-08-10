@@ -35,9 +35,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 </head>
 <body class="loading">
 
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
   <div id="loader">
     <BrandLogo variant="lockup" class="lmark" />
-    <div class="lbar"><i id="lbarFill"></i></div>
+    <div class="lbar"><span id="lbarFill"></span></div>
     <div class="lnum" id="lnum">00</div>
   </div>
 
@@ -45,7 +47,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 
   <Nav />
 
-  <slot />
+  <main id="main-content" tabindex="-1">
+    <slot />
+  </main>
 
   <Footer />
 
@@ -162,7 +166,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
   var items=document.querySelectorAll('#pinRight .pin__item');
   var pnums=document.querySelectorAll('#numWrap .pin__num');
   var ptits=document.querySelectorAll('#titWrap .pin__tit');
-  var rail=document.querySelectorAll('#rail i');
+  var rail=document.querySelectorAll('#rail span');
   var active=0;
   function setActive(i){
     if(i===active) return;
@@ -188,7 +192,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
   }
 
   /* ---------- ANCHORS ---------- */
-  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  var skipLink=document.querySelector('.skip-link');
+  if(skipLink){
+    skipLink.addEventListener('click',function(ev){
+      var target=document.getElementById('main-content'); if(!target)return;
+      ev.preventDefault();
+      target.focus({preventScroll:true});
+      target.scrollIntoView({behavior:'auto',block:'start'});
+    });
+  }
+  document.querySelectorAll('a[href^="#"]:not(.skip-link)').forEach(function(a){
     a.addEventListener('click',function(ev){
       var id=a.getAttribute('href'); if(id.length<2)return;
       var t=document.querySelector(id); if(!t)return;

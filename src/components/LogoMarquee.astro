@@ -32,7 +32,7 @@ const headingId = `${sectionId}-heading`;
     <h2 class="label" id={headingId}>{visibleLabel}</h2>
     {externalCta && (
       <a class="textlink logo-marquee__cta" href={externalCta.href} target="_blank" rel="noopener noreferrer">
-        {externalCta.label}<ExternalArrow />
+        {externalCta.label}<ExternalArrow /><span class="sr-only"> (opens in a new tab)</span>
       </a>
     )}
   </div>

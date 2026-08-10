@@ -60,21 +60,21 @@ const points = [
     <div class="pin" id="pin">
       <div class="pin__left">
         <div class="pin__meta">Why Companies Choose Wyckoff</div>
-        <div class="pin__numwrap" id="numWrap">
+        <div class="pin__numwrap" id="numWrap" aria-hidden="true">
           {points.map((p, i) => <div class={`pin__num${i === 0 ? " on" : ""}`}>{p.num}</div>)}
         </div>
-        <div class="pin__titwrap" id="titWrap">
+        <div class="pin__titwrap" id="titWrap" aria-hidden="true">
           {points.map((p, i) => <div class={`pin__tit${i === 0 ? " on" : ""}`}>{p.title}</div>)}
         </div>
-        <div class="pin__rail" id="rail">
-          {points.map((_, i) => <i class={i === 0 ? "on" : ""}></i>)}
+        <div class="pin__rail" id="rail" aria-hidden="true">
+          {points.map((_, i) => <span class={i === 0 ? "on" : ""}></span>)}
         </div>
       </div>
 
       <div class="pin__right" id="pinRight">
         {points.map((p) => (
           <article class="pin__item">
-            <h3 class="pin__mobtit"><span>{p.title}</span><em>{p.num}</em></h3>
+            <h3 class="pin__mobtit"><span>{p.title}</span><span class="pin__mobnum">{p.num}</span></h3>
             <div class="pin__seg"><h4>The challenge</h4><p>{p.challenge}</p></div>
             <div class="pin__seg"><h4>What's needed</h4><p>{p.needed}</p></div>
           </article>
