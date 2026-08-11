@@ -35,18 +35,9 @@ const structuredData = {
           <span>This is why we</span>
           <span>get the call.</span>
         </h1>
-        <p>Executive marketing leadership for $3M–$50M companies, at the moments that decide their next decade.</p>
+        <p>Executive marketing leadership for $3M–$50M+ companies, at the moments that decide their next decade.</p>
         <a href="/inflection-points/#point-index">See all eight <span aria-hidden="true">&darr;</span></a>
       </div>
-
-      <aside class="ip-hero__summary" aria-label="Eight critical business inflection points">
-        <p class="ip-hero__word">Eight</p>
-        <p class="ip-hero__summary-title">Critical business<br />inflection points</p>
-        <div class="ip-hero__summary-foot">
-          <span aria-hidden="true"></span>
-          <p>Executive perspective.</p>
-        </div>
-      </aside>
     </div>
   </header>
 
@@ -129,7 +120,7 @@ const structuredData = {
     padding: clamp(8.5rem, 15vh, 11rem) 0 clamp(4rem, 8vh, 6rem);
     overflow: hidden;
     background:
-      radial-gradient(circle at 80% 14%, color-mix(in srgb, var(--sage) 36%, transparent), transparent 38%),
+      radial-gradient(circle at 50% 12%, color-mix(in srgb, var(--sage) 36%, transparent), transparent 42%),
       var(--ink);
     color: var(--cream);
   }
@@ -143,15 +134,20 @@ const structuredData = {
       linear-gradient(color-mix(in srgb, var(--sage-pale) 16%, transparent) 1px, transparent 1px),
       linear-gradient(90deg, color-mix(in srgb, var(--sage-pale) 16%, transparent) 1px, transparent 1px);
     background-size: 5rem 5rem;
-    mask-image: linear-gradient(90deg, transparent 4%, #000 56%, #000 100%);
+    mask-image: radial-gradient(circle at 50% 46%, #000 0%, #000 42%, transparent 82%);
   }
 
   .ip-hero__grid {
     position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(21rem, .8fr);
-    align-items: end;
-    gap: clamp(4rem, 10vw, 10rem);
+  }
+
+  .ip-hero__copy {
+    display: flex;
+    width: min(100%, 76rem);
+    margin-inline: auto;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .ip-eyebrow {
@@ -173,12 +169,13 @@ const structuredData = {
   }
 
   .ip-hero h1 {
-    max-width: 12ch;
+    max-width: 14ch;
     margin: 0;
-    font-size: clamp(3rem, 5.15vw, 4.25rem);
+    font-size: clamp(3.75rem, 6.4vw, 5.75rem);
     font-weight: 600;
-    line-height: .98;
+    line-height: .94;
     letter-spacing: -.05em;
+    text-wrap: balance;
   }
 
   .ip-hero h1 span {
@@ -186,7 +183,7 @@ const structuredData = {
   }
 
   .ip-hero__copy > p:not(.ip-eyebrow) {
-    max-width: 43ch;
+    max-width: 48ch;
     margin: 2rem 0 0;
     color: color-mix(in srgb, var(--cream) 76%, transparent);
     font-size: clamp(1rem, 1.2vw, 1.16rem);
@@ -220,67 +217,6 @@ const structuredData = {
   .ip-hero__copy > a:hover span,
   .ip-hero__copy > a:focus-visible span {
     transform: translateY(.2rem);
-  }
-
-  .ip-hero__summary {
-    position: relative;
-    display: flex;
-    min-height: clamp(20rem, 29vw, 27rem);
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: clamp(2rem, 4vw, 3.5rem);
-    border-top: 1px solid var(--amber);
-    border-bottom: 1px solid color-mix(in srgb, var(--sage-pale) 30%, transparent);
-    background: linear-gradient(145deg, color-mix(in srgb, var(--sage) 15%, transparent), transparent 68%);
-  }
-
-  .ip-hero__word {
-    position: relative;
-    z-index: 1;
-    margin: 0;
-    color: var(--sage-pale);
-    font-size: clamp(4rem, 6vw, 6.25rem);
-    font-weight: 300;
-    letter-spacing: -.065em;
-    line-height: .78;
-  }
-
-  .ip-hero__summary-title {
-    position: relative;
-    z-index: 1;
-    max-width: 15ch;
-    margin: 1.65rem 0 0;
-    color: var(--cream);
-    font-size: clamp(1.35rem, 2.1vw, 2rem);
-    font-weight: 600;
-    letter-spacing: -.025em;
-    line-height: 1.08;
-  }
-
-  .ip-hero__summary-foot {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: auto;
-    padding-top: clamp(2.5rem, 6vw, 4.5rem);
-  }
-
-  .ip-hero__summary-foot > span {
-    width: 3rem;
-    height: 1px;
-    flex: none;
-    background: var(--amber);
-  }
-
-  .ip-hero__summary-foot p {
-    margin: 0;
-    color: color-mix(in srgb, var(--cream) 68%, transparent);
-    font-size: .72rem;
-    font-weight: 700;
-    letter-spacing: .17em;
-    text-transform: uppercase;
   }
 
   .point-index {
@@ -538,11 +474,6 @@ const structuredData = {
   }
 
   @media (max-width: 1050px) {
-    .ip-hero__grid {
-      grid-template-columns: minmax(0, 1.05fr) minmax(18rem, .7fr);
-      gap: 3rem;
-    }
-
     .point-index ol {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -583,46 +514,23 @@ const structuredData = {
 
     .ip-hero__field {
       background-size: 3.5rem 3.5rem;
-      mask-image: linear-gradient(180deg, transparent 2%, #000 45%, #000 100%);
+      mask-image: radial-gradient(circle at 50% 43%, #000 0%, #000 46%, transparent 88%);
     }
 
-    .ip-hero__grid,
     .point-ledger__intro,
     .ip-cta__grid {
       grid-template-columns: 1fr;
     }
 
-    .ip-hero__grid {
-      gap: 3.25rem;
-    }
-
     .ip-hero h1 {
-      max-width: 11.5ch;
-      font-size: clamp(2.35rem, 11vw, 2.65rem);
-      line-height: 1;
+      max-width: 12ch;
+      font-size: clamp(2.75rem, 12vw, 3.15rem);
+      line-height: .96;
     }
 
     .ip-hero__copy > p:not(.ip-eyebrow) {
       margin-top: 1.4rem;
       font-size: .98rem;
-    }
-
-    .ip-hero__summary {
-      min-height: 17rem;
-      padding: 1.75rem;
-    }
-
-    .ip-hero__word {
-      font-size: clamp(3.75rem, 18vw, 5rem);
-    }
-
-    .ip-hero__summary-title {
-      margin-top: 1.35rem;
-      font-size: clamp(1.35rem, 6.6vw, 1.75rem);
-    }
-
-    .ip-hero__summary-foot {
-      padding-top: 2.5rem;
     }
 
     .point-index__heading {

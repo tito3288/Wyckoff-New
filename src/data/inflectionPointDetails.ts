@@ -74,7 +74,7 @@ export const inflectionPointDetails = {
       },
       {
         type: "paragraph",
-        text: "Wyckoff Consulting helps companies between $3 million and $50 million in revenue break through growth plateaus by providing executive-level marketing leadership through a Fractional Chief Marketing Officer (CMO) model.",
+        text: "Wyckoff Consulting helps companies from $3 million to $50 million+ in revenue break through growth plateaus by providing executive-level marketing leadership through a Fractional Chief Marketing Officer (CMO) model.",
       },
       {
         type: "paragraph",
@@ -531,7 +531,7 @@ export const inflectionPointDetails = {
               "Independent Sponsors",
               "Search Funds",
               "Holding Companies",
-              "Portfolio Companies generating between $3 million and $50 million in annual revenue",
+              "Portfolio Companies generating $3 million to $50 million+ in annual revenue",
             ],
           },
         ],

@@ -13,7 +13,10 @@ const revenueOptions = ["$3M – $10M", "$10M – $25M", "$25M – $50M", "$50M+
       <div class="field"><label for="f-co">Company</label><input id="f-co" name="company" type="text" autocomplete="organization" /></div>
       <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required /></div>
       <div class="field"><label for="f-rev">Annual revenue</label>
-        <select id="f-rev" name="revenue">{revenueOptions.map((opt) => <option>{opt}</option>)}</select>
+        <select id="f-rev" name="revenue">
+          <option value="">Select a revenue range</option>
+          {revenueOptions.map((opt) => <option value={opt}>{opt}</option>)}
+        </select>
       </div>
       <div class="field"><label for="f-what">What's changed?</label><textarea id="f-what" name="message" rows="3" required></textarea></div>
       <div class="hp-field" aria-hidden="true">
