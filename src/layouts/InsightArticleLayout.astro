@@ -1,0 +1,531 @@
+---
+import InsightCard from "../components/insights/InsightCard.astro";
+import Layout from "./Layout.astro";
+import {
+  formatInsightDate,
+  getDisplayCategory,
+  getInsightDateTime,
+  getInsightPath,
+  type InsightEntry,
+} from "../lib/insights";
+
+interface Props {
+  entry: InsightEntry;
+  related: InsightEntry[];
+}
+
+const { entry, related } = Astro.props;
+const category = getDisplayCategory(entry);
+const canonical = new URL(getInsightPath(entry), Astro.site ?? Astro.url);
+const imageUrl = new URL(entry.data.featuredImage, canonical);
+const showUpdatedDate =
+  entry.data.updatedAt &&
+  entry.data.updatedAt.getTime() > entry.data.publishedAt.getTime();
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: entry.data.title,
+  description: entry.data.description,
+  image: imageUrl.href,
+  datePublished: entry.data.publishedAt.toISOString(),
+  dateModified: (entry.data.updatedAt ?? entry.data.publishedAt).toISOString(),
+  mainEntityOfPage: canonical.href,
+  articleSection: entry.data.categories,
+  publisher: {
+    "@type": "Organization",
+    name: "Wyckoff Consulting",
+    url: new URL("/", canonical).href,
+  },
+};
+---
+
+<Layout
+  title={`${entry.data.title} | Wyckoff Consulting`}
+  description={entry.data.description}
+  image={entry.data.featuredImage}
+  imageAlt={entry.data.featuredImageAlt}
+  ogType="article"
+  publishedTime={entry.data.publishedAt.toISOString()}
+  modifiedTime={(entry.data.updatedAt ?? entry.data.publishedAt).toISOString()}
+  canonicalPath={getInsightPath(entry)}
+  structuredData={articleSchema}
+>
+  <article class="insight-article">
+    <header class="insight-article__hero" id="top" data-nav-dark>
+      <div class="insight-article__texture" aria-hidden="true"></div>
+      <div class="wrap insight-article__hero-inner">
+        <a class="insight-article__back" href="/insights/">
+          <span aria-hidden="true">&larr;</span> All insights
+        </a>
+
+        <div class="insight-article__heading">
+          <p class="insight-article__meta">
+            <span>Insight</span>
+            <time datetime={getInsightDateTime(entry.data.publishedAt)}>
+              {formatInsightDate(entry.data.publishedAt)}
+            </time>
+            {category && <span>{category}</span>}
+          </p>
+          <h1>{entry.data.title}</h1>
+          <p class="insight-article__description">{entry.data.description}</p>
+          {showUpdatedDate && entry.data.updatedAt && (
+            <p class="insight-article__updated">
+              Updated <time datetime={getInsightDateTime(entry.data.updatedAt)}>{formatInsightDate(entry.data.updatedAt)}</time>
+            </p>
+          )}
+        </div>
+
+        <figure
+          class="insight-article__featured"
+          style={`--featured-width:${entry.data.featuredImageWidth}px`}
+        >
+          <img
+            src={entry.data.featuredImage}
+            alt={entry.data.featuredImageAlt}
+            width={entry.data.featuredImageWidth}
+            height={entry.data.featuredImageHeight}
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </figure>
+      </div>
+    </header>
+
+    <div class="insight-article__main">
+      <div class="insight-article__body">
+        <slot />
+      </div>
+
+      <aside class="insight-article__cta" aria-labelledby="insight-cta-title">
+        <div>
+          <p>The next step</p>
+          <h2 id="insight-cta-title">Let&rsquo;s discuss profitable growth.</h2>
+        </div>
+        <div>
+          <p>Tell us what&rsquo;s shifted in the business. If there&rsquo;s a fit, you&rsquo;ll hear back directly from Luke.</p>
+          <a href="/#contact">Start a conversation <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="related-insights" aria-labelledby="related-insights-title">
+      <div class="wrap">
+        <header class="related-insights__heading">
+          <div>
+            <p>More insights</p>
+            <h2 id="related-insights-title">Continue reading.</h2>
+          </div>
+          <a href="/insights/">View all insights <span aria-hidden="true">&rarr;</span></a>
+        </header>
+        <div class="related-insights__grid">
+          {related.map((relatedEntry) => <InsightCard entry={relatedEntry} />)}
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>
+
+<style>
+  .insight-article__hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(7.5rem, 12vw, 10rem) 0 clamp(4rem, 7vw, 6.5rem);
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .insight-article__texture {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 86% 10%, color-mix(in srgb, var(--sage-lt) 18%, transparent), transparent 28rem),
+      linear-gradient(128deg, transparent 50%, color-mix(in srgb, var(--sage) 10%, transparent));
+  }
+
+  .insight-article__texture::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: .065;
+    background-image: radial-gradient(circle, var(--cream) 1px, transparent 1px);
+    background-size: 23px 23px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 30%, black);
+    mask-image: linear-gradient(90deg, transparent 30%, black);
+  }
+
+  .insight-article__back {
+    display: inline-flex;
+    align-items: center;
+    gap: .75rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4.25rem);
+    padding-bottom: .35rem;
+    border-bottom: 1px solid currentColor;
+    color: color-mix(in srgb, var(--cream) 82%, transparent);
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color .25s ease, gap .25s ease;
+  }
+
+  .insight-article__back span {
+    color: var(--amber);
+  }
+
+  .insight-article__back:hover {
+    gap: 1rem;
+    color: var(--cream);
+  }
+
+  .insight-article__heading {
+    max-width: 68rem;
+  }
+
+  .insight-article__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .6rem 1rem;
+    margin: 0 0 1.35rem;
+    color: var(--sage-pale);
+    font-size: clamp(.7rem, .8vw, .82rem);
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+  }
+
+  .insight-article__meta > * + * {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .insight-article__meta > * + *::before {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: var(--amber);
+  }
+
+  .insight-article h1 {
+    max-width: 19ch;
+    margin: 0;
+    font-size: clamp(2.75rem, 4.5vw, 4.25rem);
+    font-weight: 600;
+    line-height: .98;
+    letter-spacing: -.045em;
+    text-wrap: balance;
+  }
+
+  .insight-article__description {
+    max-width: 58ch;
+    margin: clamp(1.25rem, 2.5vw, 2rem) 0 0;
+    color: color-mix(in srgb, var(--cream) 80%, transparent);
+    font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+    line-height: 1.62;
+  }
+
+  .insight-article__updated {
+    margin: 1rem 0 0;
+    color: color-mix(in srgb, var(--cream) 60%, transparent);
+    font-size: .82rem;
+  }
+
+  .insight-article__featured {
+    position: relative;
+    width: min(100%, var(--featured-width));
+    margin: clamp(2.75rem, 5vw, 4.5rem) auto 0;
+    overflow: hidden;
+    background: var(--forest);
+    border-left: 3px solid var(--amber);
+  }
+
+  .insight-article__featured::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid color-mix(in srgb, var(--cream) 15%, transparent);
+    pointer-events: none;
+  }
+
+  .insight-article__featured img {
+    width: 100%;
+    height: auto;
+    filter: saturate(.9) contrast(1.02);
+  }
+
+  .insight-article__main {
+    padding: clamp(4rem, 8vw, 7rem) var(--gutter);
+    background: var(--cream);
+  }
+
+  .insight-article__body {
+    max-width: 72ch;
+    margin-inline: auto;
+    color: color-mix(in srgb, var(--ink) 91%, transparent);
+    font-size: clamp(1.04rem, 1.18vw, 1.16rem);
+    line-height: 1.78;
+  }
+
+  .insight-article__body :global(p),
+  .insight-article__body :global(ul),
+  .insight-article__body :global(ol),
+  .insight-article__body :global(blockquote) {
+    margin: 0 0 1.5em;
+  }
+
+  .insight-article__body :global(h2),
+  .insight-article__body :global(h3),
+  .insight-article__body :global(h4) {
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: -.03em;
+    text-wrap: balance;
+  }
+
+  .insight-article__body :global(h2) {
+    margin: 2.2em 0 .8em;
+    font-size: clamp(1.8rem, 2.4vw, 2.45rem);
+    line-height: 1.08;
+  }
+
+  .insight-article__body :global(h3) {
+    margin: 1.9em 0 .7em;
+    font-size: clamp(1.4rem, 1.8vw, 1.8rem);
+    line-height: 1.15;
+  }
+
+  .insight-article__body :global(h4) {
+    margin: 1.7em 0 .6em;
+    font-size: 1.2rem;
+    line-height: 1.25;
+  }
+
+  .insight-article__body :global(a) {
+    color: var(--forest);
+    text-decoration-color: var(--amber);
+    text-decoration-thickness: 1px;
+    text-underline-offset: .2em;
+  }
+
+  .insight-article__body :global(a:hover) {
+    color: var(--ochre);
+  }
+
+  .insight-article__body :global(ul),
+  .insight-article__body :global(ol) {
+    padding-left: 1.35em;
+  }
+
+  .insight-article__body :global(li + li) {
+    margin-top: .55em;
+  }
+
+  .insight-article__body :global(blockquote) {
+    margin-block: 2.2rem;
+    padding: .4rem 0 .4rem clamp(1.25rem, 3vw, 2rem);
+    border-left: 3px solid var(--amber);
+    color: var(--forest);
+    font-size: clamp(1.22rem, 1.7vw, 1.55rem);
+    line-height: 1.5;
+  }
+
+  .insight-article__body :global(img) {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    margin: 2.5rem auto;
+  }
+
+  .insight-article__body :global(figure) {
+    margin: 2.75rem 0;
+  }
+
+  .insight-article__body :global(figure img) {
+    width: 100%;
+    margin: 0;
+  }
+
+  .insight-article__body :global(figcaption) {
+    margin-top: .75rem;
+    color: color-mix(in srgb, var(--ink) 62%, transparent);
+    font-size: .82rem;
+    line-height: 1.5;
+  }
+
+  .insight-article__body :global(hr) {
+    width: 100%;
+    height: 1px;
+    margin: 3.5rem 0;
+    border: 0;
+    background: color-mix(in srgb, var(--ink) 18%, transparent);
+  }
+
+  .insight-article__cta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, .72fr);
+    gap: clamp(2rem, 7vw, 7rem);
+    max-width: 72rem;
+    margin: clamp(4.5rem, 9vw, 7rem) auto 0;
+    padding: clamp(2rem, 4vw, 3.5rem);
+    border-top: 2px solid var(--amber);
+    background: var(--forest);
+    color: var(--cream);
+  }
+
+  .insight-article__cta p {
+    max-width: 40ch;
+    margin: 0;
+    color: color-mix(in srgb, var(--cream) 76%, transparent);
+    font-size: .98rem;
+    line-height: 1.62;
+  }
+
+  .insight-article__cta > div:first-child > p {
+    margin-bottom: 1rem;
+    color: var(--amber);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+
+  .insight-article__cta h2 {
+    max-width: 15ch;
+    margin: 0;
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -.04em;
+    text-wrap: balance;
+  }
+
+  .insight-article__cta a,
+  .related-insights__heading > a {
+    display: inline-flex;
+    align-items: center;
+    gap: .7rem;
+    margin-top: 1.5rem;
+    padding-bottom: .4rem;
+    border-bottom: 1px solid currentColor;
+    color: inherit;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .insight-article__cta a span,
+  .related-insights__heading > a span {
+    color: var(--amber);
+  }
+
+  .related-insights {
+    padding: clamp(4.5rem, 9vw, 8rem) 0;
+    background: var(--tan);
+  }
+
+  .related-insights__heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    align-items: end;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .related-insights__heading p {
+    margin: 0 0 .85rem;
+    color: var(--forest);
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+
+  .related-insights__heading h2 {
+    margin: 0;
+    font-size: clamp(2.25rem, 3.7vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -.04em;
+  }
+
+  .related-insights__heading > a {
+    margin-top: 0;
+  }
+
+  .related-insights__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+
+  @media (max-width: 960px) {
+    .insight-article__cta {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .related-insights__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 700px) {
+    .insight-article__hero {
+      padding-top: 6.8rem;
+      padding-bottom: 3.5rem;
+    }
+
+    .insight-article__back {
+      margin-bottom: 2.25rem;
+    }
+
+    .insight-article h1 {
+      max-width: none;
+      font-size: clamp(2.15rem, 8vw, 2.65rem);
+      line-height: 1;
+    }
+
+    .insight-article__featured {
+      margin-top: 2.5rem;
+    }
+
+    .insight-article__main {
+      padding-top: 3.5rem;
+      padding-bottom: 4rem;
+    }
+
+    .insight-article__cta {
+      padding: 1.75rem 1.4rem;
+    }
+
+    .related-insights__heading {
+      display: block;
+    }
+
+    .related-insights__heading > a {
+      margin-top: 1.5rem;
+    }
+
+    .related-insights__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .insight-article__texture::after {
+      display: none;
+    }
+  }
+</style>

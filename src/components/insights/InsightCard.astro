@@ -1,0 +1,186 @@
+---
+import {
+  formatInsightDate,
+  getDisplayCategory,
+  getInsightDateTime,
+  getInsightPath,
+  type InsightEntry,
+} from "../../lib/insights";
+
+interface Props {
+  entry: InsightEntry;
+  eager?: boolean;
+}
+
+const { entry, eager = false } = Astro.props;
+const category = getDisplayCategory(entry);
+const href = getInsightPath(entry);
+---
+
+<article class="insight-card">
+  <a class="insight-card__link" href={href}>
+    <figure class="insight-card__media">
+      <img
+        src={entry.data.featuredImage}
+        alt=""
+        width={entry.data.featuredImageWidth}
+        height={entry.data.featuredImageHeight}
+        loading={eager ? "eager" : "lazy"}
+        fetchpriority={eager ? "high" : "auto"}
+        decoding="async"
+      />
+    </figure>
+
+    <div class="insight-card__body">
+      <p class="insight-card__meta">
+        <time datetime={getInsightDateTime(entry.data.publishedAt)}>
+          {formatInsightDate(entry.data.publishedAt, false)}
+        </time>
+        {category && <span>{category}</span>}
+      </p>
+      <h3>{entry.data.title}</h3>
+      <p class="insight-card__description">{entry.data.description}</p>
+      <span class="insight-card__action">Read insight <span aria-hidden="true">&rarr;</span></span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .insight-card {
+    min-width: 0;
+    height: 100%;
+    border-top: 2px solid var(--amber);
+  }
+
+  .insight-card__link {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .insight-card__media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    margin: 0;
+    overflow: hidden;
+    background: var(--tan);
+  }
+
+  .insight-card__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+    pointer-events: none;
+  }
+
+  .insight-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(.78) contrast(1.03);
+    transition: transform .8s cubic-bezier(.16, .84, .44, 1), filter .5s ease;
+  }
+
+  .insight-card__body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: clamp(1.25rem, 2.2vw, 1.8rem) 0 0;
+  }
+
+  .insight-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .55rem 1rem;
+    margin: 0;
+    color: var(--forest);
+    font-size: clamp(.69rem, .76vw, .78rem);
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .insight-card__meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .insight-card__meta span::before {
+    content: "";
+    width: 1.9rem;
+    height: 1px;
+    background: var(--amber);
+  }
+
+  .insight-card h3 {
+    max-width: 24ch;
+    margin: .9rem 0 0;
+    font-size: clamp(1.3rem, 1.65vw, 1.65rem);
+    font-weight: 600;
+    line-height: 1.14;
+    letter-spacing: -.03em;
+    text-wrap: balance;
+  }
+
+  .insight-card__description {
+    display: -webkit-box;
+    max-width: 44ch;
+    margin: .85rem 0 0;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--ink) 72%, transparent);
+    font-size: .98rem;
+    line-height: 1.58;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .insight-card__action {
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    align-self: flex-start;
+    margin-top: auto;
+    padding-top: 1.35rem;
+    padding-bottom: .35rem;
+    border-bottom: 1px solid currentColor;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .insight-card__action span {
+    color: var(--amber);
+    transition: transform .3s ease;
+  }
+
+  .insight-card__link:hover .insight-card__media img,
+  .insight-card__link:focus-visible .insight-card__media img {
+    transform: scale(1.035);
+    filter: saturate(1) contrast(1.02);
+  }
+
+  .insight-card__link:hover .insight-card__action span,
+  .insight-card__link:focus-visible .insight-card__action span {
+    transform: translateX(.3rem);
+  }
+
+  @media (max-width: 640px) {
+    .insight-card__description {
+      -webkit-line-clamp: 4;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .insight-card__media img,
+    .insight-card__action span {
+      transition: none;
+    }
+  }
+</style>

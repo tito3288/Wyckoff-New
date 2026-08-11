@@ -7,14 +7,29 @@ import Footer from "../components/Footer.astro";
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
+  imageAlt?: string;
+  ogType?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
+  canonicalPath?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
   title = "Wyckoff Consulting — Executive Marketing Leadership",
   description = "Executive marketing leadership for $3M–$50M companies, at the moments that decide their next decade. Fractional CMO services since 1993.",
+  image = "/images/hero-fallback.jpg",
+  imageAlt = "",
+  ogType = "website",
+  publishedTime,
+  modifiedTime,
+  canonicalPath,
+  structuredData,
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, Astro.site ?? Astro.url);
+const socialImage = new URL(image, canonical);
 ---
 <!doctype html>
 <html lang="en">
@@ -26,12 +41,21 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
   <link rel="canonical" href={canonical} />
   <link rel="icon" type="image/png" href="/images/brand/wyckoff-favicon.png" />
   <meta name="theme-color" content="#5B7F71" />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content={ogType} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={new URL("/images/hero-fallback.jpg", canonical)} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={socialImage} />
+  {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+  {ogType === "article" && publishedTime && <meta property="article:published_time" content={publishedTime} />}
+  {ogType === "article" && modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={socialImage} />
+  {imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
   <meta name="generator" content={Astro.generator} />
+  {structuredData && <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
 </head>
 <body class="loading">
 
@@ -93,7 +117,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
   var plxEls=Array.prototype.slice.call(document.querySelectorAll('[data-plx]'));
   function onScroll(){
     var y=window.scrollY;
-    if(y > window.innerHeight*0.8) nav.classList.add('stuck'); else nav.classList.remove('stuck');
+    var darkHeader=document.querySelector('[data-nav-dark]');
+    var threshold=window.innerHeight*0.8;
+    if(darkHeader){ threshold=darkHeader.getBoundingClientRect().bottom+y-(nav ? nav.offsetHeight : 0); }
+    if(y > threshold) nav.classList.add('stuck'); else nav.classList.remove('stuck');
     var h=document.documentElement.scrollHeight-window.innerHeight;
     prog.style.width=(h>0 ? (y/h)*100 : 0)+'%';
     if(!reduce && y < window.innerHeight){

@@ -1,0 +1,359 @@
+---
+import {
+  formatInsightDate,
+  getDisplayCategory,
+  getInsightDateTime,
+  getInsightPath,
+  type InsightEntry,
+} from "../../lib/insights";
+
+interface Props {
+  featured: InsightEntry;
+  total: number;
+}
+
+const { featured, total } = Astro.props;
+const category = getDisplayCategory(featured);
+---
+
+<section class="insights-hero" id="top" aria-labelledby="insights-title" data-nav-dark>
+  <div class="insights-hero__texture" aria-hidden="true"></div>
+  <div class="wrap insights-hero__inner">
+    <header class="insights-hero__heading">
+      <div>
+        <p class="insights-hero__eyebrow">Insights</p>
+        <h1 id="insights-title">Wyckoff&rsquo;s Thought Leadership</h1>
+      </div>
+      <p class="insights-hero__count">
+        <strong>{String(total).padStart(2, "0")}</strong>
+        <span>Perspectives in the collection</span>
+      </p>
+    </header>
+
+    <a class="featured-insight" href={getInsightPath(featured)}>
+      <figure class="featured-insight__media">
+        <img
+          src={featured.data.featuredImage}
+          alt=""
+          width={featured.data.featuredImageWidth}
+          height={featured.data.featuredImageHeight}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </figure>
+
+      <div class="featured-insight__copy">
+        <p class="featured-insight__label">Latest insight</p>
+        <p class="featured-insight__meta">
+          <time datetime={getInsightDateTime(featured.data.publishedAt)}>
+            {formatInsightDate(featured.data.publishedAt)}
+          </time>
+          {category && <span>{category}</span>}
+        </p>
+        <h2>{featured.data.title}</h2>
+        <p class="featured-insight__description">{featured.data.description}</p>
+        <span class="featured-insight__action">
+          Read the latest insight <span aria-hidden="true">&rarr;</span>
+        </span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<style>
+  .insights-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(8rem, 13vw, 11rem) 0 clamp(4.5rem, 8vw, 7rem);
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .insights-hero__texture {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 84% 12%, color-mix(in srgb, var(--sage-lt) 20%, transparent), transparent 30rem),
+      linear-gradient(132deg, transparent 44%, color-mix(in srgb, var(--sage) 12%, transparent));
+  }
+
+  .insights-hero__texture::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: .07;
+    background-image: radial-gradient(circle, var(--cream) 1px, transparent 1px);
+    background-size: 23px 23px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 25%, black);
+    mask-image: linear-gradient(90deg, transparent 25%, black);
+  }
+
+  .insights-hero__heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: clamp(2rem, 7vw, 7rem);
+    align-items: end;
+    padding-bottom: clamp(2.75rem, 5vw, 4.5rem);
+  }
+
+  .insights-hero__eyebrow,
+  .featured-insight__label {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    margin: 0 0 1.3rem;
+    color: var(--sage-pale);
+    font-size: clamp(.72rem, .82vw, .84rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+  }
+
+  .insights-hero__eyebrow::before,
+  .featured-insight__label::before {
+    content: "";
+    width: clamp(2.3rem, 4vw, 4rem);
+    height: 2px;
+    background: var(--amber);
+  }
+
+  .insights-hero h1 {
+    max-width: 14ch;
+    margin: 0;
+    font-size: clamp(2.75rem, 4.4vw, 4.25rem);
+    font-weight: 600;
+    line-height: .98;
+    letter-spacing: -.045em;
+    text-wrap: balance;
+  }
+
+  .insights-hero__count {
+    display: grid;
+    grid-template-columns: auto minmax(0, 9rem);
+    gap: 1rem;
+    align-items: end;
+    margin: 0;
+    padding-bottom: .35rem;
+    color: color-mix(in srgb, var(--cream) 70%, transparent);
+  }
+
+  .insights-hero__count strong {
+    color: var(--sage-pale);
+    font-size: clamp(2.4rem, 4vw, 3.75rem);
+    font-weight: 500;
+    line-height: .8;
+    letter-spacing: -.05em;
+  }
+
+  .insights-hero__count span {
+    font-size: .72rem;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+
+  .featured-insight {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(20rem, .85fr);
+    color: inherit;
+    border-top: 1px solid color-mix(in srgb, var(--cream) 26%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--cream) 26%, transparent);
+    text-decoration: none;
+  }
+
+  .featured-insight__media {
+    position: relative;
+    min-height: clamp(22rem, 38vw, 35rem);
+    margin: 0;
+    overflow: hidden;
+    background: var(--forest);
+  }
+
+  .featured-insight__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 65%, color-mix(in srgb, var(--ink) 22%, transparent));
+    pointer-events: none;
+  }
+
+  .featured-insight__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(.82) contrast(1.03);
+    transition: transform 1s cubic-bezier(.16, .84, .44, 1), filter .5s ease;
+  }
+
+  .featured-insight__copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    padding: clamp(2rem, 4.2vw, 4.5rem);
+    background: color-mix(in srgb, var(--forest) 54%, var(--ink));
+  }
+
+  .featured-insight__label {
+    margin-bottom: 2rem;
+    color: var(--amber);
+  }
+
+  .featured-insight__label::before {
+    width: 2rem;
+  }
+
+  .featured-insight__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem 1rem;
+    margin: 0 0 1rem;
+    color: color-mix(in srgb, var(--cream) 68%, transparent);
+    font-size: .72rem;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+
+  .featured-insight__meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .featured-insight__meta span::before {
+    content: "";
+    width: 1.6rem;
+    height: 1px;
+    background: var(--amber);
+  }
+
+  .featured-insight h2 {
+    max-width: 17ch;
+    margin: 0;
+    font-size: clamp(2rem, 3.1vw, 3.15rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -.04em;
+    text-wrap: balance;
+  }
+
+  .featured-insight__description {
+    display: -webkit-box;
+    max-width: 42ch;
+    margin: 1.25rem 0 0;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--cream) 76%, transparent);
+    font-size: clamp(.96rem, 1.15vw, 1.08rem);
+    line-height: 1.62;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+
+  .featured-insight__action {
+    display: inline-flex;
+    align-items: center;
+    gap: .75rem;
+    align-self: flex-start;
+    margin-top: 2rem;
+    padding-bottom: .4rem;
+    border-bottom: 1px solid currentColor;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .featured-insight__action span {
+    color: var(--amber);
+    transition: transform .3s ease;
+  }
+
+  .featured-insight:hover .featured-insight__media img,
+  .featured-insight:focus-visible .featured-insight__media img {
+    transform: scale(1.025);
+    filter: saturate(1) contrast(1.02);
+  }
+
+  .featured-insight:hover .featured-insight__action span,
+  .featured-insight:focus-visible .featured-insight__action span {
+    transform: translateX(.35rem);
+  }
+
+  @media (max-width: 900px) {
+    .insights-hero {
+      padding-top: 7.25rem;
+      padding-bottom: 4rem;
+    }
+
+    .insights-hero__heading {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+
+    .insights-hero h1 {
+      max-width: 15ch;
+      font-size: clamp(2.35rem, 8vw, 2.65rem);
+      line-height: 1;
+    }
+
+    .insights-hero__count {
+      grid-template-columns: auto 1fr;
+      max-width: 15rem;
+    }
+
+    .featured-insight {
+      grid-template-columns: 1fr;
+    }
+
+    .featured-insight__media {
+      min-height: 0;
+      aspect-ratio: 16 / 10;
+    }
+
+    .featured-insight__copy {
+      padding: clamp(1.6rem, 6vw, 2.4rem);
+    }
+
+    .featured-insight h2 {
+      font-size: clamp(1.8rem, 7vw, 2.35rem);
+      line-height: 1.04;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .insights-hero__heading {
+      padding-bottom: 2.2rem;
+    }
+
+    .insights-hero__count {
+      display: none;
+    }
+
+    .featured-insight__label {
+      margin-bottom: 1.35rem;
+    }
+
+    .featured-insight__description {
+      -webkit-line-clamp: 5;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .insights-hero__texture::after {
+      display: none;
+    }
+
+    .featured-insight__media img,
+    .featured-insight__action span {
+      transition: none;
+    }
+  }
+</style>

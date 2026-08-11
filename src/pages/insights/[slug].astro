@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from "astro:content";
+import InsightArticleLayout from "../../layouts/InsightArticleLayout.astro";
+import {
+  getInsightSlug,
+  getRelatedInsights,
+  sortInsightsByNewest,
+  type InsightEntry,
+} from "../../lib/insights";
+
+interface Props {
+  entry: InsightEntry;
+  related: InsightEntry[];
+}
+
+export async function getStaticPaths() {
+  const insights = sortInsightsByNewest(
+    await getCollection("insights", ({ data }) => !data.draft),
+  );
+
+  return insights.map((entry) => ({
+    params: { slug: getInsightSlug(entry) },
+    props: {
+      entry,
+      related: getRelatedInsights(insights, entry),
+    },
+  }));
+}
+
+const { entry, related } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<InsightArticleLayout entry={entry} related={related}>
+  <Content />
+</InsightArticleLayout>

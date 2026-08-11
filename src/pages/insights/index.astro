@@ -1,0 +1,162 @@
+---
+import { getCollection } from "astro:content";
+import InsightCard from "../../components/insights/InsightCard.astro";
+import InsightsHero from "../../components/insights/InsightsHero.astro";
+import Layout from "../../layouts/Layout.astro";
+import { sortInsightsByNewest } from "../../lib/insights";
+
+const insights = sortInsightsByNewest(
+  await getCollection("insights", ({ data }) => !data.draft),
+);
+const featured = insights[0];
+const remaining = insights.slice(1);
+---
+
+<Layout
+  title="Insights | Wyckoff Consulting"
+  description="Explore Wyckoff Consulting insights on marketing leadership, growth, sales, strategy, and the decisions that shape enterprise value."
+  image={featured?.data.featuredImage}
+  imageAlt={featured?.data.featuredImageAlt}
+  canonicalPath="/insights/"
+>
+  {featured ? (
+    <InsightsHero featured={featured} total={insights.length} />
+  ) : (
+    <header class="insights-empty-hero" id="top" data-nav-dark>
+      <div class="wrap">
+        <p>Insights</p>
+        <h1>Wyckoff&rsquo;s Thought Leadership</h1>
+      </div>
+    </header>
+  )}
+
+  <section class="insights-archive" aria-labelledby="all-insights-title">
+    <div class="wrap">
+      <header class="insights-archive__heading">
+        <div>
+          <p>Full collection</p>
+          <h2 id="all-insights-title">All insights.</h2>
+        </div>
+        <p>{insights.length} {insights.length === 1 ? "article" : "articles"}</p>
+      </header>
+
+      {remaining.length > 0 ? (
+        <div class="insights-archive__grid">
+          {remaining.map((entry) => (
+            <InsightCard entry={entry} />
+          ))}
+        </div>
+      ) : featured ? (
+        <p class="insights-archive__empty">More perspectives are on the way.</p>
+      ) : (
+        <p class="insights-archive__empty">Insights will be published here soon.</p>
+      )}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .insights-empty-hero {
+    padding: clamp(8rem, 14vw, 11rem) 0 clamp(4rem, 8vw, 7rem);
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .insights-empty-hero p,
+  .insights-archive__heading > div > p {
+    margin: 0 0 1rem;
+    color: var(--sage-pale);
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+  }
+
+  .insights-empty-hero h1 {
+    max-width: 14ch;
+    margin: 0;
+    font-size: clamp(2.75rem, 4.4vw, 4.25rem);
+    font-weight: 600;
+    line-height: .98;
+    letter-spacing: -.045em;
+    text-wrap: balance;
+  }
+
+  .insights-archive {
+    padding: clamp(4.5rem, 9vw, 8rem) 0 clamp(5rem, 10vw, 9rem);
+    background: var(--cream);
+  }
+
+  .insights-archive__heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    align-items: end;
+    margin-bottom: clamp(2.75rem, 5vw, 4.5rem);
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+  }
+
+  .insights-archive__heading > div > p {
+    color: var(--forest);
+  }
+
+  .insights-archive__heading h2 {
+    margin: 0;
+    font-size: clamp(2.25rem, 3.7vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -.04em;
+  }
+
+  .insights-archive__heading > p {
+    margin: 0 0 .35rem;
+    color: color-mix(in srgb, var(--ink) 62%, transparent);
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .insights-archive__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(3.25rem, 5.5vw, 5.5rem) clamp(2rem, 4vw, 4rem);
+  }
+
+  .insights-archive__empty {
+    max-width: 42ch;
+    margin: 0;
+    color: color-mix(in srgb, var(--ink) 70%, transparent);
+    font-size: 1.05rem;
+  }
+
+  @media (max-width: 1050px) {
+    .insights-archive__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .insights-empty-hero {
+      padding-top: 7rem;
+    }
+
+    .insights-empty-hero h1 {
+      font-size: clamp(2.35rem, 8vw, 2.65rem);
+      line-height: 1;
+    }
+
+    .insights-archive__heading {
+      display: block;
+    }
+
+    .insights-archive__heading > p {
+      margin-top: 1rem;
+    }
+
+    .insights-archive__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
