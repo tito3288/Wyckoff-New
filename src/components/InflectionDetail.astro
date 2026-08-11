@@ -1,0 +1,619 @@
+---
+import type { InflectionPoint } from "../data/inflectionPoints";
+import type { InflectionPointDetail } from "../data/inflectionPointDetails";
+
+interface Props {
+  point: InflectionPoint;
+  detail: InflectionPointDetail;
+}
+
+const { point, detail } = Astro.props;
+const detailTitleId = `${point.slug}-detail-title`;
+---
+
+<details class="point-row__more">
+  <summary>
+    <span class="point-row__more-copy">
+      <span>Detailed strategy</span>
+      <strong class="point-row__more-closed">Explore how Wyckoff helps<span class="sr-only"> with {point.title}</span></strong>
+      <strong class="point-row__more-open">Close detailed strategy<span class="sr-only"> for {point.title}</span></strong>
+    </span>
+    <span class="point-row__more-icon" aria-hidden="true"></span>
+  </summary>
+
+  <div class="point-detail" aria-labelledby={detailTitleId}>
+    <header class="point-detail__header">
+      <p>Inflection Point {point.num} &middot; In depth</p>
+      <h4 id={detailTitleId}>{detail.headline}</h4>
+      {detail.subtitle && <p class="point-detail__subtitle">{detail.subtitle}</p>}
+    </header>
+
+    <div class="point-detail__blocks">
+      {detail.blocks.map((block, index) => {
+        const headingId = `${point.slug}-detail-${index + 1}`;
+
+        return (
+          block.type === "paragraph" ? (
+            <p class:list={["point-detail__paragraph", block.emphasis === "lead" && "point-detail__paragraph--lead"]}>
+              {block.text}
+            </p>
+          ) : block.type === "list" ? (
+            <section class="point-detail__section" aria-labelledby={block.heading ? headingId : undefined}>
+              {block.heading && <h5 id={headingId}>{block.heading}</h5>}
+              {block.intro && <p class="point-detail__section-intro">{block.intro}</p>}
+              <ul class="point-detail__list">
+                {block.items.map((item) => <li>{item}</li>)}
+              </ul>
+              {block.outro && <p class="point-detail__section-outro">{block.outro}</p>}
+            </section>
+          ) : block.type === "services" ? (
+            <section class="point-detail__section point-detail__section--services" aria-labelledby={headingId}>
+              <h5 id={headingId}>{block.heading}</h5>
+              <dl class="point-detail__services">
+                {block.items.map((item) => (
+                  <div>
+                    <dt>{item.title}</dt>
+                    <dd>{item.description}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          ) : block.type === "callout" ? (
+            <div class:list={["point-detail__callout", block.eyebrow && "point-detail__callout--objective"]}>
+              {block.eyebrow && <p>{block.eyebrow}</p>}
+              <strong>{block.text}</strong>
+            </div>
+          ) : (
+            <section class="point-detail__section point-detail__final" aria-labelledby={headingId}>
+              <h5 id={headingId}>{block.heading}</h5>
+              <div class="point-detail__final-content">
+                {block.content.map((content) => (
+                  content.type === "paragraph" ? (
+                    <p class:list={["point-detail__paragraph", content.emphasis === "lead" && "point-detail__paragraph--lead"]}>
+                      {content.text}
+                    </p>
+                  ) : content.type === "list" ? (
+                    <div class="point-detail__nested-list">
+                      {content.heading && <h6>{content.heading}</h6>}
+                      {content.intro && <p class="point-detail__section-intro">{content.intro}</p>}
+                      <ul class="point-detail__list">
+                        {content.items.map((item) => <li>{item}</li>)}
+                      </ul>
+                      {content.outro && <p class="point-detail__section-outro">{content.outro}</p>}
+                    </div>
+                  ) : (
+                    <div class:list={["point-detail__callout", content.eyebrow && "point-detail__callout--objective"]}>
+                      {content.eyebrow && <p>{content.eyebrow}</p>}
+                      <strong>{content.text}</strong>
+                    </div>
+                  )
+                ))}
+              </div>
+            </section>
+          )
+        );
+      })}
+    </div>
+
+    <a class="point-detail__back" href="/inflection-points/#point-index">
+      Back to all eight <span aria-hidden="true">&uarr;</span>
+    </a>
+  </div>
+</details>
+
+<script>
+  const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  document.querySelectorAll<HTMLDetailsElement>("details.point-row__more").forEach((details) => {
+    if (details.dataset.disclosureReady === "true") return;
+
+    const summary = details.querySelector<HTMLElement>("summary");
+    if (!summary || typeof details.animate !== "function") return;
+
+    details.dataset.disclosureReady = "true";
+
+    let animation: Animation | null = null;
+    let direction: "idle" | "opening" | "closing" = "idle";
+
+    const clearInlineState = () => {
+      details.style.height = "";
+      details.style.overflow = "";
+    };
+
+    const cancelAnimation = () => {
+      const currentAnimation = animation;
+      animation = null;
+      currentAnimation?.cancel();
+    };
+
+    const settle = (open: boolean, finishedAnimation?: Animation) => {
+      if (finishedAnimation && animation !== finishedAnimation) return;
+
+      animation = null;
+      direction = "idle";
+      details.open = open;
+      clearInlineState();
+    };
+
+    const animateHeight = (startHeight: number, endHeight: number, open: boolean) => {
+      const distance = Math.abs(endHeight - startHeight);
+
+      if (distance < 1) {
+        settle(open);
+        return;
+      }
+
+      const nextAnimation = details.animate(
+        { height: [`${startHeight}px`, `${endHeight}px`] },
+        {
+          duration: Math.min(700, Math.max(360, distance * .14)),
+          easing: "cubic-bezier(.16, .84, .44, 1)",
+        },
+      );
+
+      animation = nextAnimation;
+      nextAnimation.onfinish = () => settle(open, nextAnimation);
+      nextAnimation.oncancel = () => {
+        if (animation === nextAnimation) animation = null;
+      };
+    };
+
+    const expand = () => {
+      const startHeight = details.getBoundingClientRect().height;
+
+      cancelAnimation();
+      direction = "opening";
+      details.style.overflow = "hidden";
+      details.style.height = `${startHeight}px`;
+      details.open = true;
+
+      details.style.height = "auto";
+      const endHeight = details.getBoundingClientRect().height;
+      details.style.height = `${startHeight}px`;
+
+      animateHeight(startHeight, endHeight, true);
+    };
+
+    const collapse = () => {
+      const startHeight = details.getBoundingClientRect().height;
+      const computedStyle = window.getComputedStyle(details);
+      const borderHeight =
+        Number.parseFloat(computedStyle.borderTopWidth) +
+        Number.parseFloat(computedStyle.borderBottomWidth);
+      const endHeight = summary.getBoundingClientRect().height + borderHeight;
+
+      cancelAnimation();
+      direction = "closing";
+      details.style.overflow = "hidden";
+      details.style.height = `${startHeight}px`;
+
+      animateHeight(startHeight, endHeight, false);
+    };
+
+    summary.addEventListener("click", (event) => {
+      if (motionPreference.matches) return;
+
+      event.preventDefault();
+
+      if (!details.open || direction === "closing") {
+        expand();
+      } else {
+        collapse();
+      }
+    });
+
+    motionPreference.addEventListener("change", (event) => {
+      if (!event.matches || direction === "idle") return;
+      const shouldRemainOpen = direction === "opening";
+      cancelAnimation();
+      settle(shouldRemainOpen);
+    });
+  });
+</script>
+
+<style>
+  .point-row__more {
+    grid-column: 1 / -1;
+    min-width: 0;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+    background: var(--cream);
+  }
+
+  summary {
+    display: flex;
+    min-height: 4.25rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: .85rem clamp(1.25rem, 2vw, 2rem);
+    cursor: pointer;
+    list-style: none;
+    transition: background .25s ease, color .25s ease;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::marker {
+    content: "";
+  }
+
+  summary:hover {
+    background: color-mix(in srgb, var(--tan) 54%, var(--cream));
+  }
+
+  summary:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: -4px;
+  }
+
+  .point-row__more[open] > summary {
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .point-row__more-copy {
+    display: grid;
+    gap: .18rem;
+  }
+
+  .point-row__more-copy > span {
+    color: var(--forest);
+    font-size: .62rem;
+    font-weight: 700;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+  }
+
+  .point-row__more[open] .point-row__more-copy > span {
+    color: var(--amber);
+  }
+
+  .point-row__more-copy strong {
+    font-size: clamp(.9rem, 1.1vw, 1.02rem);
+    font-weight: 600;
+    letter-spacing: -.01em;
+  }
+
+  .point-row__more-open {
+    display: none;
+  }
+
+  .point-row__more[open] .point-row__more-closed {
+    display: none;
+  }
+
+  .point-row__more[open] .point-row__more-open {
+    display: inline;
+  }
+
+  .point-row__more-icon {
+    position: relative;
+    width: 2.35rem;
+    height: 2.35rem;
+    flex: none;
+    border: 1px solid color-mix(in srgb, var(--ink) 38%, transparent);
+    border-radius: 50%;
+  }
+
+  .point-row__more[open] .point-row__more-icon {
+    border-color: color-mix(in srgb, var(--cream) 42%, transparent);
+  }
+
+  .point-row__more-icon::before,
+  .point-row__more-icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: .8rem;
+    height: 1px;
+    background: currentColor;
+    transform: translate(-50%, -50%);
+    transition: transform .25s ease;
+  }
+
+  .point-row__more-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .point-row__more[open] .point-row__more-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+  }
+
+  .point-detail {
+    padding: clamp(2.5rem, 6vw, 5.5rem) clamp(1.25rem, 5vw, 5rem);
+    border-top: 1px solid color-mix(in srgb, var(--cream) 14%, transparent);
+    background: color-mix(in srgb, var(--tan) 28%, var(--cream));
+  }
+
+  .point-detail__header {
+    display: grid;
+    grid-template-columns: minmax(10rem, .42fr) minmax(0, 1.58fr);
+    grid-template-areas:
+      "eyebrow title"
+      ". subtitle";
+    gap: 1rem clamp(2.5rem, 7vw, 7rem);
+    align-items: start;
+  }
+
+  .point-detail__header > p:first-child {
+    grid-area: eyebrow;
+    margin: .5rem 0 0;
+    color: var(--forest);
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  .point-detail__header h4 {
+    grid-area: title;
+    max-width: 24ch;
+    margin: 0;
+    font-size: clamp(2rem, 3.4vw, 3.65rem);
+    font-weight: 600;
+    letter-spacing: -.045em;
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+
+  .point-detail__subtitle {
+    grid-area: subtitle;
+    max-width: 44ch;
+    margin: .6rem 0 0;
+    color: var(--forest);
+    font-size: clamp(1.05rem, 1.45vw, 1.35rem);
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .point-detail__blocks {
+    width: min(100%, 72rem);
+    margin: clamp(3rem, 7vw, 5.5rem) auto 0;
+  }
+
+  .point-detail__paragraph {
+    max-width: 70ch;
+    margin: 0 0 1.35rem;
+    color: color-mix(in srgb, var(--ink) 82%, transparent);
+    font-size: clamp(1rem, 1.1vw, 1.1rem);
+    line-height: 1.72;
+  }
+
+  .point-detail__paragraph--lead {
+    max-width: 42ch;
+    margin-bottom: 2rem;
+    color: var(--ink);
+    font-size: clamp(1.35rem, 2vw, 1.9rem);
+    font-weight: 500;
+    letter-spacing: -.025em;
+    line-height: 1.25;
+  }
+
+  .point-detail__section,
+  .point-detail__callout {
+    margin-top: clamp(2.75rem, 6vw, 4.75rem);
+  }
+
+  .point-detail__section {
+    padding-top: clamp(1.75rem, 4vw, 2.75rem);
+    border-top: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+  }
+
+  .point-detail__section h5 {
+    max-width: 30ch;
+    margin: 0 0 1.5rem;
+    font-size: clamp(1.4rem, 2.2vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -.03em;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  .point-detail__section-intro,
+  .point-detail__section-outro {
+    max-width: 70ch;
+    margin: 0 0 1.5rem;
+    color: color-mix(in srgb, var(--ink) 78%, transparent);
+    font-size: 1.03rem;
+    line-height: 1.68;
+  }
+
+  .point-detail__section-outro {
+    margin: 1.75rem 0 0;
+  }
+
+  .point-detail__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+    list-style: none;
+  }
+
+  .point-detail__list li {
+    position: relative;
+    min-width: 0;
+    padding: 1rem 1rem 1rem 2.45rem;
+    border-right: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+    font-size: clamp(.92rem, 1vw, 1.02rem);
+    line-height: 1.48;
+  }
+
+  .point-detail__list li::before {
+    content: "";
+    position: absolute;
+    top: 1.45rem;
+    left: 1rem;
+    width: .4rem;
+    height: .4rem;
+    border-radius: 50%;
+    background: var(--amber);
+  }
+
+  .point-detail__services {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+  }
+
+  .point-detail__services > div {
+    padding: 1.4rem clamp(1rem, 2vw, 1.75rem) 1.6rem;
+    border-right: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+  }
+
+  .point-detail__services > div:nth-child(even) {
+    border-right: 0;
+  }
+
+  .point-detail__services dt {
+    margin: 0 0 .65rem;
+    color: var(--forest);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .point-detail__services dd {
+    margin: 0;
+    color: color-mix(in srgb, var(--ink) 80%, transparent);
+    font-size: .98rem;
+    line-height: 1.62;
+  }
+
+  .point-detail__callout {
+    max-width: 64rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    border-left: 2px solid var(--amber);
+    background: var(--sage-pale);
+  }
+
+  .point-detail__callout--objective {
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .point-detail__callout p {
+    margin: 0 0 .7rem;
+    color: var(--amber);
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .point-detail__callout strong {
+    display: block;
+    max-width: 34ch;
+    font-size: clamp(1.35rem, 2.25vw, 2.15rem);
+    font-weight: 500;
+    letter-spacing: -.03em;
+    line-height: 1.2;
+  }
+
+  .point-detail__final-content > .point-detail__paragraph:last-child {
+    margin-bottom: 0;
+  }
+
+  .point-detail__nested-list .point-detail__list {
+    margin-top: 1.25rem;
+  }
+
+  .point-detail__nested-list h6 {
+    margin: 0 0 1rem;
+    font-size: 1.08rem;
+    font-weight: 600;
+    letter-spacing: -.015em;
+  }
+
+  .point-detail__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: clamp(3.5rem, 7vw, 5.5rem);
+    padding-bottom: .55rem;
+    border-bottom: 1px solid currentColor;
+    color: var(--forest);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .point-detail__back span {
+    color: var(--amber);
+    transition: transform .25s ease;
+  }
+
+  .point-detail__back:hover span,
+  .point-detail__back:focus-visible span {
+    transform: translateY(-.2rem);
+  }
+
+  @media (max-width: 760px) {
+    summary {
+      gap: 1rem;
+      padding-inline: 1rem;
+    }
+
+    .point-detail {
+      padding: 2.5rem 1rem 3rem;
+    }
+
+    .point-detail__header {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "eyebrow"
+        "title"
+        "subtitle";
+      gap: .9rem;
+    }
+
+    .point-detail__header > p:first-child {
+      margin-top: 0;
+    }
+
+    .point-detail__header h4 {
+      max-width: 18ch;
+      font-size: clamp(1.75rem, 8.6vw, 2.4rem);
+      line-height: 1.04;
+    }
+
+    .point-detail__blocks {
+      margin-top: 2.75rem;
+    }
+
+    .point-detail__list,
+    .point-detail__services {
+      grid-template-columns: 1fr;
+    }
+
+    .point-detail__services > div {
+      border-right: 0;
+    }
+
+    .point-detail__callout {
+      padding: 1.5rem 1.25rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    summary,
+    .point-row__more-icon::before,
+    .point-row__more-icon::after,
+    .point-detail__back span {
+      transition: none;
+    }
+  }
+</style>

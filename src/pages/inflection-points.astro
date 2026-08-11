@@ -1,6 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import InflectionDetail from "../components/InflectionDetail.astro";
 import { inflectionPoints } from "../data/inflectionPoints";
+import { inflectionPointDetails } from "../data/inflectionPointDetails";
 
 const pageDescription = "Explore the eight critical business inflection points that call for experienced Fractional CMO leadership from Wyckoff Consulting.";
 const structuredData = {
@@ -98,6 +100,7 @@ const structuredData = {
               <h4>What&rsquo;s needed</h4>
               <p>{point.needed}</p>
             </div>
+            <InflectionDetail point={point} detail={inflectionPointDetails[point.slug]} />
           </article>
         ))}
       </div>
@@ -485,6 +488,7 @@ const structuredData = {
   }
 
   .point-row__detail--needed {
+    border-right: 0 !important;
     background: color-mix(in srgb, var(--sage-pale) 30%, transparent);
   }
 
