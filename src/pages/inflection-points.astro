@@ -1,0 +1,707 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { inflectionPoints } from "../data/inflectionPoints";
+
+const pageDescription = "Explore the eight critical business inflection points that call for experienced Fractional CMO leadership from Wyckoff Consulting.";
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Eight Critical Business Inflection Points",
+  description: pageDescription,
+  numberOfItems: inflectionPoints.length,
+  itemListElement: inflectionPoints.map((point, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: point.title,
+    url: `https://wyckoffconsulting.com/inflection-points/#${point.slug}`,
+  })),
+};
+---
+
+<Layout
+  title="Inflection Points | Wyckoff Consulting"
+  description={pageDescription}
+  canonicalPath="/inflection-points/"
+  structuredData={structuredData}
+>
+  <header class="ip-hero" id="top" data-nav-dark aria-labelledby="ip-title">
+    <div class="ip-hero__field" aria-hidden="true"></div>
+    <div class="wrap ip-hero__grid">
+      <div class="ip-hero__copy">
+        <p class="ip-eyebrow"><span></span>Inflection Points</p>
+        <h1 id="ip-title">
+          <span>This is why we</span>
+          <span>get the call.</span>
+        </h1>
+        <p>Executive marketing leadership for $3M–$50M companies, at the moments that decide their next decade.</p>
+        <a href="/inflection-points/#point-index">See all eight <span aria-hidden="true">&darr;</span></a>
+      </div>
+
+      <aside class="ip-hero__summary" aria-label="Eight critical business inflection points">
+        <p class="ip-hero__word">Eight</p>
+        <p class="ip-hero__summary-title">Critical business<br />inflection points</p>
+        <div class="ip-hero__summary-foot">
+          <span aria-hidden="true"></span>
+          <p>Executive perspective.</p>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <nav class="point-index" id="point-index" aria-label="Inflection point index">
+    <div class="wrap">
+      <div class="point-index__heading">
+        <p>Eight critical business inflection points</p>
+        <span>Choose a moment</span>
+      </div>
+      <ol>
+        {inflectionPoints.map((point) => (
+          <li>
+            <a href={`/inflection-points/#${point.slug}`}>
+              <span>{point.num}</span>
+              <strong>{point.title}</strong>
+              <span aria-hidden="true">&darr;</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </nav>
+
+  <section class="point-ledger" aria-labelledby="point-ledger-title">
+    <div class="wrap">
+      <header class="point-ledger__intro">
+        <p>Why Companies Choose Wyckoff</p>
+        <h2 id="point-ledger-title">The moments that define a company&rsquo;s future.</h2>
+      </header>
+
+      <div class="point-ledger__labels" aria-hidden="true">
+        <span>Point</span>
+        <span>Business moment</span>
+        <span>The challenge</span>
+        <span>What&rsquo;s needed</span>
+      </div>
+
+      <div class="point-ledger__rows">
+        {inflectionPoints.map((point) => (
+          <article class="point-row" id={point.slug} aria-labelledby={`${point.slug}-title`}>
+            <div class="point-row__number" aria-hidden="true">{point.num}</div>
+            <div class="point-row__title">
+              <p>Inflection Point {point.num}</p>
+              <h3 id={`${point.slug}-title`}>{point.title}</h3>
+            </div>
+            <div class="point-row__detail point-row__detail--challenge">
+              <h4>The challenge</h4>
+              <p>{point.challenge}</p>
+            </div>
+            <div class="point-row__detail point-row__detail--needed">
+              <h4>What&rsquo;s needed</h4>
+              <p>{point.needed}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="ip-cta" aria-labelledby="ip-cta-title">
+    <div class="wrap ip-cta__grid">
+      <div>
+        <p>The next step</p>
+        <h2 id="ip-cta-title">Let&rsquo;s discuss profitable growth.</h2>
+      </div>
+      <div>
+        <p>Tell us what&rsquo;s shifted in the business. If there&rsquo;s a fit, you&rsquo;ll hear back directly from Luke.</p>
+        <a href="/#contact">Start a conversation <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .ip-hero {
+    position: relative;
+    display: grid;
+    align-items: end;
+    padding: clamp(8.5rem, 15vh, 11rem) 0 clamp(4rem, 8vh, 6rem);
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 80% 14%, color-mix(in srgb, var(--sage) 36%, transparent), transparent 38%),
+      var(--ink);
+    color: var(--cream);
+  }
+
+  .ip-hero__field {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .28;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--sage-pale) 16%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--sage-pale) 16%, transparent) 1px, transparent 1px);
+    background-size: 5rem 5rem;
+    mask-image: linear-gradient(90deg, transparent 4%, #000 56%, #000 100%);
+  }
+
+  .ip-hero__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(21rem, .8fr);
+    align-items: end;
+    gap: clamp(4rem, 10vw, 10rem);
+  }
+
+  .ip-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0 0 1.4rem;
+    color: var(--sage-pale);
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+  }
+
+  .ip-eyebrow span {
+    width: 3.5rem;
+    height: 1px;
+    background: var(--amber);
+  }
+
+  .ip-hero h1 {
+    max-width: 12ch;
+    margin: 0;
+    font-size: clamp(3rem, 5.15vw, 4.25rem);
+    font-weight: 600;
+    line-height: .98;
+    letter-spacing: -.05em;
+  }
+
+  .ip-hero h1 span {
+    display: block;
+  }
+
+  .ip-hero__copy > p:not(.ip-eyebrow) {
+    max-width: 43ch;
+    margin: 2rem 0 0;
+    color: color-mix(in srgb, var(--cream) 76%, transparent);
+    font-size: clamp(1rem, 1.2vw, 1.16rem);
+    line-height: 1.65;
+  }
+
+  .ip-hero__copy > a,
+  .ip-cta a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2.5rem;
+    min-width: min(100%, 19rem);
+    margin-top: 2rem;
+    padding: 0 0 .65rem;
+    border-bottom: 1px solid currentColor;
+    color: inherit;
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .ip-hero__copy > a span,
+  .ip-cta a span {
+    color: var(--amber);
+    transition: transform .25s ease;
+  }
+
+  .ip-hero__copy > a:hover span,
+  .ip-hero__copy > a:focus-visible span {
+    transform: translateY(.2rem);
+  }
+
+  .ip-hero__summary {
+    position: relative;
+    display: flex;
+    min-height: clamp(20rem, 29vw, 27rem);
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(2rem, 4vw, 3.5rem);
+    border-top: 1px solid var(--amber);
+    border-bottom: 1px solid color-mix(in srgb, var(--sage-pale) 30%, transparent);
+    background: linear-gradient(145deg, color-mix(in srgb, var(--sage) 15%, transparent), transparent 68%);
+  }
+
+  .ip-hero__word {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    color: var(--sage-pale);
+    font-size: clamp(4rem, 6vw, 6.25rem);
+    font-weight: 300;
+    letter-spacing: -.065em;
+    line-height: .78;
+  }
+
+  .ip-hero__summary-title {
+    position: relative;
+    z-index: 1;
+    max-width: 15ch;
+    margin: 1.65rem 0 0;
+    color: var(--cream);
+    font-size: clamp(1.35rem, 2.1vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -.025em;
+    line-height: 1.08;
+  }
+
+  .ip-hero__summary-foot {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .ip-hero__summary-foot > span {
+    width: 3rem;
+    height: 1px;
+    flex: none;
+    background: var(--amber);
+  }
+
+  .ip-hero__summary-foot p {
+    margin: 0;
+    color: color-mix(in srgb, var(--cream) 68%, transparent);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+  }
+
+  .point-index {
+    scroll-margin-top: 5.5rem;
+    padding: clamp(3.25rem, 6vw, 5rem) 0;
+    background: var(--tan);
+  }
+
+  .ip-hero :focus-visible,
+  .ip-cta :focus-visible {
+    outline-color: var(--amber);
+  }
+
+  .point-index__heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .point-index__heading p,
+  .point-index__heading span,
+  .point-ledger__intro > p,
+  .ip-cta__grid > div:first-child > p {
+    margin: 0;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .19em;
+    text-transform: uppercase;
+  }
+
+  .point-index__heading span {
+    color: color-mix(in srgb, var(--ink) 58%, transparent);
+  }
+
+  .point-index ol {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+    list-style: none;
+  }
+
+  .point-index li {
+    min-width: 0;
+  }
+
+  .point-index a {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: start;
+    gap: .8rem;
+    min-height: 8.5rem;
+    padding: 1.25rem;
+    border-right: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+    color: inherit;
+    text-decoration: none;
+    transition: background .25s ease, color .25s ease;
+  }
+
+  .point-index a:hover,
+  .point-index a:focus-visible {
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .point-index a > span:first-child,
+  .point-index a > span:last-child {
+    color: var(--amber);
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+  }
+
+  .point-index a > span:last-child {
+    transition: transform .25s ease;
+  }
+
+  .point-index a:hover > span:last-child,
+  .point-index a:focus-visible > span:last-child {
+    transform: translateY(.2rem);
+  }
+
+  .point-index strong {
+    font-size: clamp(.95rem, 1.2vw, 1.12rem);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .point-ledger {
+    padding: clamp(5rem, 10vw, 9rem) 0;
+    background: var(--cream);
+  }
+
+  .point-ledger__intro {
+    display: grid;
+    grid-template-columns: minmax(12rem, .6fr) minmax(0, 1.4fr);
+    gap: 3rem;
+    align-items: start;
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .point-ledger__intro > p {
+    padding-top: .75rem;
+    color: var(--forest);
+  }
+
+  .point-ledger__intro h2 {
+    max-width: 18ch;
+    margin: 0;
+    font-size: clamp(2.7rem, 4.4vw, 4.25rem);
+    font-weight: 600;
+    letter-spacing: -.045em;
+    line-height: .98;
+    text-wrap: balance;
+  }
+
+  .point-ledger__labels,
+  .point-row {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(15rem, .95fr) minmax(14rem, 1fr) minmax(14rem, 1fr);
+  }
+
+  .point-ledger__labels {
+    border-bottom: 1px solid var(--ink);
+    color: color-mix(in srgb, var(--ink) 58%, transparent);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+  }
+
+  .point-ledger__labels span {
+    padding: 0 1.25rem .9rem;
+  }
+
+  .point-ledger__labels span:first-child {
+    padding-left: 0;
+  }
+
+  .point-row {
+    scroll-margin-top: 6.5rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+    transition: background .3s ease;
+  }
+
+  .point-row:target {
+    background: color-mix(in srgb, var(--tan) 62%, var(--cream));
+  }
+
+  .point-row > div {
+    min-width: 0;
+    padding: clamp(1.75rem, 3vw, 2.75rem) clamp(1.25rem, 2vw, 2rem);
+    border-right: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+  }
+
+  .point-row > div:first-child {
+    padding-left: 0;
+  }
+
+  .point-row > div:last-child {
+    border-right: 0;
+  }
+
+  .point-row__number {
+    color: var(--amber);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+  }
+
+  .point-row__title > p,
+  .point-row__detail h4 {
+    margin: 0 0 .75rem;
+    color: color-mix(in srgb, var(--ink) 58%, transparent);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+
+  .point-row__title > p {
+    display: none;
+  }
+
+  .point-row__title h3 {
+    max-width: 15ch;
+    margin: 0;
+    font-size: clamp(1.65rem, 2.35vw, 2.35rem);
+    font-weight: 600;
+    letter-spacing: -.035em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  .point-row__detail p {
+    margin: 0;
+    color: color-mix(in srgb, var(--ink) 78%, transparent);
+    font-size: clamp(.95rem, 1.08vw, 1.08rem);
+    line-height: 1.62;
+  }
+
+  .point-row__detail--needed {
+    background: color-mix(in srgb, var(--sage-pale) 30%, transparent);
+  }
+
+  .point-row__detail--needed h4 {
+    color: var(--forest);
+  }
+
+  .ip-cta {
+    padding: clamp(4.75rem, 9vw, 8rem) 0;
+    background: var(--sage);
+    color: var(--cream);
+  }
+
+  .ip-cta__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(18rem, .75fr);
+    gap: clamp(4rem, 10vw, 10rem);
+    align-items: end;
+  }
+
+  .ip-cta__grid > div:first-child > p {
+    margin-bottom: 1.2rem;
+    color: var(--ink);
+  }
+
+  .ip-cta h2 {
+    max-width: 13ch;
+    margin: 0;
+    font-size: clamp(2.7rem, 4.4vw, 4.25rem);
+    font-weight: 600;
+    letter-spacing: -.045em;
+    line-height: .98;
+    text-wrap: balance;
+  }
+
+  .ip-cta__grid > div:last-child > p {
+    max-width: 40ch;
+    margin: 0;
+    color: color-mix(in srgb, var(--cream) 82%, transparent);
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+
+  .ip-cta a:hover span,
+  .ip-cta a:focus-visible span {
+    transform: translateX(.25rem);
+  }
+
+  @media (max-width: 1050px) {
+    .ip-hero__grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(18rem, .7fr);
+      gap: 3rem;
+    }
+
+    .point-index ol {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .point-ledger__labels {
+      display: none;
+    }
+
+    .point-row {
+      grid-template-columns: 4.5rem minmax(14rem, .8fr) minmax(0, 1.2fr);
+    }
+
+    .point-row__number {
+      grid-row: 1 / span 2;
+    }
+
+    .point-row__title {
+      grid-column: 2 / -1;
+      border-right: 0 !important;
+    }
+
+    .point-row__detail--needed {
+      grid-column: 3;
+      border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+    }
+
+    .point-row__detail--challenge {
+      grid-column: 2;
+      border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+      border-right: 0;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .ip-hero {
+      padding: 7.75rem 0 3.5rem;
+    }
+
+    .ip-hero__field {
+      background-size: 3.5rem 3.5rem;
+      mask-image: linear-gradient(180deg, transparent 2%, #000 45%, #000 100%);
+    }
+
+    .ip-hero__grid,
+    .point-ledger__intro,
+    .ip-cta__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ip-hero__grid {
+      gap: 3.25rem;
+    }
+
+    .ip-hero h1 {
+      max-width: 11.5ch;
+      font-size: clamp(2.35rem, 11vw, 2.65rem);
+      line-height: 1;
+    }
+
+    .ip-hero__copy > p:not(.ip-eyebrow) {
+      margin-top: 1.4rem;
+      font-size: .98rem;
+    }
+
+    .ip-hero__summary {
+      min-height: 17rem;
+      padding: 1.75rem;
+    }
+
+    .ip-hero__word {
+      font-size: clamp(3.75rem, 18vw, 5rem);
+    }
+
+    .ip-hero__summary-title {
+      margin-top: 1.35rem;
+      font-size: clamp(1.35rem, 6.6vw, 1.75rem);
+    }
+
+    .ip-hero__summary-foot {
+      padding-top: 2.5rem;
+    }
+
+    .point-index__heading {
+      align-items: start;
+      flex-direction: column;
+      gap: .45rem;
+    }
+
+    .point-index ol {
+      grid-template-columns: 1fr;
+    }
+
+    .point-index a {
+      min-height: 0;
+      padding: 1rem;
+    }
+
+    .point-ledger__intro {
+      gap: 1rem;
+    }
+
+    .point-ledger__intro > p {
+      padding-top: 0;
+    }
+
+    .point-ledger__intro h2,
+    .ip-cta h2 {
+      max-width: 13ch;
+      font-size: clamp(2.25rem, 10.6vw, 2.65rem);
+      line-height: 1;
+    }
+
+    .point-row {
+      grid-template-columns: 3.65rem 1fr;
+    }
+
+    .point-row > div {
+      padding: 1.5rem 1rem;
+    }
+
+    .point-row > div:first-child {
+      padding-left: 0;
+    }
+
+    .point-row__title {
+      grid-column: auto;
+      border-right: 0 !important;
+    }
+
+    .point-row__number {
+      grid-row: auto;
+    }
+
+    .point-row__title > p {
+      display: block;
+    }
+
+    .point-row__title h3 {
+      font-size: clamp(1.6rem, 7.3vw, 2rem);
+    }
+
+    .point-row__detail {
+      grid-column: 1 / -1;
+      border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+      border-right: 0 !important;
+    }
+
+    .point-row__detail--needed {
+      grid-column: 1 / -1;
+    }
+
+    .ip-cta__grid {
+      gap: 2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .point-index a,
+    .point-index a > span:last-child,
+    .point-row,
+    .ip-hero__copy > a span,
+    .ip-cta a span {
+      transition: none;
+    }
+  }
+</style>

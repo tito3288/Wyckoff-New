@@ -3,9 +3,10 @@ import BrandLogo from "./BrandLogo.astro";
 
 const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/";
 const onHome = pathname === "/";
+const onInflectionPoints = pathname === "/inflection-points" || pathname.startsWith("/inflection-points/");
 const onInsights = pathname === "/insights" || pathname.startsWith("/insights/");
 const links = [
-  { href: onHome ? "#points" : "/#points", label: "Inflection Points", cta: false, current: false },
+  { href: "/inflection-points/", label: "Inflection Points", cta: false, current: onInflectionPoints },
   { href: "/about", label: "About", cta: false, current: pathname === "/about" },
   { href: "/insights", label: "Insights", cta: false, current: onInsights },
   { href: onHome ? "#contact" : "/#contact", label: "Start a Conversation", cta: true, current: false },
