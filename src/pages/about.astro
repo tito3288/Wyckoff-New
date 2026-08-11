@@ -1,0 +1,989 @@
+---
+import Layout from "../layouts/Layout.astro";
+import LogoMarquee from "../components/LogoMarquee.astro";
+import ResultsShowcase from "../components/ResultsShowcase.astro";
+import { guestLectureLogos } from "../data/logos";
+
+const expectations = [
+  {
+    title: "Executive Perspective",
+    body: "Receive executive-level guidance that aligns marketing, sales, operations, and financial objectives into one cohesive growth strategy.",
+  },
+  {
+    title: "Strategic Partnership",
+    body: "Work with a trusted advisor who becomes an extension of your leadership team and is fully invested in your company's long-term success.",
+  },
+  {
+    title: "Growth-Focused Leadership",
+    body: "Every recommendation is designed to increase revenue, improve profitability, strengthen your competitive position, and create long-term enterprise value.",
+  },
+  {
+    title: "Proven Experience",
+    body: "Benefit from more than three decades of helping organizations across 20+ industries and 12 countries solve complex growth challenges.",
+  },
+  {
+    title: "Decisive Execution",
+    body: "Ideas create opportunity. Execution creates results. Wyckoff Consulting helps leadership teams turn strategy into measurable business outcomes.",
+  },
+  {
+    title: "Customized Solutions",
+    body: "No two companies face the same challenges. Every engagement is tailored to your business, your leadership team, and your growth objectives.",
+  },
+  {
+    title: "Confidence During Change",
+    body: "From leadership transitions and market expansion to mergers, acquisitions, and exit planning, receive experienced guidance during your company's most important moments.",
+  },
+  {
+    title: "A Partner Invested in Your Success",
+    body: "Your business goals become our mission. Every engagement is driven by integrity, accountability, urgency, and an unwavering commitment to helping your company reach its next stage of growth.",
+  },
+];
+
+const industries = [
+  "Manufacturing & Industrial",
+  "Private Equity & Venture Capital",
+  "Professional, Scientific & Technical Services",
+  "Information Technology & Software",
+  "Healthcare & Healthcare Technology",
+  "Financial Services & Insurance",
+  "Energy & Utilities",
+  "Defense & Aerospace",
+  "Consumer Products",
+  "Retail & E-Commerce",
+  "Telecommunications",
+  "Education & Higher Education",
+  "Market Research",
+  "Travel & Hospitality",
+  "Media, Communications & Entertainment",
+  "Natural Resources",
+  "Sports & Recreation",
+  "Faith-Based Organizations",
+  "Political Organizations",
+  "Scientific Research",
+];
+---
+
+<Layout
+  title="About Luke Wyckoff | Wyckoff Consulting"
+  description="Meet Luke Wyckoff, a Fractional Chief Marketing Officer bringing more than three decades of executive growth leadership across 20+ industries and 12 countries."
+>
+  <section class="about-hero" id="top" aria-labelledby="about-title">
+    <div class="about-hero__glow" aria-hidden="true"></div>
+    <div class="wrap about-hero__grid" id="aboutHeroInner">
+      <div class="about-hero__copy">
+        <p class="about-hero__eyebrow">About Luke Wyckoff</p>
+        <h1 class="about-hero__title" id="about-title">
+          <span class="about-hero__sentence"><span class="about-hero__title-line">Three decades of</span> <span class="about-hero__title-line">cross-industry experience.</span></span>
+          <span class="about-hero__sentence about-hero__title-soft"><span class="about-hero__title-line">One goal:</span> <span class="about-hero__title-line">accelerate your growth.</span></span>
+        </h1>
+        <p class="about-hero__lede">
+          Strategic perspective built across 20+ industries and 12 countries.
+        </p>
+        <a class="textlink about-hero__link" href="#executive-leadership">Meet your future Fractional CMO <span aria-hidden="true">&darr;</span></a>
+      </div>
+
+      <figure class="about-hero__portrait">
+        <div class="about-hero__portrait-frame">
+          <img
+            src="/images/wyckoff/luke-headshot.webp"
+            alt="Luke Wyckoff, Fractional Chief Marketing Officer"
+            width="958"
+            height="959"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </div>
+        <figcaption>
+          <span>Fractional Chief Marketing Officer</span>
+          <span>In practice since 1993</span>
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="wrap about-hero__proof" aria-label="Luke Wyckoff's experience at a glance">
+      <div><strong>30+</strong><span>Years of executive experience</span></div>
+      <div><strong>20+</strong><span>Industries served</span></div>
+      <div><strong>12</strong><span>Countries</span></div>
+    </div>
+  </section>
+
+  <section class="perspective" aria-labelledby="perspective-title">
+    <div class="wrap perspective__intro">
+      <p class="label rv">Cross-Industry Perspective</p>
+      <div class="perspective__headline rv">
+        <h2 class="display" id="perspective-title"><span class="about-heading__line">The best idea for</span> <span class="about-heading__line">your business may come</span> <span class="about-heading__line">from somewhere else.</span></h2>
+        <p class="perspective__standfirst">The most valuable ideas rarely come from inside your own industry.</p>
+      </div>
+    </div>
+
+    <div class="wrap perspective__story">
+      <div class="perspective__copy rv">
+        <p>Companies engage Wyckoff Consulting because they want more than industry expertise—they want an executive advisor who brings fresh thinking, proven growth strategies, and executive-level experience from organizations around the world.</p>
+        <p>For more than 30 years, Luke Wyckoff has helped business owners, CEOs, executive teams, private equity firms, and portfolio companies solve complex growth challenges across more than <strong>20 industries in 12 countries</strong>.</p>
+        <p>This breadth of experience allows clients to benefit from proven strategies that competitors often overlook because they're too focused on &ldquo;the way our industry has always done it.&rdquo;</p>
+        <p>Instead of applying a one-size-fits-all marketing approach, Wyckoff Consulting identifies the best ideas from multiple industries and adapts them to fit your business, your market, and your growth objectives.</p>
+      </div>
+
+      <aside class="perspective__principle rv" aria-label="Wyckoff Consulting principle">
+        <span aria-hidden="true">Wyckoff Principle</span>
+        <p>Innovation happens when successful ideas cross industry boundaries.</p>
+        <strong>That's where competitive advantage is created.</strong>
+      </aside>
+    </div>
+
+    <div class="wrap industries rv">
+      <div class="industries__heading">
+        <p class="label">Industries Served</p>
+        <p>Perspective earned across markets, business models, and moments of change.</p>
+      </div>
+      <ol class="industries__list">
+        {industries.map((industry, index) => (
+          <li><span>{String(index + 1).padStart(2, "0")}</span>{industry}</li>
+        ))}
+      </ol>
+      <p class="industries__closing">Whether your company generates <strong>$3 million or $50 million in annual revenue</strong>, the challenges of growth, differentiation, leadership, and value creation are remarkably similar. Wyckoff Consulting brings the strategic perspective, cross-industry experience, and executive leadership needed to help organizations solve those challenges—and capitalize on opportunities others never see.</p>
+    </div>
+  </section>
+
+  <section class="about-leadership band" id="executive-leadership" aria-labelledby="leadership-title">
+    <div class="wrap about-leadership__grid">
+      <div class="about-leadership__heading rv">
+        <p class="label">The Fractional Chief Marketing Officer</p>
+        <h2 class="display" id="leadership-title"><span class="about-heading__line">Executive leadership</span> <span class="about-heading__line">when your business</span> <span class="about-heading__line">needs it most.</span></h2>
+      </div>
+      <div class="about-leadership__body rv">
+        <p class="about-leadership__opening">Growing companies don't hire Wyckoff Consulting because they need another marketing agency.</p>
+        <p>They engage a Fractional Chief Marketing Officer because they're facing an important business decision—and they need experienced executive leadership to help them move forward with confidence.</p>
+        <p>For more than 30 years, Luke Wyckoff has partnered with business owners, CEOs, executive teams, private equity firms, and portfolio companies to navigate the moments that define a company's future.</p>
+        <p>Whether growth has stalled, leadership has changed, a company is entering a new market, preparing for a sale, integrating an acquisition, or building its first marketing function, Wyckoff Consulting provides the strategic direction and executive leadership needed to accelerate growth and increase enterprise value.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="expectations band" aria-labelledby="expectations-title">
+    <div class="wrap">
+      <div class="expectations__heading rv">
+        <p class="label">What You Can Expect</p>
+        <h2 class="display" id="expectations-title"><span class="about-heading__line">A senior partner for</span> <span class="about-heading__line">the decisions that shape</span> <span class="about-heading__line">what comes next.</span></h2>
+        <p>Clear thinking, decisive execution, and an unwavering commitment to creating long-term enterprise value.</p>
+      </div>
+
+      <ol class="expectations__grid">
+        {expectations.map((expectation, index) => (
+          <li class="expectation rv">
+            <span class="expectation__number">{String(index + 1).padStart(2, "0")}</span>
+            <div>
+              <h3>{expectation.title}</h3>
+              <p>{expectation.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <LogoMarquee
+    id="guest-lectures"
+    visibleLabel="Where Luke has guest lectured"
+    accessibleLabel="Colleges and universities where Luke Wyckoff has guest lectured"
+    logos={guestLectureLogos}
+    externalCta={{
+      label: "Explore Luke's keynote work",
+      href: "https://lukewyckoff.com/",
+    }}
+    featureImage={{
+      src: "/images/wyckoff/luke-speaking.webp",
+      alt: "A collage of Luke Wyckoff speaking and engaging with an audience",
+      width: 940,
+      height: 788,
+    }}
+  />
+
+  <ResultsShowcase />
+</Layout>
+
+<style>
+  .about-hero {
+    position: relative;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    height: 100svh;
+    overflow: hidden;
+    background: var(--ink);
+    color: var(--cream);
+    padding-top: clamp(5.75rem, 12svh, 8rem);
+  }
+
+  #executive-leadership,
+  :global(#guest-lectures),
+  :global(#annual-results) {
+    scroll-margin-top: 6rem;
+  }
+
+  .about-hero__glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 86% 20%, color-mix(in srgb, var(--sage-lt) 24%, transparent), transparent 30%),
+      linear-gradient(125deg, transparent 48%, color-mix(in srgb, var(--sage) 18%, transparent));
+  }
+
+  .about-hero__glow::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: .08;
+    background-image: radial-gradient(circle, var(--cream) 1px, transparent 1px);
+    background-size: 22px 22px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 35%, black);
+    mask-image: linear-gradient(90deg, transparent 35%, black);
+  }
+
+  .about-hero__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.22fr) minmax(20rem, .78fr);
+    min-height: 0;
+    gap: clamp(2.5rem, 7vw, 8rem);
+    align-items: center;
+  }
+
+  .about-hero__copy {
+    padding-block: clamp(.75rem, 2svh, 1.5rem);
+  }
+
+  .about-hero__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0 0 clamp(.75rem, 2svh, 1.35rem);
+    color: var(--sage-pale);
+    font-size: var(--micro-size);
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+  }
+
+  .about-hero__eyebrow::before {
+    content: "";
+    width: clamp(2.5rem, 5vw, 5rem);
+    height: 2px;
+    background: var(--amber);
+  }
+
+  .about-hero__title {
+    margin: 0;
+    max-width: 15ch;
+    font-size: clamp(2.4rem, min(4.6vw, 8.8svh), 5.6rem);
+    font-weight: 600;
+    letter-spacing: -.055em;
+    line-height: .9;
+    text-wrap: balance;
+  }
+
+  .about-hero__sentence {
+    display: block;
+  }
+
+  .about-hero__title-line,
+  .about-heading__line {
+    display: inline;
+  }
+
+  .about-hero__title-soft {
+    color: var(--sage-pale);
+    font-weight: 400;
+  }
+
+  .about-hero__lede {
+    max-width: 42ch;
+    margin: clamp(.9rem, 2.4svh, 1.6rem) 0 0;
+    font-size: clamp(.94rem, 1.15vw, 1.1rem);
+    line-height: 1.5;
+    color: color-mix(in srgb, var(--cream) 86%, transparent);
+  }
+
+  .about-hero__link {
+    margin-top: clamp(.9rem, 2.4svh, 1.6rem);
+  }
+
+  .about-hero__portrait {
+    position: relative;
+    width: min(100%, clamp(17.6rem, 53.6svh, 30.4rem));
+    height: auto;
+    aspect-ratio: 4 / 5;
+    margin: 0;
+    align-self: end;
+    justify-self: end;
+  }
+
+  .about-hero__portrait::before {
+    content: "";
+    position: absolute;
+    inset: 8% -5% -2% 9%;
+    border: 1px solid color-mix(in srgb, var(--cream) 18%, transparent);
+    transform: translate(1.25rem, 1.25rem);
+  }
+
+  .about-hero__portrait-frame {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background: var(--cream);
+    border-left: 3px solid var(--amber);
+  }
+
+  .about-hero__portrait-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--ink) 30%, transparent));
+    pointer-events: none;
+  }
+
+  .about-hero__portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: saturate(.88) contrast(1.03);
+  }
+
+  .about-hero__portrait figcaption {
+    position: absolute;
+    left: clamp(1rem, 2vw, 1.7rem);
+    right: clamp(1rem, 2vw, 1.7rem);
+    bottom: clamp(1rem, 2vw, 1.7rem);
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: .8rem;
+    border-top: 1px solid color-mix(in srgb, var(--cream) 42%, transparent);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+
+  .about-hero__proof {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 0;
+    border-top: 1px solid color-mix(in srgb, var(--cream) 18%, transparent);
+  }
+
+  .about-hero__proof > div {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(.8rem, 2vw, 1.5rem);
+    align-items: center;
+    padding: clamp(.8rem, 1.8svh, 1.25rem) clamp(1rem, 2.3vw, 2rem);
+    border-right: 1px solid color-mix(in srgb, var(--cream) 18%, transparent);
+  }
+
+  .about-hero__proof > div:first-child { padding-left: 0; }
+  .about-hero__proof > div:last-child { border-right: 0; }
+
+  .about-hero__proof strong {
+    font-size: clamp(2rem, min(3.5vw, 5svh), 3.5rem);
+    font-weight: 600;
+    letter-spacing: -.055em;
+    line-height: 1;
+    color: var(--sage-pale);
+  }
+
+  .about-hero__proof span {
+    max-width: 14ch;
+    font-size: clamp(.72rem, .9vw, .9rem);
+    font-weight: 700;
+    letter-spacing: .14em;
+    line-height: 1.45;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--cream) 78%, transparent);
+  }
+
+  .about-leadership__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: clamp(3rem, 9vw, 9rem);
+    align-items: start;
+  }
+
+  .about-leadership__heading {
+    position: sticky;
+    top: 8rem;
+  }
+
+  .about-leadership__heading h2 {
+    max-width: 14ch;
+    font-size: clamp(2.65rem, 3.8vw, 4.25rem);
+    line-height: .98;
+    letter-spacing: -.04em;
+    text-wrap: balance;
+  }
+
+  .about-leadership__body > p {
+    margin: 0 0 1.45rem;
+    max-width: 49ch;
+    font-size: clamp(1rem, 1.25vw, 1.17rem);
+    line-height: 1.72;
+    color: color-mix(in srgb, var(--ink) 86%, transparent);
+  }
+
+  .about-leadership__body .about-leadership__opening {
+    margin-bottom: 2.2rem;
+    font-size: clamp(1.55rem, 2.6vw, 2.75rem);
+    font-weight: 500;
+    letter-spacing: -.035em;
+    line-height: 1.14;
+    color: var(--ink);
+  }
+
+  .perspective {
+    overflow: hidden;
+    padding-block: clamp(5rem, 14vh, 11rem);
+    background: var(--primary-surface);
+    color: var(--primary-surface-cream);
+  }
+
+  .perspective .label {
+    color: var(--primary-surface-ink);
+  }
+
+  .perspective__headline {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(15rem, .65fr);
+    gap: clamp(2rem, 7vw, 7rem);
+    align-items: end;
+  }
+
+  .perspective__headline h2 {
+    max-width: 12ch;
+    font-size: clamp(2.65rem, 3.8vw, 4.25rem);
+    line-height: .98;
+    letter-spacing: -.04em;
+    text-wrap: balance;
+  }
+
+  .perspective__standfirst {
+    margin: 0;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--amber);
+    font-size: clamp(1.35rem, 2.2vw, 2.25rem);
+    font-weight: 500;
+    letter-spacing: -.03em;
+    line-height: 1.2;
+  }
+
+  .perspective__story {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, .72fr);
+    gap: clamp(3rem, 9vw, 9rem);
+    margin-top: clamp(4rem, 10vh, 8rem);
+    align-items: start;
+  }
+
+  .perspective__copy {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 3rem;
+  }
+
+  .perspective__copy p {
+    margin: 0;
+    font-size: clamp(1rem, 1.25vw, 1.17rem);
+    line-height: 1.68;
+  }
+
+  .perspective__copy strong {
+    color: var(--ink);
+  }
+
+  .perspective__principle {
+    position: relative;
+    padding: clamp(2rem, 4vw, 3.5rem);
+    background: var(--ink);
+    color: var(--cream);
+    border-top: 3px solid var(--amber);
+  }
+
+  .perspective__principle > span {
+    display: block;
+    margin-bottom: clamp(3rem, 8vh, 6rem);
+    color: var(--amber);
+    font-size: var(--micro-size);
+    font-weight: 700;
+    letter-spacing: .18em;
+  }
+
+  .perspective__principle p,
+  .perspective__principle strong {
+    display: block;
+    margin: 0;
+    font-size: clamp(1.6rem, 3vw, 3.2rem);
+    letter-spacing: -.045em;
+    line-height: 1.02;
+  }
+
+  .perspective__principle p {
+    color: var(--sage-pale);
+    font-weight: 400;
+  }
+
+  .perspective__principle strong {
+    margin-top: 1.2rem;
+    font-weight: 600;
+  }
+
+  .industries {
+    margin-top: clamp(4rem, 11vh, 9rem);
+    padding-top: clamp(2rem, 5vh, 4rem);
+    border-top: 1px solid color-mix(in srgb, var(--cream) 24%, transparent);
+  }
+
+  .industries__heading {
+    display: grid;
+    grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr);
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .industries__heading .label {
+    margin: 0;
+  }
+
+  .industries__heading > p:last-child {
+    margin: 0;
+    max-width: 32ch;
+    font-size: clamp(1.25rem, 2vw, 2rem);
+    letter-spacing: -.025em;
+    line-height: 1.25;
+  }
+
+  .industries__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: clamp(3rem, 7vh, 5rem) 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid color-mix(in srgb, var(--cream) 23%, transparent);
+  }
+
+  .industries__list li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: .85rem;
+    min-height: 6.2rem;
+    padding: 1.15rem 1rem 1.15rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--cream) 23%, transparent);
+    font-size: clamp(.9rem, 1.08vw, 1.05rem);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .industries__list li span {
+    color: var(--primary-surface-ink);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+  }
+
+  .industries__closing {
+    max-width: 88ch;
+    margin: clamp(3rem, 7vh, 5rem) 0 0;
+    padding-left: clamp(1.5rem, 4vw, 3rem);
+    border-left: 2px solid var(--amber);
+    font-size: clamp(1.05rem, 1.45vw, 1.3rem);
+    line-height: 1.65;
+  }
+
+  .industries__closing strong {
+    color: var(--ink);
+  }
+
+  .expectations {
+    padding-block: clamp(4.5rem, 10vh, 8rem);
+  }
+
+  .expectations__heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(18rem, .55fr);
+    grid-template-areas:
+      "label copy"
+      "title copy";
+    column-gap: clamp(3rem, 8vw, 8rem);
+    row-gap: clamp(1.25rem, 2.5vh, 2rem);
+    align-items: start;
+  }
+
+  .expectations__heading .label {
+    grid-area: label;
+    align-self: start;
+    margin: 0;
+  }
+
+  .expectations__heading h2 {
+    grid-area: title;
+    max-width: 16ch;
+    font-size: clamp(2.65rem, 3.8vw, 4.25rem);
+    line-height: .98;
+    letter-spacing: -.04em;
+    text-wrap: balance;
+  }
+
+  .expectations__heading > p:last-child {
+    grid-area: copy;
+    align-self: end;
+    justify-self: end;
+    max-width: 34ch;
+    margin: 0;
+    padding-left: 1.4rem;
+    border-left: 2px solid var(--amber);
+    font-size: clamp(1rem, 1.2vw, 1.15rem);
+    line-height: 1.62;
+  }
+
+  .expectations__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: clamp(4rem, 9vh, 7rem) 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  }
+
+  .expectation {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(1.2rem, 3vw, 2.4rem);
+    padding: clamp(1.8rem, 4vw, 3rem) clamp(1.2rem, 3vw, 2.5rem) clamp(1.8rem, 4vw, 3rem) 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  }
+
+  .expectation:nth-child(odd) {
+    border-right: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  }
+
+  .expectation:nth-child(even) {
+    padding-left: clamp(1.2rem, 3vw, 2.5rem);
+  }
+
+  .expectation__number {
+    color: var(--ochre);
+    font-size: var(--micro-size);
+    font-weight: 700;
+    letter-spacing: .18em;
+  }
+
+  .expectation h3 {
+    margin: 0;
+    font-size: clamp(1.3rem, 2vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -.035em;
+    line-height: 1.1;
+  }
+
+  .expectation p {
+    max-width: 48ch;
+    margin: 1rem 0 0;
+    font-size: clamp(.98rem, 1.1vw, 1.08rem);
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--ink) 82%, transparent);
+  }
+
+	:global(#guest-lectures) {
+		background: var(--tan);
+		padding-top: clamp(3rem, 8vh, 6rem);
+		padding-bottom: 0;
+	}
+
+  :global(#guest-lectures .mq--logos) {
+    background: var(--tan);
+  }
+
+  @media (min-width: 801px) {
+    .about-hero__title-line,
+    .about-heading__line {
+      display: block;
+    }
+
+    .about-hero__portrait-frame::after {
+      background: linear-gradient(
+        180deg,
+        transparent 52%,
+        color-mix(in srgb, var(--ink) 28%, transparent) 72%,
+        color-mix(in srgb, var(--ink) 88%, transparent) 100%
+      );
+    }
+
+    .about-hero__portrait figcaption {
+      text-shadow: 0 2px 14px color-mix(in srgb, var(--ink) 88%, transparent);
+    }
+
+    .perspective {
+      padding-block: clamp(4.5rem, 10vh, 8rem);
+    }
+
+    .perspective__headline {
+      grid-template-columns: minmax(0, 1.2fr) minmax(18rem, .55fr);
+      gap: clamp(3rem, 6vw, 6rem);
+    }
+
+    .perspective__headline h2 {
+      max-width: 14ch;
+      font-size: clamp(2.65rem, 3.8vw, 4.25rem);
+      line-height: .98;
+      letter-spacing: -.04em;
+    }
+
+    .perspective__standfirst {
+      font-size: clamp(1.25rem, 1.8vw, 1.75rem);
+    }
+
+    .perspective__story {
+      margin-top: clamp(3rem, 7vh, 5rem);
+    }
+
+    .perspective__principle {
+      padding: clamp(2rem, 3vw, 3rem);
+    }
+
+    .perspective__principle > span {
+      margin-bottom: clamp(1.75rem, 3vh, 2.5rem);
+    }
+
+    .perspective__principle p {
+      font-size: clamp(1.35rem, 2vw, 2rem);
+      line-height: 1.14;
+    }
+
+    .perspective__principle strong {
+      margin-top: clamp(1.25rem, 2.5vh, 1.75rem);
+      padding-top: clamp(1.25rem, 2.5vh, 1.75rem);
+      border-top: 1px solid color-mix(in srgb, var(--cream) 24%, transparent);
+      font-size: clamp(1.45rem, 2.1vw, 2.1rem);
+      line-height: 1.08;
+    }
+  }
+
+  @media (max-width: 1050px) {
+    .about-hero__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(17rem, .62fr);
+      gap: 3rem;
+    }
+
+    .perspective__copy {
+      grid-template-columns: 1fr;
+    }
+
+    .industries__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+  }
+
+  @media (max-width: 800px) {
+    .about-hero {
+      padding-top: 6rem;
+    }
+
+    .about-leadership {
+      padding-bottom: 2rem;
+    }
+
+    .about-leadership__body > p:last-child {
+      margin-bottom: 0;
+    }
+
+    .expectations {
+      padding-top: 2rem;
+    }
+
+    .about-hero__portrait-frame::after {
+      background: linear-gradient(
+        180deg,
+        transparent 52%,
+        color-mix(in srgb, var(--ink) 28%, transparent) 72%,
+        color-mix(in srgb, var(--ink) 88%, transparent) 100%
+      );
+    }
+
+    .about-hero__portrait figcaption {
+      text-shadow: 0 2px 14px color-mix(in srgb, var(--ink) 88%, transparent);
+    }
+
+    .about-hero__grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: clamp(.75rem, 2svh, 1.25rem);
+      align-items: stretch;
+    }
+
+    .about-hero__copy {
+      padding-block: .35rem 0;
+    }
+
+    .about-hero__title {
+      max-width: none;
+      font-size: clamp(1.85rem, min(7.8vw, 7.8svh), 3.3rem);
+      line-height: .94;
+    }
+
+    .about-hero__portrait {
+      width: auto;
+      max-width: min(100%, 24rem);
+      height: 100%;
+      max-height: none;
+      margin-inline: auto;
+      justify-self: center;
+    }
+
+    .about-hero__eyebrow {
+      gap: .65rem;
+      font-size: clamp(.8rem, 3.2vw, .95rem);
+      letter-spacing: .1em;
+      margin-bottom: clamp(.55rem, 1.5svh, .85rem);
+    }
+
+    .about-hero__eyebrow::before { width: clamp(1.6rem, 8vw, 2.5rem); }
+
+    .about-hero__lede {
+      margin-top: clamp(.65rem, 1.7svh, 1rem);
+      font-size: clamp(.82rem, 3.7vw, .95rem);
+      line-height: 1.42;
+    }
+
+    .about-hero__link {
+      margin-top: clamp(.65rem, 1.7svh, 1rem);
+      font-size: .78rem;
+      letter-spacing: .13em;
+      white-space: normal;
+    }
+
+    .about-hero__proof {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .about-hero__proof > div,
+    .about-hero__proof > div:first-child {
+      display: block;
+      padding: clamp(.55rem, 1.4svh, .85rem) clamp(.35rem, 2vw, .75rem);
+      border-right: 1px solid color-mix(in srgb, var(--cream) 18%, transparent);
+      border-bottom: 0;
+    }
+
+    .about-hero__proof > div:last-child {
+      border-right: 0;
+    }
+
+    .about-hero__proof strong {
+      display: block;
+      font-size: clamp(1.65rem, min(8vw, 5svh), 2.35rem);
+    }
+
+    .about-hero__proof span {
+      display: block;
+      margin-top: .2rem;
+      font-size: clamp(.54rem, 2vw, .66rem);
+      letter-spacing: .09em;
+      line-height: 1.25;
+    }
+
+    .about-leadership__grid,
+    .perspective__headline,
+    .perspective__story,
+    .industries__heading,
+    .expectations__heading {
+      grid-template-columns: 1fr;
+    }
+
+    .about-leadership__heading {
+      position: static;
+    }
+
+    .about-leadership__heading h2,
+    .perspective__headline h2,
+    .expectations__heading h2 {
+      max-width: 13ch;
+    }
+
+    .perspective__standfirst {
+      max-width: 30ch;
+    }
+
+    .perspective__copy {
+      grid-template-columns: 1fr;
+    }
+
+    .industries__heading > p:last-child,
+    .expectations__heading > p:last-child {
+      grid-column: 1;
+    }
+
+    .expectations__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .expectation,
+    .expectation:nth-child(even) {
+      padding-inline: 0;
+      border-right: 0;
+    }
+
+    .expectations__heading {
+      grid-template-areas:
+        "label"
+        "title"
+        "copy";
+      row-gap: 1.5rem;
+    }
+
+    .expectations__heading > p:last-child {
+      justify-self: start;
+    }
+  }
+
+  @media (min-width: 801px) and (max-height: 700px) {
+    .about-hero { padding-top: 5.5rem; }
+    .about-hero__copy { padding-block: .25rem; }
+    .about-hero__eyebrow { margin-bottom: .55rem; }
+    .about-hero__title { font-size: clamp(2rem, min(4.4vw, 8svh), 5rem); }
+    .about-hero__lede,
+    .about-hero__link { margin-top: .65rem; }
+  }
+
+  @media (max-width: 540px) {
+    .about-hero__portrait figcaption {
+      flex-direction: column;
+      gap: .4rem;
+    }
+
+    .industries__list {
+      grid-template-columns: 1fr;
+    }
+
+    .industries__list li {
+      min-height: 0;
+    }
+  }
+
+  @media (max-width: 900px) and (max-height: 600px) {
+    .about-hero { padding-top: 4.75rem; }
+    .about-hero__title { font-size: clamp(1.65rem, min(6.8vw, 8svh), 3rem); }
+    .about-hero__eyebrow { font-size: .76rem; }
+    .about-hero__portrait figcaption { font-size: .58rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about-hero__glow::after {
+      display: none;
+    }
+  }
+</style>

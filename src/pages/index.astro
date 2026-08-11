@@ -12,7 +12,7 @@ import Statement from "../components/Statement.astro";
 import Testimonials from "../components/Testimonials.astro";
 import Insights from "../components/Insights.astro";
 import Contact from "../components/Contact.astro";
-import { clientLogos, guestLectureLogos } from "../data/logos";
+import { clientLogos } from "../data/logos";
 ---
 <Layout>
   <Hero />
@@ -28,22 +28,6 @@ import { clientLogos, guestLectureLogos } from "../data/logos";
   <InflectionPoints />
   <Stats />
   <About />
-  <LogoMarquee
-    id="guest-lectures"
-    visibleLabel="Where Luke has guest lectured"
-    accessibleLabel="Colleges and universities where Luke Wyckoff has guest lectured"
-    logos={guestLectureLogos}
-    externalCta={{
-      label: "Explore Luke's keynote work",
-      href: "https://lukewyckoff.com/",
-    }}
-    featureImage={{
-      src: "/images/wyckoff/luke-speaking.webp",
-      alt: "A collage of Luke Wyckoff speaking and engaging with an audience",
-      width: 940,
-      height: 788,
-    }}
-  />
   <Statement />
   <Testimonials />
   <Insights />

@@ -28,26 +28,28 @@ const sectionId = id ?? visibleLabel.toLowerCase().replace(/[^a-z0-9]+/g, "-").r
 const headingId = `${sectionId}-heading`;
 ---
 <section class="logo-marquee" id={sectionId} aria-labelledby={headingId}>
-  <div class:list={["wrap", "logo-marquee__header", externalCta && "logo-marquee__header--with-cta"]}>
-    <h2 class="label" id={headingId}>{visibleLabel}</h2>
-    {externalCta && (
-      <a class="textlink logo-marquee__cta" href={externalCta.href} target="_blank" rel="noopener noreferrer">
-        {externalCta.label}<ExternalArrow /><span class="sr-only"> (opens in a new tab)</span>
-      </a>
+  <div class:list={["logo-marquee__content", featureImage && "wrap", featureImage && "logo-marquee__editorial"]}>
+    <div class:list={[!featureImage && "wrap", "logo-marquee__header", externalCta && "logo-marquee__header--with-cta"]}>
+      <h2 class="label" id={headingId}>{visibleLabel}</h2>
+      {externalCta && (
+        <a class="textlink logo-marquee__cta" href={externalCta.href} target="_blank" rel="noopener noreferrer">
+          {externalCta.label}<ExternalArrow /><span class="sr-only"> (opens in a new tab)</span>
+        </a>
+      )}
+    </div>
+    {featureImage && (
+      <div class="logo-marquee__feature">
+        <img
+          src={featureImage.src}
+          alt={featureImage.alt}
+          width={featureImage.width}
+          height={featureImage.height}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
     )}
   </div>
-  {featureImage && (
-    <div class="wrap logo-marquee__feature">
-      <img
-        src={featureImage.src}
-        alt={featureImage.alt}
-        width={featureImage.width}
-        height={featureImage.height}
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
-  )}
   <div class="mq mq--logos" aria-label={accessibleLabel}>
     <div class="mq__track">
       {logos.map((logo) => (
@@ -129,6 +131,69 @@ const headingId = `${sectionId}-heading`;
     border-left: 3px solid var(--amber);
   }
 
+  @media (min-width: 901px) {
+    .logo-marquee__editorial {
+      display: grid;
+      grid-template-columns: minmax(17rem, .48fr) minmax(0, 1.52fr);
+      grid-template-areas:
+        "image image"
+        "cta heading";
+      align-items: stretch;
+      padding-bottom: 0;
+    }
+
+    .logo-marquee__editorial .logo-marquee__header {
+      display: contents;
+    }
+
+    .logo-marquee__editorial .logo-marquee__header .label {
+      grid-area: heading;
+      align-items: center;
+      align-self: stretch;
+      gap: clamp(1rem, 2vw, 1.75rem);
+      max-width: none;
+      min-width: 0;
+      min-height: clamp(9rem, 14vw, 12rem);
+      padding: clamp(2rem, 3.5vw, 3.5rem);
+      border-block: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+      background: color-mix(in srgb, var(--tan) 68%, var(--cream));
+      color: var(--ink);
+      font-size: clamp(1.4rem, 2.2vw, 2.2rem);
+      line-height: 1.08;
+      letter-spacing: .07em;
+    }
+
+    .logo-marquee__editorial .logo-marquee__cta {
+      grid-area: cta;
+      align-self: stretch;
+      justify-self: stretch;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      max-width: none;
+      min-height: clamp(9rem, 14vw, 12rem);
+      padding: clamp(2rem, 3.5vw, 3.5rem);
+      border: 0;
+      border-top: 3px solid var(--amber);
+      background: var(--ink);
+      color: var(--cream);
+      text-align: left;
+    }
+
+    .logo-marquee__editorial .logo-marquee__feature {
+      grid-area: image;
+      min-width: 0;
+      padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
+    }
+
+    .logo-marquee__editorial .logo-marquee__feature img {
+      width: min(100%, 58rem);
+      max-width: 100%;
+      height: auto;
+      margin-inline: auto;
+    }
+  }
+
   @media (max-width: 900px) {
     .logo-marquee__header--with-cta {
       grid-template-columns: 1fr;
@@ -138,6 +203,64 @@ const headingId = `${sectionId}-heading`;
       grid-column: 1;
       justify-self: center;
       text-align: center;
+    }
+
+    .logo-marquee__editorial {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "image"
+        "cta"
+        "heading";
+      padding-bottom: 0;
+    }
+
+    .logo-marquee__editorial .logo-marquee__header {
+      display: contents;
+    }
+
+    .logo-marquee__editorial .logo-marquee__feature {
+      grid-area: image;
+      min-width: 0;
+      padding-bottom: clamp(1.5rem, 6vw, 2.5rem);
+    }
+
+    .logo-marquee__editorial .logo-marquee__feature img {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .logo-marquee__editorial .logo-marquee__cta {
+      grid-area: cta;
+      align-self: stretch;
+      justify-self: stretch;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1.25rem;
+      max-width: none;
+      min-height: 5.25rem;
+      padding: 1.2rem 1.25rem;
+      border: 0;
+      border-top: 3px solid var(--amber);
+      background: var(--ink);
+      color: var(--cream);
+      text-align: left;
+    }
+
+    .logo-marquee__editorial .logo-marquee__header .label {
+      grid-area: heading;
+      align-self: stretch;
+      gap: 1rem;
+      max-width: none;
+      min-width: 0;
+      min-height: 6.5rem;
+      padding: 1.35rem 1.25rem;
+      border-block: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+      background: color-mix(in srgb, var(--tan) 68%, var(--cream));
+      color: var(--ink);
+      font-size: clamp(1.15rem, 5.5vw, 1.5rem);
+      line-height: 1.1;
+      letter-spacing: .08em;
     }
   }
 </style>

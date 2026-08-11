@@ -1,0 +1,807 @@
+---
+type Metric = {
+  value: string;
+  label: string;
+  detail?: string;
+  ariaLabel?: string;
+};
+
+type MetricGroup = {
+  title: string;
+  metrics: Metric[];
+};
+
+type AnnualResult = {
+  year: string;
+  title: string;
+  highlights: Metric[];
+  groups: MetricGroup[];
+};
+
+const annualResults: AnnualResult[] = [
+  {
+    year: "2023",
+    title: "Built across every channel.",
+    highlights: [
+      { value: "17%", label: "Reported average sales growth", detail: "Top-line revenue" },
+      { value: "1,280", label: "Original social posts", detail: "Across 6 platforms" },
+      { value: "$2.3M", label: "Digital ad spending" },
+    ],
+    groups: [
+      {
+        title: "Market presence",
+        metrics: [
+          { value: "5", label: "Keynote speeches" },
+          { value: "13", label: "Tradeshow designs" },
+          { value: "23", label: "Published marketing articles" },
+        ],
+      },
+      {
+        title: "Campaign volume",
+        metrics: [
+          { value: "69", label: "New marketing materials" },
+          { value: "890", label: "Email campaigns" },
+        ],
+      },
+      {
+        title: "Growth initiatives",
+        metrics: [
+          { value: "5", label: "New product launches" },
+          { value: "7", label: "Product expansions" },
+        ],
+      },
+    ],
+  },
+  {
+    year: "2024",
+    title: "Scale, without losing the details.",
+    highlights: [
+      { value: "21%", label: "Reported average sales growth", detail: "Top-line revenue" },
+      {
+        value: "35,000+",
+        label: "Leads generated",
+        detail: "Across 5 clients",
+        ariaLabel: "More than 35,000 leads generated across 5 clients",
+      },
+      { value: "1,885", label: "Original social posts", detail: "Across 6 platforms" },
+    ],
+    groups: [
+      {
+        title: "Market presence",
+        metrics: [
+          { value: "7", label: "Keynote speeches" },
+          { value: "6", label: "Tradeshow designs" },
+          { value: "28", label: "Published marketing articles" },
+        ],
+      },
+      {
+        title: "Campaign scale",
+        metrics: [
+          { value: "84", label: "New marketing materials" },
+          { value: "992", label: "Email campaigns" },
+          { value: "$3.9M", label: "Digital ad spending" },
+        ],
+      },
+      {
+        title: "Growth & leadership",
+        metrics: [
+          { value: "11", label: "New product launches" },
+          { value: "4", label: "Product expansions" },
+          { value: "14", label: "Direct reports managed" },
+          { value: "3", label: "Digital transformation sessions coached" },
+        ],
+      },
+    ],
+  },
+  {
+    year: "2025",
+    title: "A wider footprint. A stronger finish.",
+    highlights: [
+      { value: "22%", label: "Reported average sales growth", detail: "Top-line revenue" },
+      {
+        value: "12,000+",
+        label: "Leads generated",
+        detail: "Across 5 clients",
+        ariaLabel: "More than 12,000 leads generated across 5 clients",
+      },
+      {
+        value: "17",
+        label: "Cities worked in",
+        detail: "Across 5 countries",
+        ariaLabel: "Worked in 17 cities across 5 countries",
+      },
+    ],
+    groups: [
+      {
+        title: "Market presence",
+        metrics: [
+          { value: "4", label: "Keynote speeches" },
+          { value: "3", label: "Tradeshow designs" },
+          { value: "2,965", label: "Original social posts", detail: "Across 6 platforms" },
+        ],
+      },
+      {
+        title: "Campaign scale",
+        metrics: [
+          { value: "84", label: "New marketing materials" },
+          { value: "1,422", label: "Email campaigns" },
+          { value: "$3.2M", label: "Digital ad spending" },
+        ],
+      },
+      {
+        title: "Growth & leadership",
+        metrics: [
+          { value: "6", label: "New product launches" },
+          { value: "3", label: "Product expansions" },
+          { value: "9", label: "Direct reports managed" },
+          { value: "4", label: "AI transformation sessions coached" },
+        ],
+      },
+    ],
+  },
+];
+---
+
+<section
+  class="results"
+  id="annual-results"
+  data-results-showcase
+  data-active-year="2025"
+  aria-labelledby="annual-results-heading"
+>
+  <div class="results__wrap">
+    <header class="results__intro">
+      <div>
+        <p class="results__eyebrow"><span aria-hidden="true"></span>The work in numbers</p>
+        <h2 id="annual-results-heading">You expect results? <span>Here is the report card.</span></h2>
+      </div>
+      <p class="results__lede">
+        Start with the outcomes that matter most. Then open the full annual report for the activity behind them.
+      </p>
+    </header>
+
+    <div class="results__experience">
+      <nav class="year-switcher" data-year-switcher aria-label="Annual results by year">
+        {annualResults.map((result) => (
+          <a
+            class={`year-switcher__tab${result.year === "2025" ? " is-active" : ""}`}
+            href={`#results-${result.year}`}
+            data-year-tab
+            data-year={result.year}
+            aria-label={`View ${result.year} annual results`}
+          >
+            <strong>{result.year}</strong>
+          </a>
+        ))}
+      </nav>
+
+      <p class="results__status" aria-live="polite" aria-atomic="true" data-year-status></p>
+
+      <div class="results__panels">
+        {annualResults.map((result) => {
+          const supportingMetricCount = result.groups.reduce((total, group) => total + group.metrics.length, 0);
+
+          return (
+            <article
+              class={`result-panel${result.year === "2025" ? " is-active" : ""}`}
+              id={`results-${result.year}`}
+              data-year-panel
+              data-year={result.year}
+              aria-labelledby={`results-${result.year}-title`}
+            >
+              <header class="result-panel__header">
+                <p class="result-panel__kicker">{result.year} report card</p>
+                <h3 id={`results-${result.year}-title`}>{result.title}</h3>
+              </header>
+
+              <ul class="highlight-grid" aria-label={`${result.year} headline results`}>
+                {result.highlights.map((metric, index) => (
+                  <li
+                    class={`highlight${index === 0 ? " highlight--primary" : ""}`}
+                    style={`--metric-index: ${index}`}
+                    aria-label={metric.ariaLabel}
+                  >
+                    <strong class="highlight__value">{metric.value}</strong>
+                    <span class="highlight__label">{metric.label}</span>
+                    {metric.detail && <span class="highlight__detail">{metric.detail}</span>}
+                  </li>
+                ))}
+              </ul>
+
+              <details class="report-details">
+                <summary>
+                  <span>View full {result.year} report card</span>
+                  <em>{supportingMetricCount} supporting measures</em>
+                </summary>
+
+                <div class="report-groups">
+                  {result.groups.map((group) => (
+                    <section class="report-group" aria-labelledby={`results-${result.year}-${group.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>
+                      <h4 id={`results-${result.year}-${group.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>{group.title}</h4>
+                      <ul>
+                        {group.metrics.map((metric) => (
+                          <li aria-label={metric.ariaLabel}>
+                            <strong>{metric.value}</strong>
+                            <span>
+                              {metric.label}
+                              {metric.detail && <small>{metric.detail}</small>}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  ))}
+                </div>
+              </details>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+
+    <p class="results__disclosure">
+      Figures reflect annual activity and results reported by Wyckoff Consulting. Top-line sales growth figures are reported annual averages.
+    </p>
+  </div>
+</section>
+
+<style>
+  .results {
+    --results-ink: var(--ink, #1f2d27);
+    --results-forest: var(--forest, #3b5249);
+    --results-cream: var(--cream, #ece6de);
+    --results-tan: var(--tan, #e6d1bc);
+    --results-amber: var(--amber, #d08847);
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    padding-block: clamp(5rem, 9vw, 8rem);
+    background: linear-gradient(120deg, var(--results-forest), var(--results-ink) 76%);
+    color: var(--results-cream);
+  }
+
+  .results::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(circle at 88% 8%, color-mix(in srgb, var(--results-amber) 10%, transparent), transparent 31rem);
+    pointer-events: none;
+  }
+
+  .results__wrap {
+    width: min(100%, 1440px);
+    margin-inline: auto;
+    padding-inline: var(--gutter, clamp(1.25rem, 5vw, 6rem));
+  }
+
+  .results__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+    align-items: end;
+    gap: clamp(2.5rem, 8vw, 8rem);
+    padding-bottom: clamp(2.75rem, 5vw, 4.75rem);
+  }
+
+  .results__eyebrow,
+  .result-panel__kicker,
+  .report-group h4 {
+    margin: 0;
+    font-size: clamp(0.72rem, 0.8vw, 0.84rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .results__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: clamp(1.25rem, 2vw, 1.8rem);
+    color: var(--results-amber);
+  }
+
+  .results__eyebrow span {
+    width: clamp(2.4rem, 4vw, 4.5rem);
+    height: 2px;
+    background: currentColor;
+  }
+
+  .results h2 {
+    max-width: 16ch;
+    margin: 0;
+    font-size: clamp(2.65rem, 3.8vw, 4.25rem);
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
+  .results h2 span {
+    display: block;
+    color: var(--results-amber);
+  }
+
+  .results__lede {
+    max-width: 34ch;
+    margin: 0 0 0.35rem;
+    color: color-mix(in srgb, var(--results-cream) 76%, transparent);
+    font-size: clamp(1rem, 1.25vw, 1.18rem);
+    line-height: 1.6;
+  }
+
+  .results__experience {
+    border: 1px solid color-mix(in srgb, var(--results-cream) 22%, transparent);
+    background: var(--results-cream);
+    box-shadow: 0 2rem 5rem color-mix(in srgb, #000 24%, transparent);
+  }
+
+  .year-switcher {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: color-mix(in srgb, var(--results-ink) 92%, transparent);
+  }
+
+  .year-switcher__tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    padding: clamp(1rem, 1.8vw, 1.4rem);
+    color: color-mix(in srgb, var(--results-cream) 62%, transparent);
+    text-decoration: none;
+    transition: color 220ms ease, background 220ms ease;
+  }
+
+  .year-switcher__tab + .year-switcher__tab {
+    border-left: 1px solid color-mix(in srgb, var(--results-cream) 18%, transparent);
+  }
+
+  .year-switcher__tab::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 4px;
+    background: var(--results-amber);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 280ms ease;
+  }
+
+  .year-switcher__tab strong {
+    font-size: clamp(1.15rem, 1.8vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.04em;
+  }
+
+  .year-switcher__tab:hover {
+    color: var(--results-cream);
+    background: color-mix(in srgb, var(--results-cream) 6%, transparent);
+  }
+
+  .year-switcher__tab.is-active {
+    color: var(--results-ink);
+    background: var(--results-cream);
+  }
+
+  .year-switcher__tab.is-active::after { transform: scaleX(1); }
+
+  .year-switcher__tab:focus-visible {
+    z-index: 2;
+    outline: 3px solid var(--results-amber);
+    outline-offset: -5px;
+  }
+
+  .results__status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .results__panels { touch-action: pan-y; }
+
+  .result-panel {
+    scroll-margin-top: 6rem;
+    padding: clamp(1.5rem, 4vw, 4rem);
+    background: var(--results-cream);
+    color: var(--results-ink);
+  }
+
+  .results[data-enhanced="true"] .result-panel[hidden] { display: none; }
+
+  .result-panel.is-active { animation: panel-in 480ms cubic-bezier(0.16, 0.84, 0.44, 1) both; }
+
+  .result-panel__header {
+    display: grid;
+    grid-template-columns: minmax(10rem, 0.55fr) minmax(0, 1.45fr);
+    align-items: end;
+    gap: clamp(1.5rem, 5vw, 5rem);
+    padding-bottom: clamp(1.75rem, 3.5vw, 3rem);
+  }
+
+  .result-panel__kicker {
+    padding-bottom: 0.35rem;
+    color: var(--results-amber);
+  }
+
+  .result-panel h3 {
+    max-width: 20ch;
+    margin: 0;
+    font-size: clamp(1.9rem, 2.7vw, 3rem);
+    font-weight: 500;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid color-mix(in srgb, var(--results-ink) 20%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--results-ink) 20%, transparent);
+  }
+
+  .highlight {
+    display: flex;
+    min-width: 0;
+    min-height: clamp(11rem, 14vw, 14rem);
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(1.25rem, 2.5vw, 2.25rem);
+    border-right: 1px solid color-mix(in srgb, var(--results-ink) 20%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--results-ink) 20%, transparent);
+    background: color-mix(in srgb, var(--results-tan) 32%, transparent);
+  }
+
+  .highlight--primary {
+    background: var(--results-amber);
+  }
+
+  .result-panel.is-active .highlight {
+    animation: metric-in 440ms calc(70ms + (var(--metric-index) * 55ms)) cubic-bezier(0.16, 0.84, 0.44, 1) both;
+  }
+
+  .highlight__value {
+    display: block;
+    font-size: clamp(2.8rem, 4vw, 4.4rem);
+    font-weight: 500;
+    line-height: 0.94;
+    letter-spacing: -0.045em;
+    white-space: nowrap;
+  }
+
+  .highlight__label {
+    display: block;
+    max-width: 24ch;
+    margin-top: 1.15rem;
+    font-size: clamp(0.78rem, 0.9vw, 0.92rem);
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .highlight__detail {
+    margin-top: 0.45rem;
+    color: color-mix(in srgb, currentColor 68%, transparent);
+    font-size: clamp(0.78rem, 0.88vw, 0.9rem);
+    font-weight: 600;
+  }
+
+  .report-details {
+    margin-top: clamp(1rem, 2vw, 1.5rem);
+    border: 1px solid color-mix(in srgb, var(--results-ink) 22%, transparent);
+  }
+
+  .report-details summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.2rem clamp(1rem, 2vw, 1.5rem);
+    cursor: pointer;
+    list-style: none;
+    transition: color 180ms ease, background 180ms ease;
+  }
+
+  .report-details summary::-webkit-details-marker { display: none; }
+
+  .report-details summary::after {
+    content: "+";
+    flex: 0 0 auto;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .report-details[open] summary::after { content: "−"; }
+
+  .report-details summary:hover {
+    background: color-mix(in srgb, var(--results-tan) 38%, transparent);
+  }
+
+  .report-details summary:focus-visible {
+    outline: 3px solid var(--results-amber);
+    outline-offset: -4px;
+  }
+
+  .report-details summary span {
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .report-details summary em {
+    margin-left: auto;
+    color: color-mix(in srgb, var(--results-ink) 62%, transparent);
+    font-size: clamp(0.76rem, 0.85vw, 0.84rem);
+    font-style: normal;
+  }
+
+  .report-groups {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid color-mix(in srgb, var(--results-ink) 22%, transparent);
+  }
+
+  .report-group {
+    min-width: 0;
+    padding: clamp(1.35rem, 2.5vw, 2.25rem);
+  }
+
+  .report-group + .report-group {
+    border-left: 1px solid color-mix(in srgb, var(--results-ink) 18%, transparent);
+  }
+
+  .report-group h4 {
+    margin-bottom: 1.25rem;
+    color: var(--results-amber);
+  }
+
+  .report-group ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .report-group li {
+    display: grid;
+    grid-template-columns: minmax(3.8rem, auto) minmax(0, 1fr);
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.85rem;
+    border-top: 1px solid color-mix(in srgb, var(--results-ink) 13%, transparent);
+  }
+
+  .report-group li strong {
+    font-size: clamp(1.2rem, 1.6vw, 1.55rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+
+  .report-group li span {
+    font-size: clamp(0.82rem, 0.88vw, 0.9rem);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .report-group li small {
+    display: block;
+    margin-top: 0.2rem;
+    color: color-mix(in srgb, var(--results-ink) 60%, transparent);
+    font-size: 0.76rem;
+    font-weight: 500;
+  }
+
+  .results__disclosure {
+    max-width: 76ch;
+    margin: 1.25rem 0 0 auto;
+    color: color-mix(in srgb, var(--results-cream) 62%, transparent);
+    font-size: clamp(0.72rem, 0.8vw, 0.82rem);
+    line-height: 1.55;
+    text-align: right;
+  }
+
+  @keyframes panel-in {
+    from { opacity: 0; transform: translateY(1rem); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes metric-in {
+    from { opacity: 0; transform: translateY(0.75rem); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    .results__intro {
+      grid-template-columns: 1fr;
+      gap: 1.8rem;
+    }
+
+    .results h2 { max-width: 16ch; }
+
+    .result-panel__header {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+
+    .report-groups { grid-template-columns: 1fr; }
+
+    .report-group + .report-group {
+      border-top: 1px solid color-mix(in srgb, var(--results-ink) 18%, transparent);
+      border-left: 0;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .results { padding-block: 4.75rem; }
+
+    .results h2 {
+      max-width: none;
+      font-size: clamp(1.45rem, 7.7vw, 2rem);
+      line-height: 1.02;
+      letter-spacing: -0.035em;
+      white-space: nowrap;
+    }
+
+    .results h2 span { margin-top: 0.08em; }
+
+    .year-switcher__tab {
+      padding: 1rem 0.4rem;
+    }
+
+    .year-switcher__tab strong {
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    .highlight-grid { grid-template-columns: 1fr; }
+
+    .highlight {
+      min-height: 10rem;
+      padding: 1.25rem;
+    }
+
+    .highlight__value { font-size: clamp(2.75rem, 14vw, 4.5rem); }
+
+    .report-details summary em { display: none; }
+
+    .results__disclosure {
+      margin-left: 0;
+      text-align: left;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .year-switcher__tab,
+    .year-switcher__tab::after,
+    .report-details summary {
+      transition: none;
+    }
+
+    .result-panel.is-active,
+    .result-panel.is-active .highlight {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const initializeResultsShowcases = () => {
+    document.querySelectorAll("[data-results-showcase]").forEach((candidate) => {
+      if (!(candidate instanceof HTMLElement) || candidate.dataset.enhanced === "true") return;
+
+      const switcher = candidate.querySelector("[data-year-switcher]");
+      const panelContainer = candidate.querySelector(".results__panels");
+      const status = candidate.querySelector("[data-year-status]");
+      const tabs = Array.from(candidate.querySelectorAll("[data-year-tab]")).filter(
+        (tab): tab is HTMLAnchorElement => tab instanceof HTMLAnchorElement,
+      );
+      const panels = Array.from(candidate.querySelectorAll("[data-year-panel]")).filter(
+        (panel): panel is HTMLElement => panel instanceof HTMLElement,
+      );
+
+      if (!(switcher instanceof HTMLElement) || tabs.length === 0 || panels.length === 0) return;
+
+      switcher.setAttribute("role", "tablist");
+      tabs.forEach((tab) => {
+        const year = tab.dataset.year;
+        const panel = panels.find((item) => item.dataset.year === year);
+        tab.setAttribute("role", "tab");
+        if (panel) tab.setAttribute("aria-controls", panel.id);
+      });
+
+      panels.forEach((panel) => {
+        panel.setAttribute("role", "tabpanel");
+        panel.tabIndex = 0;
+      });
+
+      const activate = (tab: HTMLAnchorElement, focusTab = false) => {
+        const year = tab.dataset.year;
+        if (!year) return;
+
+        candidate.dataset.activeYear = year;
+        tabs.forEach((item) => {
+          const selected = item === tab;
+          item.classList.toggle("is-active", selected);
+          item.setAttribute("aria-selected", String(selected));
+          item.tabIndex = selected ? 0 : -1;
+        });
+
+        panels.forEach((panel) => {
+          const selected = panel.dataset.year === year;
+          panel.hidden = !selected;
+          panel.classList.toggle("is-active", selected);
+        });
+
+        if (status instanceof HTMLElement) status.textContent = `${year} annual results selected.`;
+        if (focusTab) tab.focus();
+      };
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", (event) => {
+          event.preventDefault();
+          activate(tab);
+        });
+
+        tab.addEventListener("keydown", (event) => {
+          let nextIndex: number | null = null;
+          if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+          if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+          if (event.key === "Home") nextIndex = 0;
+          if (event.key === "End") nextIndex = tabs.length - 1;
+          if (nextIndex === null) return;
+
+          event.preventDefault();
+          activate(tabs[nextIndex], true);
+        });
+      });
+
+      if (panelContainer instanceof HTMLElement) {
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        panelContainer.addEventListener("touchstart", (event) => {
+          const touch = event.changedTouches[0];
+          if (!touch) return;
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
+        }, { passive: true });
+
+        panelContainer.addEventListener("touchend", (event) => {
+          const touch = event.changedTouches[0];
+          if (!touch) return;
+
+          const deltaX = touch.clientX - touchStartX;
+          const deltaY = touch.clientY - touchStartY;
+          if (Math.abs(deltaX) < 52 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) return;
+
+          const activeIndex = tabs.findIndex((tab) => tab.classList.contains("is-active"));
+          if (activeIndex < 0) return;
+          const direction = deltaX < 0 ? 1 : -1;
+          const nextIndex = (activeIndex + direction + tabs.length) % tabs.length;
+          activate(tabs[nextIndex]);
+        }, { passive: true });
+      }
+
+      candidate.dataset.enhanced = "true";
+      activate(tabs.find((tab) => tab.dataset.year === "2025") ?? tabs[tabs.length - 1]);
+    });
+  };
+
+  initializeResultsShowcases();
+  document.addEventListener("astro:page-load", initializeResultsShowcases);
+</script>

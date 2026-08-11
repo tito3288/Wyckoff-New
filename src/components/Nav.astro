@@ -1,21 +1,23 @@
 ---
 import BrandLogo from "./BrandLogo.astro";
 
+const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const onHome = pathname === "/";
 const links = [
-  { href: "#points", label: "Inflection Points", cta: false },
-  { href: "#about", label: "About", cta: false },
-  { href: "#insights", label: "Insights", cta: false },
-  { href: "#contact", label: "Start a Conversation", cta: true },
+  { href: onHome ? "#points" : "/#points", label: "Inflection Points", cta: false, current: false },
+  { href: "/about", label: "About", cta: false, current: pathname === "/about" },
+  { href: onHome ? "#insights" : "/#insights", label: "Insights", cta: false, current: false },
+  { href: onHome ? "#contact" : "/#contact", label: "Start a Conversation", cta: true, current: false },
 ];
 ---
 <nav class="nav" id="nav" aria-label="Main navigation">
-  <a class="nav__brand" href="#top" aria-label="Wyckoff Consulting, home">
+  <a class="nav__brand" href={onHome ? "#top" : "/"} aria-label="Wyckoff Consulting, home">
     <BrandLogo variant="lockup" class="nav__logo" />
   </a>
 
   <div class="nav__links">
     {links.map((link) => (
-      <a class:list={[link.cta && "nav__cta"]} href={link.href}>{link.label}</a>
+      <a class:list={[link.cta && "nav__cta"]} href={link.href} aria-current={link.current ? "page" : undefined}>{link.label}</a>
     ))}
   </div>
 
@@ -40,6 +42,7 @@ const links = [
           <a
             class:list={["nav__overlay-link", link.cta && "nav__overlay-cta"]}
             href={link.href}
+            aria-current={link.current ? "page" : undefined}
             style={`--menu-index:${index}`}
           >
             <span>{link.label}</span>
