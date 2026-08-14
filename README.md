@@ -37,7 +37,7 @@ dashboard (Settings → Environment variables, Production **and** Preview):
 | :------------------ | :--------------------------------------------------------- |
 | `RESEND_API_KEY`    | Resend API key                                             |
 | `RESEND_FROM_EMAIL` | Verified sender, e.g. `Wyckoff <hello@wyckoffconsulting.com>` |
-| `CONTACT_TO_EMAIL`  | Inbox that receives inquiries                              |
+| `CONTACT_TO_EMAIL`  | Comma-separated recipient inboxes (up to 50)               |
 
 Until these are set, the form returns "The contact form is not configured yet."
 

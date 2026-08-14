@@ -7,7 +7,7 @@
  * Configure in the Cloudflare Pages dashboard (Settings → Environment variables):
  *   RESEND_API_KEY     — Resend API key
  *   RESEND_FROM_EMAIL  — verified sender, e.g. "Wyckoff Consulting <hello@wyckoffconsulting.com>"
- *   CONTACT_TO_EMAIL   — where inquiries are delivered
+ *   CONTACT_TO_EMAIL   — comma-separated inboxes where inquiries are delivered (max 50)
  */
 
 interface ContactEnv {
@@ -43,6 +43,13 @@ function escapeHtml(value: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+function parseRecipientEmails(value: string): string[] {
+  return value
+    .split(",")
+    .map((email) => email.trim())
+    .filter(Boolean);
 }
 
 export async function onRequestPost(context: PagesContext): Promise<Response> {
@@ -81,6 +88,11 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
     return json({ error: "The contact form is not configured yet." }, 500);
   }
 
+  const recipients = parseRecipientEmails(CONTACT_TO_EMAIL);
+  if (recipients.length === 0 || recipients.length > 50) {
+    return json({ error: "The contact form is not configured yet." }, 500);
+  }
+
   const html = `
     <h2>New inquiry from wyckoffconsulting.com</h2>
     <p><strong>Name:</strong> ${escapeHtml(name)}</p>
@@ -99,7 +111,7 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
     },
     body: JSON.stringify({
       from: RESEND_FROM_EMAIL,
-      to: [CONTACT_TO_EMAIL],
+      to: recipients,
       reply_to: email,
       subject: `New inquiry — ${name}${company ? ` (${company})` : ""}`,
       html,
