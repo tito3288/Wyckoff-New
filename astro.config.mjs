@@ -7,7 +7,7 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://wyckoffconsulting.com',
+  site: 'https://www.wyckoffconsulting.com',
 
   redirects: {
     '/blog-no-sidebar': '/insights',
