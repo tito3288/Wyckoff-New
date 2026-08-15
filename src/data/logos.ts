@@ -17,11 +17,11 @@ export const clientLogos = [
   { src: "/images/clients/american-cancer-society.webp", alt: "American Cancer Society", width: 743, height: 410 },
   { src: "/images/clients/university-of-michigan.webp", alt: "University of Michigan", width: 470, height: 500 },
   { src: "/images/clients/micron.webp", alt: "Micron", width: 817, height: 500 },
-  { src: "/images/clients/adept-machine-tools.webp", alt: "Adept Machine Tools, Inc.", width: 1200, height: 407 },
-  { src: "/images/clients/adamy-valuation.webp", alt: "Adamy Valuation", width: 393, height: 27 },
-  { src: "/images/clients/cavallo.webp", alt: "Cavallo", width: 506, height: 99 },
-  { src: "/images/clients/larson-tax-relief.webp", alt: "Larson Tax Relief", width: 300, height: 168 },
-  { src: "/images/clients/wanaware.webp", alt: "WanAware", width: 200, height: 188 },
+  { src: "/images/clients/adept-machine-tools.webp", alt: "Adept Machine Tools, Inc.", width: 1096, height: 275 },
+  { src: "/images/clients/adamy-valuation.svg", alt: "Adamy Valuation", width: 466, height: 27 },
+  { src: "/images/clients/cavallo.svg", alt: "Cavallo", width: 215, height: 40 },
+  { src: "/images/clients/larson-tax-relief.svg", alt: "Larson Tax Relief", width: 233, height: 101 },
+  { src: "/images/clients/wanaware.png", alt: "WanAware", width: 777, height: 153 },
 ] satisfies readonly LogoItem[];
 
 export const guestLectureLogos = [
