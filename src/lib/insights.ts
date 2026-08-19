@@ -21,6 +21,16 @@ export function sortInsightsByNewest(entries: InsightEntry[]): InsightEntry[] {
   );
 }
 
+export function shouldIncludeInsight(
+  entry: InsightEntry,
+  includeDrafts = false,
+  now = new Date(),
+): boolean {
+  return includeDrafts || (
+    !entry.data.draft && entry.data.publishedAt.getTime() <= now.getTime()
+  );
+}
+
 export function getInsightSlug(entry: InsightEntry): string {
   return entry.id
     .replace(/\\/g, "/")
@@ -56,7 +66,7 @@ export function getRelatedInsights(
   );
 
   return entries
-    .filter((entry) => entry.id !== current.id && !entry.data.draft)
+    .filter((entry) => entry.id !== current.id)
     .sort((left, right) => {
       const leftMatches = left.data.categories.some((category) =>
         currentCategories.has(category.trim().toLowerCase()),

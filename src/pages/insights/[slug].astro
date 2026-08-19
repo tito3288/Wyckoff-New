@@ -4,6 +4,7 @@ import InsightArticleLayout from "../../layouts/InsightArticleLayout.astro";
 import {
   getInsightSlug,
   getRelatedInsights,
+  shouldIncludeInsight,
   sortInsightsByNewest,
   type InsightEntry,
 } from "../../lib/insights";
@@ -14,8 +15,11 @@ interface Props {
 }
 
 export async function getStaticPaths() {
+  const includeDrafts = import.meta.env.INSIGHTS_PREVIEW === "true";
   const insights = sortInsightsByNewest(
-    await getCollection("insights", ({ data }) => !data.draft),
+    (await getCollection("insights")).filter((entry) =>
+      shouldIncludeInsight(entry, includeDrafts)
+    ),
   );
 
   return insights.map((entry) => ({

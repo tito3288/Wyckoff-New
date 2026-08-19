@@ -16,6 +16,10 @@ interface Props {
 
 const { entry, related } = Astro.props;
 const category = getDisplayCategory(entry);
+const author =
+  entry.data.author && entry.data.author.trim().toLowerCase() !== "admin"
+    ? entry.data.author.trim()
+    : undefined;
 const canonical = new URL(getInsightPath(entry), Astro.site ?? Astro.url);
 const imageUrl = new URL(entry.data.featuredImage, canonical);
 const showUpdatedDate =
@@ -32,6 +36,13 @@ const articleSchema = {
   dateModified: (entry.data.updatedAt ?? entry.data.publishedAt).toISOString(),
   mainEntityOfPage: canonical.href,
   articleSection: entry.data.categories,
+  keywords: entry.data.tags.length > 0 ? entry.data.tags.join(", ") : undefined,
+  author: author
+    ? {
+        "@type": "Person",
+        name: author,
+      }
+    : undefined,
   publisher: {
     "@type": "Organization",
     name: "Wyckoff Consulting",
@@ -66,6 +77,7 @@ const articleSchema = {
               {formatInsightDate(entry.data.publishedAt)}
             </time>
             {category && <span>{category}</span>}
+            {author && <span>By {author}</span>}
           </p>
           <h1>{entry.data.title}</h1>
           <p class="insight-article__description">{entry.data.description}</p>

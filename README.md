@@ -26,6 +26,23 @@ Static Astro site for wyckoffconsulting.com, built for Cloudflare Pages.
 
 No Cloudflare adapter or Wrangler config is needed — the site is fully static.
 
+### Scheduled Insights
+
+Future Insights are stored with `draft: false` and a future `publishedAt` date.
+The production build excludes them until that date arrives. Because the site is
+static, `.github/workflows/publish-scheduled-insights.yml` triggers a fresh
+Cloudflare Pages build on each approved publication date.
+
+The workflow requires one GitHub Actions repository secret:
+
+| Secret | Value |
+| :----- | :---- |
+| `CLOUDFLARE_DEPLOY_HOOK_URL` | A Cloudflare Pages deploy hook for the `main` branch |
+
+Create the hook in Cloudflare under **Workers & Pages → the Pages project →
+Settings → Builds → Deploy Hooks**. Treat the hook URL as a password and never
+commit it to the repository.
+
 ### Contact form
 
 The contact form posts to `/api/contact`, implemented as a Cloudflare Pages

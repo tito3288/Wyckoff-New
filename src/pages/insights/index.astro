@@ -3,10 +3,13 @@ import { getCollection } from "astro:content";
 import InsightCard from "../../components/insights/InsightCard.astro";
 import InsightsHero from "../../components/insights/InsightsHero.astro";
 import Layout from "../../layouts/Layout.astro";
-import { sortInsightsByNewest } from "../../lib/insights";
+import { shouldIncludeInsight, sortInsightsByNewest } from "../../lib/insights";
 
+const includeDrafts = import.meta.env.INSIGHTS_PREVIEW === "true";
 const insights = sortInsightsByNewest(
-  await getCollection("insights", ({ data }) => !data.draft),
+  (await getCollection("insights")).filter((entry) =>
+    shouldIncludeInsight(entry, includeDrafts)
+  ),
 );
 const featured = insights[0];
 const remaining = insights.slice(1);
